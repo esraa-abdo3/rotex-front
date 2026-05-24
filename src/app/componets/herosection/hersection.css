@@ -1,0 +1,46 @@
+.overflow-hiddeny{
+    height: 650px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.text-con{
+    margin: 15px 0;
+    padding: 15px 0;
+position: absolute;
+left: 10%;
+}
+@media(max-width:767px){
+    .text-con{
+    margin: 15px 0;
+    padding: 15px 0;
+    position: absolute;
+    left: 40%;
+    transform: translateX(-40%);
+    bottom: 5%;
+    -webkit-transform: translateX(-40%);
+    -moz-transform: translateX(-40%);
+    -ms-transform: translateX(-40%);
+    -o-transform: translateX(-40%);
+}
+    
+    .overflow-hiddeny{
+        height: 295px !important;
+        background-position: right;
+    }
+    .button{
+        width: 100%;
+    }
+    .text-con h2{
+        display: none;
+    }
+    .icons{
+       font-size: 14px;
+    padding: 5px 7px;
+    bottom: 34px;
+    right: 0;
+    background-color: transparent;
+    background: none;
+    display: none
+    }
+}
