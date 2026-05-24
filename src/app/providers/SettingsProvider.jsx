@@ -3,8 +3,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 const SettingsContext = createContext(null);
 
-export function SettingsProvider({ children }) {
-  const [settings, setSettings] = useState(null);
+
+export function SettingsProvider({ children ,initialSettings}) {
+   const [settings ,setSettings] = useState(initialSettings ?? null);
 
   useEffect(() => {
     fetch("https://rootex-backend.vercel.app/api/v1/setting")

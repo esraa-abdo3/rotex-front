@@ -66,7 +66,7 @@ export default function Product({ product }) {
         <div className="flex items-center justify-between">
           <div
             className="flex items-center gap-3 rounded-2xl px-4 py-2 shadow-sm border"
-            style={{ borderColor: settings.colors.gold + "33", background: "#fff" }}
+            style={{ borderColor: settings.colors.gold +"33", background: "#fff" }}
           >
             <button
               onClick={() => setQty(q => Math.max(1, q - 1))}
