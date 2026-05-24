@@ -1,4 +1,4 @@
-import Checkout from "../componets/Checkout/checkout";
+import Checkout from "../../componets/Checkout/checkout";
 
 async function getProduct() {
   const res = await fetch("https://rootex-backend.vercel.app/api/v1/product/getallproducts", {

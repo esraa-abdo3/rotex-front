@@ -136,27 +136,9 @@
   background: rgba(255,255,255,0.05);
 }
 
-.menuBtn {
-  display: none;
-  position: fixed;
-  top: 30px;
-  right: 16px;
-  width: 42px;
-  height: 42px;
-  border: none;
-  border-radius: 10px;
-  background: #111612;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-  z-index: 1001;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-  transition: background 0.2s;
-}
 
-.menuBtn:hover {
-  background: #1e2718;
-}
+
+
 
 @media (max-width: 992px) {
   .close-icon {
@@ -185,9 +167,5 @@
     transform: translateX(0);
   }
 
-  .menuBtn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+
 }

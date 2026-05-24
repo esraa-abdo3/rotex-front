@@ -1,7 +1,7 @@
+
 import { SettingsProvider } from "./providers/SettingsProvider";
 import { AuthProvider } from "./providers/AuthProvider";
 import { LanguageProvider } from "./providers/LanguageProvider";
-import Navbar from "./componets/Navbar/Navbar";
 import "./globals.css";
 
 export default function RootLayout({ children }) {
@@ -11,8 +11,9 @@ export default function RootLayout({ children }) {
         <SettingsProvider>
           <AuthProvider>
             <LanguageProvider>
-              <Navbar />
+        
               {children}
+            
             </LanguageProvider>
           </AuthProvider>
         </SettingsProvider>

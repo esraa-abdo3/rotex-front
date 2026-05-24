@@ -16,14 +16,22 @@ export async function POST(req) {
     return NextResponse.json(data, { status: res.status });
   }
 
+  // ✅ الباك اند بيبعت الـ token في الـ JSON — نحطه إحنا في الكوكي
   const token = data?.data?.token;
-  const cookieStore = await cookies();
 
+  if (!token) {
+    return NextResponse.json(
+      { status: "Fail", data: "لم يتم استلام التوكن" },
+      { status: 500 }
+    );
+  }
+
+  const cookieStore = await cookies();
   cookieStore.set("token", token, {
     httpOnly: true,
-    secure: false,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 7 * 24 * 60 * 60,
+    maxAge: 7 * 24 * 60 * 60, // 7 أيام بالثواني
     path: "/",
   });
 

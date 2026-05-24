@@ -11,6 +11,9 @@ export function SettingsProvider({ children }) {
       .then(r => r.json())
       .then(data => {
         setSettings({
+          brand: "RooteX",
+          hook: data?.settings?.hook,
+          buttonText: data?.settings?.buttonText,
           colors: {
             primaryDark: data?.settings?.colors?.primaryDark,
             secondaryDark: data?.settings?.colors?.secondaryDark,

@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import "./sidbar.css";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/providers/AuthProvider";
 
 const navLinks = [
   {
@@ -56,24 +57,25 @@ export default function Sidebar() {
   const [loggingOut, setLoggingOut] = useState(false);
   const pathname = usePathname();
   const API = "https://rootex-backend.vercel.app/api/v1";
-    const router = useRouter();
+  const router = useRouter();
+    const { logout } = useAuth();
 
+
+useEffect(() => {
+  const handler = () => setOpen(prev => !prev);
+  window.addEventListener("toggleSidebar", handler);
+  return () => window.removeEventListener("toggleSidebar", handler);
+}, []);
   const isActive = (href) => {
     if (href === "/admin") return pathname === "/admin";
     return pathname.startsWith(href);
   };
+
     const handleLogout = async () => {
-    setLoggingOut(true);
-    try {
-      await fetch(`${API}/auth/logout`, {
-        method: "POST",
-        credentials: "include", 
-      });
-    } catch (e) {
-      
-    }
-    router.push("/login");
+    await logout();
+    router.push("/Login");
   };
+
 
   return (
     <div className="dashboard">
@@ -88,8 +90,8 @@ export default function Sidebar() {
       <aside className={`sidebar ${open ? "active" : ""}`}>
         <div className="logo">
           <div className="logo-inner">
-            <span className="logo-icon">⬡</span>
-            <span className="logo-text">Admin</span>
+        
+            <span className="logo-text"> Hello Admin</span>
           </div>
           <button className="close-icon" onClick={() => setOpen(false)}>✕</button>
         </div>
@@ -164,15 +166,7 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      <main className="content">
-        <button
-          className="menuBtn"
-          onClick={() => setOpen(true)}
-          style={{ display: open ? "none" : undefined }}
-        >
-          ☰
-        </button>
-      </main>
+
     </div>
   );
 }
