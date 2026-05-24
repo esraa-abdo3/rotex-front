@@ -16,6 +16,7 @@ const router = useRouter();
 
   return (
     <section
+      id="product"
       dir="rtl"
       className="w-[90%] max-w-5xl m-auto flex flex-col md:flex-row items-center justify-center gap-16 px-6 py-20"
       style={{ margin: "60px auto", color: "#fff" }}
