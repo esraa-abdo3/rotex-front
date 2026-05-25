@@ -140,6 +140,7 @@ export default function EditProduct() {
             <label>Name English</label>
 
             <input
+           
               type="text"
               name="nameEn"
               value={form.nameEn}

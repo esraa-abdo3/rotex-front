@@ -317,7 +317,7 @@ function Field({ label, name, value, onChange, type = "text", textarea, dir, min
   const base = {
     color:"black",
     width: "100%", padding: "10px 12px", borderRadius: 10,
-    border: "1px solid #e0e0de", fontSize: 14, outline: "none",
+    border: "1px solid #e0e0de", fontSize: 16, outline: "none",
     background: "#fafaf9", fontFamily: "inherit", direction: dir || "ltr",
     boxSizing: "border-box", transition: "border 0.2s",
     resize: textarea ? "vertical" : undefined,

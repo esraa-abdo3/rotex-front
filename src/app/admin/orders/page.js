@@ -221,8 +221,8 @@ const styles = {
   filtersRow: { display: "flex", gap: 12, flexWrap: "wrap" },
   searchInput: {
     flex: "1 1 220px", padding: "10px 14px", borderRadius: 10,
-    border: "1px solid #e0e0de", fontSize: 14, outline: "none",
-    background: "white",
+    border: "1px solid #e0e0de", fontSize: 16, outline: "none",
+    background: "white", color:"black"
   },
   select: {
     padding: "10px 14px", borderRadius: 10, border: "1px solid #e0e0de",

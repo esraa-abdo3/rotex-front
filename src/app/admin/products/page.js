@@ -218,7 +218,7 @@ const styles = {
   summaryRow: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 14 },
   summaryCard: { background: "white", borderRadius: 12, padding: "16px 18px", display: "flex", alignItems: "center", gap: 14 },
   filtersRow: { display: "flex", gap: 12, flexWrap: "wrap" },
-  searchInput: { flex: "1 1 220px", padding: "10px 14px", borderRadius: 10, border: "1px solid #e0e0de", fontSize: 14, outline: "none", background: "white" },
+  searchInput: { flex: "1 1 220px", padding: "10px 14px", borderRadius: 10, border: "1px solid #e0e0de", fontSize: 16, outline: "none", background: "white" },
   select: { padding: "10px 14px", borderRadius: 10, border: "1px solid #e0e0de", fontSize: 14, outline: "none", background: "white", cursor: "pointer" ,color:"black" },
   tableCard: { background: "white", borderRadius: 14, border: "1px solid #e8e8e6", overflow: "hidden" },
   tableWrap: { overflowX: "auto" },
