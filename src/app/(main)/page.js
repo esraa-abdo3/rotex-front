@@ -4,17 +4,15 @@ import Product     from "../componets/product/product";
 import Review      from "../componets/review/review";
 import Result      from "../componets/result/result";
 
-
-
-// async function getProduct() {
-//   const res = await fetch("https://rootex-backend.vercel.app/api/v1/product/getallproducts", { cache: "no-store" });
-//   if (!res.ok) throw new Error("Failed to fetch products");
-//   return res.json();
-// }
 async function getProduct() {
   try {
-    const res = await fetch("...", { cache: "no-store" });
+    const res = await fetch(
+      "https://rootex-backend.vercel.app/api/v1/product/getallproducts",
+      { cache: "no-store" }
+    );
+
     if (!res.ok) return { data: [] };
+
     return res.json();
   } catch {
     return { data: [] };

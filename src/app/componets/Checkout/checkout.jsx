@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useSettings } from "@/app/providers/SettingsProvider";
 import { useLang } from "@/app/providers/LanguageProvider";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const GOVS = {
   "القاهرة": ["القاهرة","مدينة نصر","شبرا","المطرية","عين شمس","حلوان","المعادي","مصر الجديدة","الزيتون","الأميرية","بولاق","السلام","الخليفة","الدرب الأحمر","الموسكي","الساحل","شبرا الخيمة","الوايلي"],
@@ -34,6 +36,13 @@ const GOVS = {
 };
 
 const SHIPPING = 60;
+  const Field = ({ label, error, children , settings}) => (
+    <div className="flex flex-col gap-1">
+      <label className="text-xs font-semibold" style={{ color: settings?.colors?.primary }}>{label}</label>
+      {children}
+      {error && <span className="text-xs text-red-500">{error}</span>}
+    </div>
+  );
 
 export default function Checkout({ product }) {
   const settings = useSettings();
@@ -42,8 +51,10 @@ export default function Checkout({ product }) {
   const initialQty = Number(searchParams.get("qty")) || 1;
   const [qty, setQty] = useState(initialQty);
   const [payMethod, setPayMethod] = useState("cash");
-  const [form, setForm] = useState({ name: "", email: "", phone: "", gov: "", city: "", address: "" });
+ const [form, setForm] = useState({ name: "", email: "", phone: "", gov: "", city: "", address: "" });
   const [errors, setErrors] = useState({});
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const set = (k, v) => setForm(p => ({ ...p, [k]: v, ...(k === "gov" ? { city: "" } : {}) }));
   const cities = form.gov ? GOVS[form.gov] ?? [] : [];
@@ -88,36 +99,76 @@ export default function Checkout({ product }) {
     errGov: { ar: "اختر المحافظة", en: "Select governorate" },
     errCity: { ar: "اختر المدينة", en: "Select city" },
     errAddress: { ar: "أدخل عنوانك", en: "Enter your address" },
+    errAddress: { ar: "أدخل عنوانك", en: "Enter your address" },
+    otherCity: { ar: "أخرى", en: "Other" },
+   otherCityPh: { ar: "اكتب اسم المدينة", en: "Type your city name" },
+   errCityText: { ar: "أدخل اسم المدينة", en: "Enter city name" },
   };
 
   const validate = () => {
     const e = {};
     if (form.name.trim().length < 3) e.name = t.errName[lang];
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = t.errEmail[lang];
     if (!/^01[0-9]{9}$/.test(form.phone)) e.phone = t.errPhone[lang];
     if (!form.gov) e.gov = t.errGov[lang];
     if (!form.city) e.city = t.errCity[lang];
+  if (form.city === "__other__" && !form.cityText?.trim()) 
+  e.cityText = t.errCityText[lang];
     if (form.address.trim().length < 5) e.address = t.errAddress[lang];
     setErrors(e);
     return Object.keys(e).length === 0;
   };
+  const handleSubmit = async () => {
+    console.log("add")
+    console.log(validate())
+  if (!validate()) return;
 
-  const handleSubmit = () => {
-    if (!validate()) return;
-    console.log("order:", { form, qty, payMethod, total });
-  };
+  try {
+    setLoading(true);
+
+    const payload = {
+      name: form.name,
+      phone: form.phone,
+      email: form.email,
+      country: "Egypt",
+      governorate: form.gov,
+      city:
+        form.city === "__other__"
+          ? form.cityText
+          : form.city,
+      address: form.address,
+      paymentMethod: payMethod,
+
+      items: [
+        {
+          product: "6a105fe04036081b1eda3108",
+          quantity: qty,
+        },
+      ],
+    };
+
+    const res = await axios.post(
+      "https://rootex-backend.vercel.app/api/v1/order/createorder",
+      payload
+    );
+
+    console.log(res.data);
+
+    if (payMethod === "cash") {
+      router.push(`/success/${res.data.data._id}`);
+    }
+
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const inputCls = (k) =>
     `border rounded-xl px-4 py-2.5 text-sm outline-none transition w-full bg-white
      ${errors[k] ? "border-red-400 ring-1 ring-red-200" : "border-gray-200 focus:border-[#c8a93e] focus:ring-1 focus:ring-[#c8a93e33]"}`;
 
-  const Field = ({ label, error, children }) => (
-    <div className="flex flex-col gap-1">
-      <label className="text-xs font-semibold" style={{ color: settings?.colors?.primary }}>{label}</label>
-      {children}
-      {error && <span className="text-xs text-red-500">{error}</span>}
-    </div>
-  );
+
 
   const gold = settings?.colors?.gold ?? "#c8a93e";
   const goldLight = settings?.colors?.goldLight ?? "#d4b84a";
@@ -167,7 +218,6 @@ export default function Checkout({ product }) {
                 style={{ color: primary }} />
             </Field>
 
-            <div className="grid grid-cols-2 gap-4">
               <Field label={t.gov[lang]} error={errors.gov}>
                 <select className={inputCls("gov")} value={form.gov}
                   onChange={e => set("gov", e.target.value)}
@@ -175,23 +225,51 @@ export default function Checkout({ product }) {
                   <option value="">{t.govPh[lang]}</option>
                   {Object.keys(GOVS).map(g => <option key={g} value={g}>{g}</option>)}
                 </select>
-              </Field>
-              <Field label={t.city[lang]} error={errors.city}>
-                <select className={inputCls("city")} value={form.city}
-                  disabled={!form.gov} onChange={e => set("city", e.target.value)}
-                  style={{ color: primary }}>
-                  <option value="">{form.gov ? t.cityPh[lang] : t.cityFirst[lang]}</option>
-                  {cities.map(c => <option key={c} value={c}>{c}</option>)}
-                </select>
-              </Field>
-            </div>
+              </Field> 
+           <Field label={t.city[lang]} error={errors.city}>
+  <select
+    className={inputCls("city")}
+    value={form.city}
+    disabled={!form.gov}
+    onChange={e => set("city", e.target.value)}
+    style={{ color: primary }}
+  >
+    <option value="">
+      {form.gov ? t.cityPh[lang] : t.cityFirst[lang]}
+    </option>
+    {cities.map(c => (
+      <option key={c} value={c}>{c}</option>
+    ))}
+    {form.gov && (
+      <option value="__other__">{t.otherCity[lang]}</option>
+    )}
+  </select>
 
-            <Field label={t.address[lang]} error={errors.address}>
-              <textarea className={inputCls("address")} rows={3}
-                placeholder={t.addressPh[lang]}
-                value={form.address} onChange={e => set("address", e.target.value)}
-                style={{ color: primary }} />
+  {form.city === "__other__" && (
+    <div className="mt-2">
+      <input
+        className={inputCls("cityText")}
+        placeholder={t.otherCityPh[lang]}
+        value={form.cityText ?? ""}
+        onChange={e => setForm(p => ({ ...p, cityText: e.target.value }))}
+        style={{ color: primary }}
+      />
+      {errors.cityText && (
+        <span className="text-xs text-red-500">{errors.cityText}</span>
+      )}
+    </div>
+  )}
             </Field>
+            <Field label={t.address[lang]} error={errors.address}>
+  <textarea
+    className={inputCls("address")}
+    rows={3}
+    placeholder={t.addressPh[lang]}
+    value={form.address}
+    onChange={e => set("address", e.target.value)}
+    style={{ color: primary }}
+  />
+</Field>
 
             <div className="flex flex-col gap-3 pt-1">
               <p className="text-xs font-bold uppercase tracking-widest text-gray-400">{t.payMethod[lang]}</p>
@@ -279,15 +357,20 @@ export default function Checkout({ product }) {
               </div>
             </div>
 
-            <button onClick={handleSubmit}
-              className="w-full py-4 rounded-2xl font-extrabold text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-              style={{
-                background: `linear-gradient(135deg, ${gold}, ${goldLight})`,
-                color: "#1a1a0a",
-                boxShadow: `0 8px 24px ${gold}44`,
-              }}>
-              {t.confirm[lang]}
-            </button>
+<button
+  onClick={handleSubmit}
+  disabled={loading}
+  className="w-full py-4 rounded-2xl font-extrabold text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+  style={{
+    background: `linear-gradient(135deg, ${gold}, ${goldLight})`,
+    color: "#1a1a0a",
+    boxShadow: `0 8px 24px ${gold}44`,
+  }}
+>
+  {loading
+    ? <div  className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin"></div>
+    : t.confirm[lang]}
+</button>
       <div className="flex items-center justify-center gap-6 opacity-50 text-xs text-black" >
           <span>{t.fastShip[lang]}</span>
           <span>{t.quality[lang]}</span>
