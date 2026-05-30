@@ -26,11 +26,18 @@ export default function Navbar() {
   const primary = settings?.colors?.primary ?? "#3a4520";
   const goldLight = settings?.colors?.goldLight ?? "#d4b84a";
 
-  const handleScroll = (id) => {
-    setMenuOpen(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
+const handleScroll = (id) => {
+  setMenuOpen(false);
 
+  if (window.location.pathname !== "/") {
+    router.push(`/#${id}`);
+    return;
+  }
+
+  document.getElementById(id)?.scrollIntoView({
+    behavior: "smooth",
+  });
+};
   return (
     <>
       <nav style={{

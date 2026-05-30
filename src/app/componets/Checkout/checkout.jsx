@@ -145,20 +145,29 @@ export default function Checkout({ product }) {
         },
       ],
     };
-
+ console.log(payload)
     const res = await axios.post(
       "https://rootex-backend.vercel.app/api/v1/order/createorder",
       payload
     );
 
-    console.log(res.data);
+  
+   
 
-    if (payMethod === "cash") {
-      router.push(`/success/${res.data.data._id}`);
-    }
+if (payMethod === "cash") {
+  router.push(`/success/${res.data.data.orderNumber}`);
+}
+
+if (payMethod === "paymob") {
+  window.location.href = res.data.data.checkoutUrl;
+}
+
 
   } catch (error) {
-    console.log(error);
+      console.log(payMethod)
+      console.log(error);
+  console.log(error.response);
+  console.log(error.response?.data);
   } finally {
     setLoading(false);
   }
@@ -276,7 +285,7 @@ export default function Checkout({ product }) {
               <div className="grid grid-cols-2 gap-3">
                 {[
                   { key: "cash", label: t.cash[lang], icon: "💵", sub: t.cashSub[lang] },
-                  { key: "visa", label: t.visa[lang], icon: "💳", sub: t.visaSub[lang] },
+                  { key: "paymob", label: t.visa[lang], icon: "💳", sub: t.visaSub[lang] },
                 ].map(opt => (
                   <button key={opt.key} onClick={() => setPayMethod(opt.key)}
                     className="flex items-center gap-3 px-4 py-3 rounded-2xl border-2 transition-all text-right"
@@ -303,7 +312,6 @@ export default function Checkout({ product }) {
             </div>
           </div>
 
-          {/* ملخص الطلب */}
           <div className="flex flex-col gap-4">
             <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-4">
               <div className="flex gap-4 items-center">
@@ -360,8 +368,16 @@ export default function Checkout({ product }) {
 <button
   onClick={handleSubmit}
   disabled={loading}
-  className="w-full py-4 rounded-2xl font-extrabold text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
-  style={{
+  className="w-full cursor-pointer py-4 rounded-2xl font-extrabold text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                cursor:"pointer",
+                
+
+
+
     background: `linear-gradient(135deg, ${gold}, ${goldLight})`,
     color: "#1a1a0a",
     boxShadow: `0 8px 24px ${gold}44`,

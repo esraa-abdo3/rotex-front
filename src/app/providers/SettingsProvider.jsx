@@ -11,6 +11,7 @@ export function SettingsProvider({ children ,initialSettings}) {
     fetch("https://rootex-backend.vercel.app/api/v1/setting")
       .then(r => r.json())
       .then(data => {
+        console.log(data)
         setSettings({
           brand: "RooteX",
           hook: data?.settings?.hook,
