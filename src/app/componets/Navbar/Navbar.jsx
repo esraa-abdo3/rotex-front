@@ -29,7 +29,7 @@ export default function Navbar() {
         background: `${primaryDark}f2`,
         backdropFilter: "blur(16px)",
         borderBottom: `1px solid ${primary}33`,
-        fontFamily: settings.fontFamily ,
+     fontFamily: settings?.fontFamily || "'Cairo', sans-serif",
         direction: lang === "ar" ? "rtl" : "ltr",
       }}>
         <div style={{

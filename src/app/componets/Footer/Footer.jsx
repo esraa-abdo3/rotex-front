@@ -33,7 +33,7 @@ export default function Footer() {
 
     <footer
       dir={lang === "ar" ? "rtl" : "ltr"}
-      style={{ background: primaryDark, fontFamily: settings.fontFamily }}
+      style={{ background: primaryDark, fontFamily: settings?.fontFamily || "'Cairo', sans-serif"}}
       >
         
 
