@@ -1,0 +1,13 @@
+.cta-section{
+    width: 80%;
+    cursor: default;
+}
+@media(max-width:767px){
+    .cta-section{
+    width: 95% !important;
+}
+.itemcta{
+    justify-content: center !important;
+}
+
+}

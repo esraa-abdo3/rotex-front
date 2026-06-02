@@ -1,5 +1,5 @@
 @media(max-width:767px){
-    .setting-desctop,
+  
     .nav-cta.setting-desctop{
         display: none !important;
     }

@@ -1,22 +1,17 @@
 "use client";
-import { useState } from "react";
+
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useSettings } from "@/app/providers/SettingsProvider";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { useLang } from "@/app/providers/LanguageProvider";
 import "./Navbar.css"
-
 export default function Navbar() {
   const settings = useSettings();
   const { user, loading } = useAuth();
   const { lang, toggleLang } = useLang();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const router = useRouter();
+
 
   const t = {
-    product: { ar: "المنتج", en: "Product" },
-    reviews: { ar: "آراء العملاء", en: "Reviews" },
     buyNow: { ar: "اشتري الآن", en: "Buy Now" },
     dashboard: { ar: "لوحة التحكم", en: "Dashboard" },
   };
@@ -26,18 +21,7 @@ export default function Navbar() {
   const primary = settings?.colors?.primary ?? "#3a4520";
   const goldLight = settings?.colors?.goldLight ?? "#d4b84a";
 
-const handleScroll = (id) => {
-  setMenuOpen(false);
 
-  if (window.location.pathname !== "/") {
-    router.push(`/#${id}`);
-    return;
-  }
-
-  document.getElementById(id)?.scrollIntoView({
-    behavior: "smooth",
-  });
-};
   return (
     <>
       <nav style={{
@@ -45,7 +29,7 @@ const handleScroll = (id) => {
         background: `${primaryDark}f2`,
         backdropFilter: "blur(16px)",
         borderBottom: `1px solid ${primary}33`,
-        fontFamily: "'Cairo', sans-serif",
+        fontFamily: settings.fontFamily ,
         direction: lang === "ar" ? "rtl" : "ltr",
       }}>
         <div style={{
@@ -119,86 +103,23 @@ const handleScroll = (id) => {
             </Link>
 
         
-            <button className="nav-hamburger" onClick={() => setMenuOpen(!menuOpen)} style={{
-              display: "none", background: "none",
-              border: "none", color: "white",
-              fontSize: 22, cursor: "pointer", padding: "4px 8px",
-            }}>
-              {menuOpen ? "✕" : "☰"}
-            </button>
+     
           </div>
         </div>
 
     
-        {menuOpen && (
-          <div style={{
-            background: primaryDark,
-            borderTop: `1px solid ${primary}33`,
-            padding: "16px 24px 20px",
-            display: "flex", flexDirection: "column", gap: 12,
-          }}>
-            <button onClick={() => handleScroll("product")} style={mobileLinkStyle}>
-              {t.product[lang]}
-            </button>
-            <button onClick={() => handleScroll("reviews")} style={mobileLinkStyle}>
-              {t.reviews[lang]}
-            </button>
-
-            <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
-              <button onClick={toggleLang} style={{
-                flex: 1, padding: "10px",
-                borderRadius: 10, border: `1px solid ${primary}55`,
-                background: "rgba(255,255,255,0.05)",
-                color: "rgba(255,255,255,0.75)",
-                fontWeight: 700, fontSize: 14,
-                cursor: "pointer", fontFamily: "'Cairo', sans-serif",
-              }}>
-                {lang === "ar" ? "English" : "العربية"}
-              </button>
-
-              {!loading && user?.role === "admin" && (
-                <Link href="/admin" onClick={() => setMenuOpen(false)} style={{
-                  flex: 1, padding: "10px", borderRadius: 10,
-                  border: `1px solid ${gold}44`,
-                  background: "rgba(255,255,255,0.05)",
-                  color: gold, fontWeight: 700, fontSize: 14,
-                  fontFamily: "'Cairo', sans-serif",
-                  textDecoration: "none", textAlign: "center",
-                }}>
-                  ⚙️ {t.dashboard[lang]}
-                </Link>
-              )}
-            </div>
-
-            <Link href="/checkoutpage" onClick={() => setMenuOpen(false)} style={{
-              padding: "12px", borderRadius: 10, textAlign: "center",
-              background: `linear-gradient(135deg, ${gold}, ${goldLight})`,
-              color: "#1a1a0a", fontWeight: 700, fontSize: 15,
-              fontFamily: "'Cairo', sans-serif", textDecoration: "none",
-            }}>
-              {t.buyNow[lang]}
-            </Link>
-          </div>
-        )}
       </nav>
 
-      <style>{`
+      {/* <style>{`
         @media (max-width: 768px) {
           .nav-desktop { display: none !important; }
-          .nav-hamburger { display: flex !important; }
+      
           .nav-cta { display: none !important; }
         }
-      `}</style>
+      `}</style> */}
     </>
   );
 }
 
 
 
-const mobileLinkStyle = {
-  background: "none", border: "none",
-  color: "rgba(255,255,255,0.7)",
-  fontSize: 16, fontWeight: 600,
-  cursor: "pointer", fontFamily: "'Cairo', sans-serif",
-  textAlign: "right", padding: "8px 0",
-};

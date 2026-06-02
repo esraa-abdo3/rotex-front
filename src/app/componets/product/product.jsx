@@ -18,7 +18,7 @@ export default function Product({ product }) {
   const nameParts = name?.split("-");
 
   const t = {
-    buy: { ar: "🛒 اشتري الآن", en: "🛒 Buy Now" },
+    buy: { ar: " اشتري الآن", en: "🛒 Buy Now" },
     shipping: { ar: "✓ شحن سريع", en: "✓ Fast Shipping" },
     quality: { ar: "✓ ضمان الجودة", en: "✓ Quality Guarantee" },
     payment: { ar: "✓ دفع آمن", en: "✓ Secure Payment" },
@@ -29,7 +29,7 @@ export default function Product({ product }) {
     <section
       id="product"
       dir={lang === "ar" ? "rtl" : "ltr"}
-      className="w-[90%] max-w-5xl m-auto flex flex-col md:flex-row items-center justify-center gap-16 px-6 py-20"
+      className="w-[90%] max-w-5xl m-auto flex flex-col md:flex-row items-center justify-center gap-16 px-6 py-4"
       style={{ margin: "60px auto", color: "#fff" }}
     >
       <div className="flex-1 flex justify-center">
@@ -94,12 +94,24 @@ export default function Product({ product }) {
 
         <button
           onClick={() => router.push(`/checkoutpage?qty=${qty}`)}
-          className="w-full py-4 rounded-2xl font-bold text-lg tracking-wide transition-all duration-300 hover:scale-[1.02] hover:shadow-lg cursor-pointer"
-          style={{
-            background: `linear-gradient(135deg, ${settings.colors.gold}, ${settings.colors.gold}cc)`,
-            color: "#1a1a0a",
-            boxShadow: `0 8px 24px ${settings.colors.gold}44`,
-          }}
+          className="w-full py-4 rounded-2xl font-bold text-lg tracking-wide transition-all duration-300 hover:scale-[1.02] hover:shadow-lg cursor-pointer"  
+             style={{
+                padding: "14px 38px", borderRadius: 50,
+                background: `linear-gradient(to right, ${settings.colors.gold}, ${settings.colors.goldLight})`,
+                color: "#1a1a0a", fontWeight: 800, fontSize: 16,
+                border: "none", cursor: "pointer",
+                boxShadow: `0 10px 30px ${settings.colors.goldLight}44`,
+                transition: "transform 0.2s, box-shadow 0.2s",
+                fontFamily: "inherit",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(.98)";
+                e.currentTarget.style.boxShadow = `0 16px 40px ${settings.colors.gold}55`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = `0 10px 30px ${settings.colors.gold}44`;
+              }}
         >
           {t.buy[lang]}
         </button>

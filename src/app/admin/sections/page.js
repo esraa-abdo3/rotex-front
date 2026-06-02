@@ -5,13 +5,18 @@ import axios from "axios";
 const API = "https://rootex-backend.vercel.app/api/v1";
 
 const SECTION_META = {
-  product: { label: "Product Section",  icon: "📦", desc: "The main product display & buy section" },
-  after:   { label: "Results (After)",  icon: "✨", desc: "Before & after results showcase" },
-  review:  { label: "Reviews Section",  icon: "⭐", desc: "Customer reviews & testimonials" },
+  Heroheader: { label: "Header Section", icon: "🔝", desc: "Top navigation header" },
+  Hero:       { label: "Hero Section",   icon: "🦸", desc: "Main hero banner" },
+  product:    { label: "Product Section",icon: "📦", desc: "Main product display & buy section" },
+  after:      { label: "Results (After)",icon: "✨", desc: "Before & after results showcase" },
+  review:     { label: "Reviews Section",icon: "⭐", desc: "Customer reviews & testimonials" },
+  CTA:        { label: "CTA Section",    icon: "📣", desc: "Call to action banner" },
 };
 
 export default function SectionsOrderPage() {
-  const [order, setOrder]     = useState({ product: 1, after: 2, review: 3 });
+  const [order, setOrder] = useState({
+  Heroheader: 1, Hero: 2, product: 3, after: 4, review: 5, CTA: 6,
+});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving]   = useState(false);
   const [toast, setToast]     = useState(null);
@@ -59,24 +64,25 @@ export default function SectionsOrderPage() {
   };
 
   // ── Move Up / Down ───────────────────────────────────────
-  const move = (key, dir) => {
-    const currentOrder = order[key];
-    const targetOrder  = currentOrder + dir;
-    if (targetOrder < 1 || targetOrder > 3) return;
+const move = (key, dir) => {
+  const currentOrder = order[key];
+  const targetOrder  = currentOrder + dir;
+  if (targetOrder < 1 || targetOrder > 6) return;      
 
-    const swapKey = Object.keys(order).find((k) => order[k] === targetOrder);
-    if (!swapKey) return;
+  const swapKey = Object.keys(order).find((k) => order[k] === targetOrder);
+  if (!swapKey) return;
 
-    setOrder((prev) => ({
-      ...prev,
-      [key]:     targetOrder,
-      [swapKey]: currentOrder,
-    }));
-  };
+  setOrder((prev) => ({
+    ...prev,
+    [key]:     targetOrder,
+    [swapKey]: currentOrder,
+  }));
+};
 
   // ── Save ─────────────────────────────────────────────────
   const handleSave = async () => {
     setSaving(true);
+    console.log(order)
     try {
       const { data } = await axios.put(`${API}/section-order`, { ...order });
       if (data.success) {
@@ -84,7 +90,7 @@ export default function SectionsOrderPage() {
         showToast("Section order saved!");
       }
     } catch (err) {
-      console.log(error)
+      console.log(err)
       showToast(err?.response?.data?.message || "Something went wrong", false);
     } finally {
       setSaving(false);
@@ -120,7 +126,7 @@ export default function SectionsOrderPage() {
           disabled={saving}
           style={{ ...s.saveBtn, opacity: saving ? 0.6 : 1, cursor: saving ? "not-allowed" : "pointer" }}
         >
-          {saving ? <><span style={s.spinner} /> Saving…</> : "💾 Save Order"}
+          {saving ? <><span style={s.spinner} /> </> : "Save Order"}
         </button>
       </div>
 
@@ -149,15 +155,15 @@ export default function SectionsOrderPage() {
                 transform: isOver ? "scale(1.01)" : "scale(1)",
               }}
             >
-              {/* Drag handle */}
+            
               <div style={s.handle} title="Drag to reorder">
                 <span style={s.dots}>⠿</span>
               </div>
 
-              {/* Position badge */}
+         
               <div style={s.badge}>{pos}</div>
 
-              {/* Icon */}
+          
               <div style={s.icon}>{meta.icon}</div>
 
               {/* Info */}
@@ -168,36 +174,30 @@ export default function SectionsOrderPage() {
 
               {/* Up / Down arrows */}
               <div style={s.arrows}>
-                <button
-                  onClick={() => move(key, -1)}
-                  disabled={pos === 1}
-                  style={{ ...s.arrowBtn, opacity: pos === 1 ? 0.3 : 1 }}
-                  title="Move up"
-                >
-                  ↑
-                </button>
-                <button
-                  onClick={() => move(key, 1)}
-                  disabled={pos === 3}
-                  style={{ ...s.arrowBtn, opacity: pos === 3 ? 0.3 : 1 }}
-                  title="Move down"
-                >
-                  ↓
-                </button>
+       <button
+  onClick={() => move(key, -1)}
+  disabled={pos === 1}
+  style={{ ...s.arrowBtn, opacity: pos === 1 ? 0.3 : 1 }}
+>↑</button>
+<button
+  onClick={() => move(key, 1)}
+  disabled={pos === 6}                    
+  style={{ ...s.arrowBtn, opacity: pos === 6 ? 0.3 : 1 }}
+>↓</button>
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* Preview hint */}
+    
       <div style={s.hint }>
         <span style={{ fontSize: 16 }}>💡</span>
         <span
           style={{cursor:"default"}}
         >
           Order preview:{" "}
-          <strong>Hero</strong>
+    
           {sortedSections.map((k) => (
             <span key={k}> → <strong>{SECTION_META[k].label}</strong></span>
           ))}

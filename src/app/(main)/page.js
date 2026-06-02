@@ -3,6 +3,8 @@ import Herosection from "../componets/herosection/herosection";
 import Product     from "../componets/product/product";
 import Review      from "../componets/review/review";
 import Result      from "../componets/result/result";
+import Headersection from "../componets/herosection/Headersection";
+import CTA from "../componets/CTA/CTA.jsx"
 
 async function getProduct() {
   try {
@@ -29,22 +31,22 @@ async function getReviews() {
 async function getSectionOrder() {
   try {
     const res = await fetch("https://rootex-backend.vercel.app/api/v1/section-order", { cache: "no-store" });
-    if (!res.ok) return { product: 1, after: 2, review: 3 };
+    if (!res.ok) return { Heroheader: 1, Hero: 2, product: 3, after: 4, review: 5, CTA: 6 };
     const data = await res.json();
-    return data.success ? data.order : { product: 1, after: 2, review: 3 };
+    return data.success ? data.order : { Heroheader: 1, Hero: 2, product: 3, after: 4, review: 5, CTA: 6 };
   } catch {
-    // fallback لو الـ API مش شغال
-    return { product: 1, after: 2, review: 3 };
+    return { Heroheader: 1, Hero: 2, product: 3, after: 4, review: 5, CTA: 6 };
   }
 }
-
-
 function renderSection(key, props) {
   switch (key) {
-    case "product": return <Product key="product" product={props.product} />;
-    case "after":   return <Result  key="after" />;
-    case "review":  return <Review  key="review" reviewss={props.reviews} />;
-    default:        return null;
+    case "Heroheader": return <Headersection key="Heroheader" />;
+    case "Hero":       return <Herosection   key="Hero" />;
+    case "product":    return <Product       key="product" product={props.product} />;
+    case "after":      return <Result        key="after" />;
+    case "review":     return <Review        key="review" reviewss={props.reviews} />;
+    case "CTA":        return <CTA           key="CTA" />;
+    default:           return null;
   }
 }
 
@@ -54,18 +56,17 @@ export default async function Home() {
     getReviews(),
     getSectionOrder(),
   ]);
-
-
   const sortedSections = Object.entries(sectionOrder)
     .sort(([, a], [, b]) => a - b)
     .map(([key]) => key);
 
   return (
     <div>
-      <Herosection />
+ 
       {sortedSections.map((key) =>
         renderSection(key, { product: product.data, reviews })
       )}
+  
     </div>
   );
 }

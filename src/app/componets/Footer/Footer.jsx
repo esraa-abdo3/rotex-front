@@ -3,32 +3,37 @@ import { useSettings } from "@/app/providers/SettingsProvider";
 import { useLang } from "@/app/providers/LanguageProvider";
 import Link from "next/link";
 
+
 export default function Footer() {
   const settings = useSettings();
-  const { lang } = useLang();
+  const { lang ,toggleLang} = useLang();
 
   const t = {
-    density:    { ar: "كثافة أكثر",      en: "More Density" },
+    density: { ar: "كثافة أكثر", en: "More Density" },
+    buyNow: { ar: "اشتري الآن", en: "Buy Now" },
     strength:   { ar: "قوة أكبر",        en: "More Strength" },
     confidence: { ar: "ثقة تدوم",        en: "Lasting Confidence" },
     tagline:    { ar: "شعرك يستاهل الأفضل", en: "Your hair deserves the best" },
     rights:     { ar: "جميع الحقوق محفوظة", en: "All Rights Reserved" },
-    made:       { ar: "صُنع بـ ❤️ لكل امرأة تستحق الثقة", en: "Made with ❤️ for every woman who deserves confidence" },
+    made: { ar: "صُنع بـ ❤️ لكل امرأة تستحق الثقة", en: "Made with ❤️ for every woman who deserves confidence" },
+    
   };
 
   if (!settings) return null;
 
-  const gold = settings.colors.gold;
-  const primaryDark = settings.colors.primaryDark;
-  const primary = settings.colors.primary;
+
   const year = new Date().getFullYear();
+    const gold = settings?.colors?.gold ?? "#c8a93e";
+  const primaryDark = settings?.colors?.primaryDark ?? "#1a1f0e";
+  const primary = settings?.colors?.primary ?? "#3a4520";
+  const goldLight = settings?.colors?.goldLight ?? "#d4b84a";
 
   return (
   <>
 
     <footer
       dir={lang === "ar" ? "rtl" : "ltr"}
-      style={{ background: primaryDark, fontFamily: "'Cairo', sans-serif" }}
+      style={{ background: primaryDark, fontFamily: settings.fontFamily }}
       >
         
 
@@ -45,7 +50,21 @@ export default function Footer() {
             </span>
             <p className="text-sm" style={{ color: gold + "99" }}>
               {t.tagline[lang]}
-            </p>
+              </p>
+           <Link href="/checkoutpage" className="nav-cta setting-desctop" style={{
+              padding: "9px 20px", borderRadius: 10,
+              background: `linear-gradient(135deg, ${gold}, ${goldLight})`,
+              color: "#1a1a0a", fontWeight: 700, fontSize: 14,
+              fontFamily: "'Cairo', sans-serif",
+              textDecoration: "none", border: "none",
+              cursor: "pointer", transition: "all 0.2s",
+              boxShadow: `0 4px 14px ${gold}33`,
+            }}
+             
+             
+            >
+              {t.buyNow[lang]}
+            </Link>
           </div>
 
        
@@ -59,7 +78,7 @@ export default function Footer() {
                   >
                     {["✦", "✦", "✦"][i]}
                   </span>
-                  <span className="text-sm font-semibold text-white opacity-80">{item}</span>
+                  <span className="text-sm font-semibold text-white opacity-80 text-center">{item}</span>
                 </div>
                 {i < arr.length - 1 && (
                   <div className="h-8 w-px" style={{ background: gold + "33" }} />
