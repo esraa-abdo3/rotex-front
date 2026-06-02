@@ -578,7 +578,7 @@ const inputStyle = {
   border: "1px solid rgba(255,255,255,0.1)",
   borderRadius: 12,
   color: "white",
-  fontSize: 14,
+  fontSize: 16,
   fontFamily: "'Cairo', sans-serif",
   outline: "none",
   boxSizing: "border-box",

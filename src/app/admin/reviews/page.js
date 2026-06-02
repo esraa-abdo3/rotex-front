@@ -1,5 +1,6 @@
 "use client";
 
+import { useLang } from "@/app/providers/LanguageProvider";
 import { useEffect, useState, useMemo } from "react";
 
 const API = "https://rootex-backend.vercel.app/api/v1";
@@ -52,126 +53,83 @@ function SkeletonRow() {
   );
 }
 
-// ─── Modal ────────────────────────────────────────────────────────────────────
-// function ReviewModal({ mode, review, onClose, onSave }) {
+function ReviewModal({ mode, review, onClose, onSave }) {
 //   const blank = { name: "", review: "", rating: 5, isVisible: true };
 //   const [form, setForm] = useState(mode === "edit" ? { ...review } : blank);
+//   const [imageFile, setImageFile] = useState(null);
+//   const [imagePreview, setImagePreview] = useState(mode === "edit" ? review?.image : null);
 //   const [saving, setSaving] = useState(false);
 //   const [err, setErr] = useState("");
 
 //   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
-//   const handleSave = async () => {
-//     if (!form.name.trim() || !form.review.trim()) {
-//       setErr("Name and review text are required.");
-//       return;
-//     }
-//     setSaving(true);
-//     setErr("");
-//     try {
-//       const url =
-//         mode === "edit"
-//           ? `${API}/Review/${review._id}`
-//           : `${API}/Review`;
-//       const method = mode === "edit" ? "PATCH" : "POST";
-//       const res = await fetch(url, {
-//         method,
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({
-//           name: form.name.trim(),
-//           review: form.review.trim(),
-//           rating: form.rating,
-//           isVisible: form.isVisible,
-//         }),
-//       });
-//       if (!res.ok) throw new Error("Request failed");
-//       const data = await res.json();
-//       onSave(data.data, mode);
-//     } catch {
-//       setErr("Something went wrong. Please try again.");
-//     } finally {
-//       setSaving(false);
-//     }
+//   const handleImageChange = (e) => {
+//     const file = e.target.files[0];
+//     if (!file) return;
+//     setImageFile(file);
+//     setImagePreview(URL.createObjectURL(file));
 //   };
 
-//   return (
-//     <div style={styles.overlay} onClick={(e) => e.target === e.currentTarget && onClose()}>
-//       <div style={styles.modal}>
-//         {/* Modal header */}
-//         <div style={styles.modalHeader}>
-//           <h2 style={styles.modalTitle}>
-//             {mode === "edit" ? "✏️ Edit Review" : "➕ Add Review"}
-//           </h2>
-//           <button onClick={onClose} style={styles.closeBtn}>✕</button>
-//         </div>
+ 
+// const handleSave = async () => {
+//   if (!form.name.trim() || !form.review.trim()) {
+//     setErr("Name and review text are required.");
+//     return;
+//   }
+//   setSaving(true);
+//   setErr("");
+//   try {
+//     const url = mode === "edit" ? `${API}/Review/${review._id}` : `${API}/Review`;
+//     const method = mode === "edit" ? "PATCH" : "POST";
 
-//         {err && <div style={styles.errBanner}>⚠️ {err}</div>}
+//     const formData = new FormData();
+//     formData.append("name", form.name.trim());
+//     formData.append("review", form.review.trim());
+//     formData.append("rating", form.rating);
+//     formData.append("isVisible", form.isVisible);
 
-//         {/* Name */}
-//         <label style={styles.label}>Customer Name</label>
-//         <input
-//           style={styles.input}
-//           placeholder="e.g. Ahmed Mohamed"
-//           value={form.name}
-//           onChange={(e) => set("name", e.target.value)}
-//         />
+//     if (imageFile) {
+//       formData.append("image", imageFile);
+//     } else if (mode === "edit" && imagePreview === null && review?.image) {
+  
+//       formData.append("removeImage", "true");
+//     }
 
-//         {/* Review text */}
-//         <label style={styles.label}>Review Text</label>
-//         <textarea
-//           style={{ ...styles.input, minHeight: 100, resize: "vertical" }}
-//           placeholder="Customer review…"
-//           value={form.review}
-//           onChange={(e) => set("review", e.target.value)}
-//         />
+//     const res = await fetch(url, { method, body: formData });
+//     if (!res.ok) throw new Error("Request failed");
+//     const data = await res.json();
+//     onSave(data.data, mode);
+//   } catch {
+//     setErr("Something went wrong. Please try again.");
+//   } finally {
+//     setSaving(false);
+//   }
+  // };
+    const blank = {
+    name: "",
+    review: "",
+    rating: 5,
+    isVisible: true,
+  };
 
-//         {/* Rating */}
-//         <label style={styles.label}>Rating</label>
-//         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-//           <Stars rating={form.rating} size={26} interactive onRate={(n) => set("rating", n)} />
-//           <span style={{ fontSize: 14, color: "#888", fontWeight: 600 }}>{form.rating} / 5</span>
-//         </div>
+  const [form, setForm] = useState(
+    mode === "edit"
+      ? {
+          ...review,
+          review:
+            typeof review?.review === "object"
+              ? review.review.ar
+              : review?.review || "",
+        }
+      : blank
+  );
 
-//         {/* Visibility */}
-//         <label style={{ ...styles.label, display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}>
-//           <div
-//             onClick={() => set("isVisible", !form.isVisible)}
-//             style={{
-//               width: 42, height: 24, borderRadius: 12,
-//               background: form.isVisible ? "#166534" : "#d1d5db",
-//               position: "relative", cursor: "pointer", transition: "background 0.2s",
-//             }}
-//           >
-//             <div style={{
-//               width: 18, height: 18, borderRadius: "50%", background: "white",
-//               position: "absolute", top: 3,
-//               left: form.isVisible ? 21 : 3,
-//               transition: "left 0.2s",
-//               boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-//             }} />
-//           </div>
-//           <span style={{ fontWeight: 500, color: "#333" }}>
-//             {form.isVisible ? "Visible on site" : "Hidden from site"}
-//           </span>
-//         </label>
-
-//         {/* Actions */}
-//         <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 8 }}>
-//           <button onClick={onClose} style={styles.cancelBtn}>Cancel</button>
-//           <button onClick={handleSave} disabled={saving} style={styles.saveBtn}>
-//             {saving ? "Saving…" : mode === "edit" ? "Save Changes" : "Add Review"}
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-// ─── Modal ────────────────────────────────────────────────────────────────────
-function ReviewModal({ mode, review, onClose, onSave }) {
-  const blank = { name: "", review: "", rating: 5, isVisible: true };
-  const [form, setForm] = useState(mode === "edit" ? { ...review } : blank);
   const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(mode === "edit" ? review?.image : null);
+
+  const [imagePreview, setImagePreview] = useState(
+    mode === "edit" ? review?.image : null
+  );
+
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState("");
 
@@ -180,45 +138,62 @@ function ReviewModal({ mode, review, onClose, onSave }) {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
   };
 
- 
-const handleSave = async () => {
-  if (!form.name.trim() || !form.review.trim()) {
-    setErr("Name and review text are required.");
-    return;
-  }
-  setSaving(true);
-  setErr("");
-  try {
-    const url = mode === "edit" ? `${API}/Review/${review._id}` : `${API}/Review`;
-    const method = mode === "edit" ? "PATCH" : "POST";
-
-    const formData = new FormData();
-    formData.append("name", form.name.trim());
-    formData.append("review", form.review.trim());
-    formData.append("rating", form.rating);
-    formData.append("isVisible", form.isVisible);
-
-    if (imageFile) {
-      formData.append("image", imageFile);
-    } else if (mode === "edit" && imagePreview === null && review?.image) {
-  
-      formData.append("removeImage", "true");
+  const handleSave = async () => {
+    if (!form.name?.trim() || !form.review?.trim()) {
+      setErr("Name and review text are required.");
+      return;
     }
 
-    const res = await fetch(url, { method, body: formData });
-    if (!res.ok) throw new Error("Request failed");
-    const data = await res.json();
-    onSave(data.data, mode);
-  } catch {
-    setErr("Something went wrong. Please try again.");
-  } finally {
-    setSaving(false);
-  }
-};
+    setSaving(true);
+    setErr("");
+
+    try {
+      const url =
+        mode === "edit"
+          ? `${API}/Review/${review._id}`
+          : `${API}/Review`;
+
+      const method = mode === "edit" ? "PATCH" : "POST";
+
+      const formData = new FormData();
+
+      formData.append("name", form.name.trim());
+      formData.append("review", form.review.trim());
+      formData.append("rating", form.rating);
+      formData.append("isVisible", form.isVisible);
+
+      if (imageFile) {
+        formData.append("image", imageFile);
+      } else if (
+        mode === "edit" &&
+        imagePreview === null &&
+        review?.image
+      ) {
+        formData.append("removeImage", "true");
+      }
+
+      const res = await fetch(url, {
+        method,
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error("Request failed");
+
+      const data = await res.json();
+
+      onSave(data.data, mode);
+    } catch (err) {
+      console.log(err);
+      setErr("Something went wrong. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
   return (
     <div style={styles.overlay} onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div style={styles.modal}>
@@ -364,6 +339,7 @@ export default function ReviewsPage() {
   const [modal,    setModal]    = useState(null); // { mode: "add"|"edit", review? }
   const [delModal, setDelModal] = useState(null); // review to delete
   const [deleting, setDeleting] = useState(false);
+    const { lang } = useLang()
 
   // ── toast helper ────────────────────────────────────────────────────────────
   const showToast = (msg, ok = true) => {
@@ -387,7 +363,7 @@ export default function ReviewsPage() {
       list = list.filter(
         (r) =>
           r.name?.toLowerCase().includes(q) ||
-          r.review?.toLowerCase().includes(q)
+       r.review?.[lang]?.toLowerCase().includes(q)
       );
     }
     if (ratingF !== "all") list = list.filter((r) => r.rating === Number(ratingF));
@@ -592,7 +568,9 @@ export default function ReviewsPage() {
 
                     {/* Review text */}
                     <td style={{ ...styles.td, maxWidth: 320 }}>
-                      <p style={styles.reviewText}>{r.review}</p>
+                     <p style={styles.reviewText}>
+  {r.review?.[lang]}
+</p>
                     </td>
 
                     {/* Rating */}
@@ -718,7 +696,7 @@ const styles = {
   modalTitle:  { fontSize: 18, fontWeight: 700, color: "#111", margin: 0 },
   closeBtn:    { background: "#f3f4f6", border: "none", borderRadius: 8, width: 32, height: 32, cursor: "pointer", fontSize: 14, color: "#555", display: "flex", alignItems: "center", justifyContent: "center" },
   label:       { fontSize: 13, fontWeight: 600, color: "#444", marginBottom: 6, display: "block" },
-  input:       { width: "100%", padding: "10px 14px", borderRadius: 10, border: "1px solid #e0e0de", fontSize: 14, outline: "none", fontFamily: "'DM Sans', sans-serif", color: "#111", boxSizing: "border-box" },
+  input:       { width: "100%", padding: "10px 14px", borderRadius: 10, border: "1px solid #e0e0de", fontSize: 16, outline: "none", fontFamily: "'DM Sans', sans-serif", color: "#111", boxSizing: "border-box" },
   errBanner:   { background: "#fef2f2", border: "1px solid #fecaca", color: "#b91c1c", borderRadius: 8, padding: "10px 14px", fontSize: 13 },
   cancelBtn:   { padding: "9px 20px", background: "#f3f4f6", color: "#333", border: "none", borderRadius: 10, fontSize: 14, fontWeight: 500, cursor: "pointer" },
   saveBtn: { padding: "9px 22px", background: "#1a1f0e", color: "white", border: "none", borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: "pointer" },
