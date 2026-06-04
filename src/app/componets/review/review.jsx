@@ -77,7 +77,7 @@ export default function Review({ reviewss }) {
   const arrowBtn = () => (
     {
       position: "absolute",
-      lineHeight: 1.3, top: "42%"
+      top: "42%"
       , transform: "translateY(-50%)",
       width: 42,
       height: 42,
