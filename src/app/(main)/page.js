@@ -51,6 +51,7 @@ function renderSection(key, props) {
   }
 }
 
+
 export default async function Home() {
   const [product, reviews, sectionOrder] = await Promise.all([
     getProduct(),

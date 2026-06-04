@@ -21,38 +21,45 @@ export default function CTA({ product }) {
 
   const t = {
     cta:       { ar: settings?.buttonText?.ar,                        en: settings?.buttonText?.en },
-    fans:      { ar: settings?.fansText?.ar || "بنت حبّوا النتيجة 💛", en: settings?.fansText?.en || "girls loved the results 💛" },
+    fans:      { ar: settings?.fansText?.ar || "بنت حبّوا النتيجة ", en: settings?.fansText?.en || "girls loved the results 💛" },
     currency:  { ar: "جنيه",     en: "EGP"        },
     insteadOf: { ar: "بدلاً من", en: "Instead of" },
   };
-
+const oldPrice = item?.oldPrice ?? item?.originalPrice ?? 2700;
+const totalOldPrice = oldPrice * qty;
+const totalPrice = item?.price * qty;
   const QtyPill = () => (
-    <div style={{ display: "flex", alignItems: "center", background: `white`, borderRadius: 16, overflow: "hidden", width: "fit-content", height: 35 }}>
-      <button onClick={decrement} style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", background:  `${backgroundColor}22`, border: "none", fontSize: 16, fontWeight: 500, color: textColor, cursor: "pointer" }}>−</button>
-      <span style={{ width: 44, textAlign: "center", fontSize: 16, fontWeight: 700, color: textColor,  }}>{qty}</span>
-      <button onClick={increment} style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", background: `${backgroundColor}22`, border: "none", fontSize: 16, fontWeight: 500, color: textColor, cursor: "pointer" }}>+</button>
+    <div style={{ display: "flex", alignItems: "center",background: `${buttonbackground}`, borderRadius: 16, overflow: "hidden", width: "fit-content", height: 35 }}>
+      <button onClick={decrement} style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", background:  `${buttonbackground}`, border: "none", fontSize: 16, fontWeight: 500, color: buttontext, cursor: "pointer" }}>−</button>
+      <span style={{ width: 44, textAlign: "center", fontSize: 16, fontWeight: 700, color: buttontext, background: `${buttonbackground}` }}>{qty}</span>
+      <button onClick={increment} style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", background: `${buttonbackground}`, border: "none", fontSize: 16, fontWeight: 500, color: buttontext, cursor: "pointer" }}>+</button>
     </div>
   );
 
   return (
-    <div className="cta-section" style={{ borderRadius: 16, overflow: "hidden", width: "75%", margin: "5px auto 0px auto", backgroundColor: backgroundColor, paddingBottom: 10 }}>
-      <div className="itemcta" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexDirection: "column", flexWrap: "wrap", gap: 5, padding: "0px 5px" }}>
-
-        {/* Fans text */}
-        <div style={{ fontSize: 14, color: textColor, marginTop: 6, textAlign: "center" }}>
+    <>
+      <div className="textafter" style={{ width: "75%", margin:"3px auto 3px auto" }}>
+                <div style={{ fontSize: 14, color: textColor, margin: "3px 0", textAlign: "center" }}>
           {renderHighlighted(t.fans[lang], highlightColor)}
         </div>
 
-        {/* Qty + Price */}
+     
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", gap: 10, direction: lang === "ar" ? "rtl" : "ltr" }}>
           <QtyPill />
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             <span style={{ fontSize: 16, fontWeight: 900, color: textColor }}>{item?.price * qty} {t.currency[lang]}</span>
             <span style={{ fontSize: 12, color: textColor, opacity: 0.6 }}>{t.insteadOf[lang]}</span>
-            <span style={{ fontSize: 12, color: textColor, textDecoration: "line-through", fontWeight: 500, opacity: 0.5 }}>{item?.oldPrice ?? item?.originalPrice ?? 2700} {t.currency[lang]}</span>
+<span className="old-price" style={{color:textColor}}>
+  {totalOldPrice} {t.currency[lang]}
+</span>
           </div>
         </div>
+      </div>   
 
+   <div className="cta-section" style={{ borderRadius: 16, overflow: "hidden", width: "75%", margin: "5px auto 0px auto", backgroundColor: backgroundColor, paddingBottom: 10 }}>
+      <div className="itemcta" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexDirection: "column", flexWrap: "wrap", gap: 5, padding: "0px 5px" }}>
+
+  
         {/* Buy Button */}
         <button
           onClick={() => router.push(`/checkoutpage?qty=${qty}`)}
@@ -62,5 +69,7 @@ export default function CTA({ product }) {
         </button>
       </div>
     </div>
+    </>
+ 
   );
 }

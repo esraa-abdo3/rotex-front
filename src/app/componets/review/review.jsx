@@ -74,7 +74,25 @@ export default function Review({ reviewss }) {
   const buttontext       = settings?.colors?.buttontext;
 
   const [reviews] = useState(reviewss ?? []);
-  const arrowBtn  = () => ({ position: "absolute", lineHeight: 1.3, top: "42%", transform: "translateY(-50%)", width: 42, height: 42, borderRadius: "50%", display: "flex", justifyContent: "center", fontSize: 26, fontWeight: 700, background: backgroundColor, border: "none", color: "#fff", cursor: "pointer", zIndex: 2, boxShadow: "0 4px 16px rgba(91,45,142,0.35)", textAlign: "center" });
+  const arrowBtn = () => (
+    {
+      position: "absolute",
+      lineHeight: 1.3, top: "42%"
+      , transform: "translateY(-50%)",
+      width: 42,
+      height: 42,
+      borderRadius: "50%",
+      display: "flex",
+      justifyContent: "center",
+      fontSize: 26,
+      fontWeight: 700,
+      background: backgroundColor,
+      border: "none",
+      color: "#fff",
+      cursor: "pointer",
+      zIndex: 2,
+      boxShadow: "0 4px 16px rgba(91,45,142,0.35)", textAlign: "center"
+    });
 
   useEffect(() => {
     reviews.forEach((r) => [r.image, r.beforeImage, r.imageAfter].filter(Boolean).forEach((src) => { const img = new Image(); img.src = src; }));
@@ -153,12 +171,37 @@ export default function Review({ reviewss }) {
                 ))}
               </div>
             </div>
-            {current !== (dir === "rtl" ? maxIndex : 0) && (
+            {/* {current !== (dir === "rtl" ? maxIndex : 0) && (
               <button className="rv-arrow" onClick={dir === "rtl" ? next : prev} style={{ ...arrowBtn(), [dir === "rtl" ? "right" : "left"]: "-10px" }}>{dir === "rtl" ? "›" : "‹"}</button>
             )}
             {current !== (dir === "rtl" ? 0 : maxIndex) && (
               <button className="rv-arrow" onClick={dir === "rtl" ? prev : next} style={{ ...arrowBtn(), [dir === "rtl" ? "left" : "right"]: 0 }}>{dir === "rtl" ? "‹" : "›"}</button>
-            )}
+            )} */}
+              {current > 0 && (
+  <button
+    className="rv-arrow"
+    onClick={prev}
+    style={{
+      ...arrowBtn(),
+      left: "0px",
+    }}
+  >
+    ←
+  </button>
+)}
+
+{current < maxIndex && (
+  <button
+    className="rv-arrow"
+    onClick={next}
+    style={{
+      ...arrowBtn(),
+      right: "0px",
+    }}
+  >
+    →
+  </button>
+)}
             <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 0 }}>
               {Array.from({ length: maxIndex + 1 }).map((_, i) => (
                 <div key={i} className="rv-dot" onClick={() => setCurrent(i)} style={{ height: 8, width: i === current ? 28 : 8, borderRadius: 4, background: i === current ? backgroundColor : "#5b2d8e44" }} />

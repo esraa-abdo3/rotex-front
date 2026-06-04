@@ -10,6 +10,7 @@ export default function Navbar() {
   const settings = useSettings();
   const { user, loading } = useAuth();
   const { lang, toggleLang } = useLang();
+  
 
 
   const t = {
@@ -33,19 +34,19 @@ export default function Navbar() {
         background: `${backgroundColor}`,
         backdropFilter: "blur(16px)",
        
-     fontFamily: settings?.fontFamily || "'Cairo', sans-serif",
+     fontFamily: settings?.Fontfamily ,
         direction: lang === "ar" ? "rtl" : "ltr",
       }}>
         <div style={{
           maxWidth: "95%", margin: "0 auto",
-          padding: "0 24px", height: 50,
+          padding: "0 24px", height: 35,
           display: "flex", alignItems: "center",
           justifyContent: "space-between",
         }}>
 
         
           <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}>
-        <span style={{ fontSize: 26, fontWeight: 900, color: textColor, letterSpacing: 1 }}>
+        <span style={{ fontSize: 23, fontWeight: 900, color: textColor, letterSpacing: 1 }}>
   {renderHighlighted(Brand, highlightColor)}
 </span>
           </Link>
@@ -57,7 +58,7 @@ export default function Navbar() {
             <button onClick={toggleLang} style={{
               background: "rgba(255,255,255,0.06)",
               border: `1px solid ${textColor}55`,
-              borderRadius: 8, padding: "6px 14px",
+              borderRadius: 8, padding: "3px 14px",
               color: textColor,
               fontSize: 13, fontWeight: 700,
               cursor: "pointer", fontFamily: "'Cairo', sans-serif",
@@ -72,7 +73,7 @@ export default function Navbar() {
 
             {!loading && user?.role === "admin" && (
               <Link href="/admin" style={{
-                padding: "8px 16px", borderRadius: 10,
+                padding: "4px 16px", borderRadius: 10,
                 background: "rgba(255,255,255,0.08)",
                 border: `1px solid ${textColor}44`,
                 color: textColor, fontWeight: 700, fontSize: 13,
@@ -88,7 +89,7 @@ export default function Navbar() {
             )}
 
             <Link href="/checkoutpage" className="nav-cta setting-desctop" style={{
-              padding: "9px 20px", borderRadius: 10,
+              padding: "5px 20px", borderRadius: 10,
               background: buttonbackground,
               color:buttontext, fontWeight: 700, fontSize: 14,
               fontFamily: "'Cairo', sans-serif",

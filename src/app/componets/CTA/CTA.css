@@ -3,11 +3,31 @@
     cursor: default;
 }
 @media(max-width:767px){
-    .cta-section{
+    .cta-section,
+    .textafter{
     width: 95% !important;
 }
 .itemcta{
     justify-content: center !important;
 }
 
+}
+
+.old-price {
+  position: relative;
+  display: inline-block;
+  color: inherit;
+  font-weight: 700;
+}
+
+.old-price::after {
+  content: "";
+  position: absolute;
+  left: -5%;
+  top: 50%;
+  width: 110%;
+  height: 1.5px;
+  background: red;
+  transform: rotate(-8deg);
+  transform-origin: center;
 }

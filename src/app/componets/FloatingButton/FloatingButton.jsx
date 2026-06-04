@@ -4,6 +4,7 @@ import { useSettings } from "../../providers/SettingsProvider";
 import { useQuantity } from "../../providers/QuantityProvider";
 import { useLang } from "@/app/providers/LanguageProvider";
 import { renderHighlighted } from "../utils/highlight";
+import "../CTA/CTA.css"
 
 export default function FloatingButton({ product }) {
   const settings = useSettings();
@@ -24,12 +25,15 @@ export default function FloatingButton({ product }) {
     currency:  { ar: "جنيه",     en: "EGP"        },
     insteadOf: { ar: "بدلاً من", en: "Instead of" },
   };
+  const oldPrice = item?.oldPrice ?? item?.originalPrice ?? 2700;
+const totalOldPrice = oldPrice * qty;
+
 
   const QtyPill = () => (
-    <div style={{ display: "flex", alignItems: "center", background: `white`, borderRadius: 16, overflow: "hidden", width: "fit-content", height: 35 }}>
-      <button onClick={decrement} style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", background: `${backgroundColor}33`, border: "none", fontSize: 16, fontWeight: 500, color: textColor, cursor: "pointer" }}>−</button>
-      <span style={{ width: 44, textAlign: "center", fontSize: 16, fontWeight: 700, color: textColor}}>{qty}</span>
-      <button onClick={increment} style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", background: `${backgroundColor}33`, border: "none", fontSize: 16, fontWeight: 500, color: textColor, cursor: "pointer" }}>+</button>
+    <div style={{ display: "flex", alignItems: "center",background: `${buttonbackground}`, borderRadius: 16, overflow: "hidden", width: "fit-content", height: 35 }}>
+      <button onClick={decrement} style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", background:  `${buttonbackground}`, border: "none", fontSize: 16, fontWeight: 500, color: buttontext, cursor: "pointer" }}>−</button>
+      <span style={{ width: 44, textAlign: "center", fontSize: 16, fontWeight: 700, color: buttontext, background: `${buttonbackground}` }}>{qty}</span>
+      <button onClick={increment} style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", background: `${buttonbackground}`, border: "none", fontSize: 16, fontWeight: 500, color: buttontext, cursor: "pointer" }}>+</button>
     </div>
   );
 
@@ -42,7 +46,9 @@ export default function FloatingButton({ product }) {
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
           <span style={{ fontSize: 16, fontWeight: 900, color: textColor }}>{item?.price * qty} {t.currency[lang]}</span>
           <span style={{ fontSize: 13, color: textColor, opacity: 0.6 }}>{t.insteadOf[lang]}</span>
-          <span style={{ fontSize: 12, color: textColor, textDecoration: "line-through", fontWeight: 500, opacity: 0.5 }}>{item?.oldPrice ?? item?.originalPrice ?? 2700} {t.currency[lang]}</span>
+       <span className="old-price" style={{color:textColor}}>
+  {totalOldPrice} {t.currency[lang]}
+</span>
         </div>
       </div>
 
