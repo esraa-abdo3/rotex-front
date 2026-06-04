@@ -16,17 +16,6 @@
 
 }
 
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(10, 9, 4, 0.92) 0%,
-    rgba(10, 9, 4, 0.5) 50%,
-    rgba(10, 9, 4, 0.05) 100%
-  );
-  border-radius: 16px;
-}
 
 
 
@@ -42,40 +31,8 @@
   font-weight: 900;
 }
 
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  border: 1px solid #b4963c66;
-  background: rgba(20, 24, 12, 0.75);
-  padding: 8px 16px;
-  border-radius: 10px;
-  backdrop-filter: blur(8px);
-  cursor: default;
-    margin-bottom: 15px ;
-}
 
-.hero-badge-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #4ade80;
-  animation: pulse 2s infinite;
-  flex-shrink: 0;
-}
 
-.hero-badge-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: #e8d88a;
-  margin: 0 0 2px;
-}
-
-.hero-badge-sub {
-  font-size: 11px;
-  color: rgba(220, 210, 170, 0.85);
-  margin: 0;
-}
 
 @keyframes pulse {
   0%, 100% { opacity: 1; }
@@ -93,11 +50,6 @@
     padding: 0 20px 5px;
   }
 
-  .hero-badge {
- 
-   margin-bottom: 0;
-
-  }
 }
 .hero-content {
   display: flex;

@@ -1,88 +1,66 @@
 "use client";
 import { useSettings } from "@/app/providers/SettingsProvider";
 import { useLang } from "@/app/providers/LanguageProvider";
+import { useQuantity } from "@/app/providers/QuantityProvider";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import "./CTA.css"
+import { renderHighlighted } from "../utils/highlight";
+import "./CTA.css";
 
-export default function CTA() {
-    const router = useRouter();
-    const settings = useSettings();
-    const { lang } = useLang();
-    const gold      = settings.colors?.gold          ?? "#c8a93e";
-    const goldLight = settings.colors?.goldLight      ?? "#d4b84a";
-    const primary   = settings.colors?.primary        ?? "#3a4520";
-    const secDark   = settings.colors?.secondaryDark  ?? "#2d3518";
-    const dir = lang === "ar" ? "rtl" : "ltr";
-     const t = {
-    label: { ar: "آراء العملاء",               en: "Customer Reviews" },
-    title: { ar: "البنات اللي جرّبوا",         en: "Girls who tried" },
-    felt:  { ar: "حسّوا بالفرق",               en: "felt the difference" },
-        cta: {
-          ar: settings?.buttonText?.ar,
-          en: settings?.buttonText?.en
-        },
-    fans:  { ar: "بنت حبّوا النتيجة 💛",        en: "girls loved the results 💛" },
-    empty: { ar: "لا توجد تقييمات بعد",         en: "No reviews yet" },
+export default function CTA({ product }) {
+  const settings = useSettings();
+  const { lang } = useLang();
+  const { qty, increment, decrement } = useQuantity();
+  const router = useRouter();
+
+  const buttonbackground = settings?.colors?.buttonbackground;
+  const backgroundColor  = settings?.colors?.backgroundColor;
+  const highlightColor   = settings?.colors?.highlightColor;
+  const textColor        = settings?.colors?.textColor;
+  const buttontext       = settings?.colors?.buttontext;
+  const item             = product?.[0];
+
+  const t = {
+    cta:       { ar: settings?.buttonText?.ar,                        en: settings?.buttonText?.en },
+    fans:      { ar: settings?.fansText?.ar || "بنت حبّوا النتيجة 💛", en: settings?.fansText?.en || "girls loved the results 💛" },
+    currency:  { ar: "جنيه",     en: "EGP"        },
+    insteadOf: { ar: "بدلاً من", en: "Instead of" },
   };
-    return (
-      <div className="cta-section"
-        style={{
-          marginTop: 52, borderRadius: 32,
-          background: `linear-gradient(135deg, ${secDark}, ${primary})`,
-          border: `1px solid ${gold}33`,
-            overflow: "hidden",
-            marginBottom: "40px",
-            width: "80%",
-          margin :"40px auto 40px auto"
-        }}>
-        <div
-          className="itemcta"
-          style={{
-            display: "flex", alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap", gap: 24,
-            padding: "32px 40px",
-          }}>
-            <div>
-              <div style={{
-                fontSize: 50, fontWeight: 900,
-                color: gold, lineHeight: 1,
-                textShadow: `0 0 30px ${gold}55`,
-              }}>
-                +1000
-              </div>
-              <div style={{ fontSize: 16, color: "rgba(255,255,255,0.85)", marginTop: 6  , textAlign:"center"}}>
-                {t.fans[lang]}
-              </div>
-            </div>
-                <Link href={"/checkoutpage"}>
-                       <button
-            
-              style={{
-                padding: "14px 38px", borderRadius: 50,
-                background: `linear-gradient(to right, ${gold}, ${goldLight})`,
-                color: "#1a1a0a", fontWeight: 800, fontSize: 16,
-                border: "none", cursor: "pointer",
-                boxShadow: `0 10px 30px ${gold}44`,
-                transition: "transform 0.2s, box-shadow 0.2s",
-                fontFamily: "inherit",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "scale(1.05)";
-                e.currentTarget.style.boxShadow = `0 16px 40px ${gold}55`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.boxShadow = `0 10px 30px ${gold}44`;
-              }}
-                >
-                
-              {t.cta[lang]}
-            </button>
-                </Link>
-         
+
+  const QtyPill = () => (
+    <div style={{ display: "flex", alignItems: "center", background: `white`, borderRadius: 16, overflow: "hidden", width: "fit-content", height: 35 }}>
+      <button onClick={decrement} style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", background:  `${backgroundColor}22`, border: "none", fontSize: 16, fontWeight: 500, color: textColor, cursor: "pointer" }}>−</button>
+      <span style={{ width: 44, textAlign: "center", fontSize: 16, fontWeight: 700, color: textColor,  }}>{qty}</span>
+      <button onClick={increment} style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", background: `${backgroundColor}22`, border: "none", fontSize: 16, fontWeight: 500, color: textColor, cursor: "pointer" }}>+</button>
+    </div>
+  );
+
+  return (
+    <div className="cta-section" style={{ borderRadius: 16, overflow: "hidden", width: "75%", margin: "5px auto 0px auto", backgroundColor: backgroundColor, paddingBottom: 10 }}>
+      <div className="itemcta" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexDirection: "column", flexWrap: "wrap", gap: 5, padding: "0px 5px" }}>
+
+        {/* Fans text */}
+        <div style={{ fontSize: 14, color: textColor, marginTop: 6, textAlign: "center" }}>
+          {renderHighlighted(t.fans[lang], highlightColor)}
+        </div>
+
+        {/* Qty + Price */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", gap: 10, direction: lang === "ar" ? "rtl" : "ltr" }}>
+          <QtyPill />
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 16, fontWeight: 900, color: textColor }}>{item?.price * qty} {t.currency[lang]}</span>
+            <span style={{ fontSize: 12, color: textColor, opacity: 0.6 }}>{t.insteadOf[lang]}</span>
+            <span style={{ fontSize: 12, color: textColor, textDecoration: "line-through", fontWeight: 500, opacity: 0.5 }}>{item?.oldPrice ?? item?.originalPrice ?? 2700} {t.currency[lang]}</span>
           </div>
         </div>
-    )
+
+        {/* Buy Button */}
+        <button
+          onClick={() => router.push(`/checkoutpage?qty=${qty}`)}
+          style={{ padding: "25px 38px", borderRadius: 16, background: buttonbackground, color: buttontext, fontWeight: 800, border: "none", cursor: "pointer", boxShadow: `0 10px 30px ${buttonbackground}44`, transition: "transform 0.2s, box-shadow 0.2s", fontFamily: "inherit", width: "100%", margin: "5px 0", fontSize: 25 }}
+        >
+          {renderHighlighted(t.cta[lang], highlightColor)}
+        </button>
+      </div>
+    </div>
+  );
 }

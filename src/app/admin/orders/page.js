@@ -28,7 +28,6 @@ export default function OrdersPage() {
       .then((d) => { setOrders(d.data || []); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
-
   const filtered = useMemo(() => {
     let list = [...orders];
     if (statusFilter !== "all") list = list.filter((o) => o.orderStatus === statusFilter);
@@ -155,7 +154,7 @@ export default function OrdersPage() {
                       onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                     >
                       <td style={styles.td}>
-                        <span style={styles.orderId}>#{order._id.slice(-6).toUpperCase()}</span>
+                        <span style={styles.orderId}>{order.orderNumber}</span>
                       </td>
                       <td style={styles.td}>
                         <div style={{ fontWeight: 500, fontSize: 14 }}>{order.name}</div>

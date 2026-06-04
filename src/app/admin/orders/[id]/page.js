@@ -38,7 +38,7 @@ export default function OrderDetailPage() {
       })
       .catch(() => setLoading(false));
   }, [id]);
-console.log(order)
+
   const showToast = (msg, ok = true) => {
     setToast({ msg, ok });
     setTimeout(() => setToast(null), 3000);
@@ -247,7 +247,7 @@ if (loading) {
         <div style={styles.pageHeader}>
           <div>
             <h1 style={styles.title}>
-              Order <span style={styles.titleId}>#{order._id.slice(-8).toUpperCase()}</span>
+              Order <span style={styles.titleId}>{order.orderNumber}</span>
             </h1>
             <p style={styles.subtitle}>{date}</p>
           </div>
@@ -324,7 +324,7 @@ if (loading) {
                   <div style={styles.itemIcon}>📦</div>
                   <div style={{ flex: 1 }}>
                     <p style={{ margin: 0, fontSize: 13, fontWeight: 500, fontFamily: "monospace", color: "#555" }}>
-                      ID: {typeof item.product === "string" ? item.product.slice(-8) : item.product?._id?.slice(-8) || "—"}
+                      ID:{item.product.idnumber ||1000}
                     </p>
                     <p style={{ margin: "2px 0 0", fontSize: 12, color: "#aaa" }}>
                       {item.price?.toLocaleString()} EGP × {item.quantity}

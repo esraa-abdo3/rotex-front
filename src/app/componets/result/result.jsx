@@ -43,18 +43,11 @@ export default function Result() {
 
       {/* Fallback if no images */}
       {images.length === 0 && (
-        <div style={{ position: "absolute", inset: 0, background: "#1a1f0e" }} />
+        <div style={{ position: "absolute", inset: 0 }} />
       )}
 
       {/* Overlay */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background:
-            "linear-gradient(to left, rgba(12,16,7,0.05), rgba(12,16,7,0.2), transparent)",
-        }}
-      />
+  
 
       {/* Dots — only when slider */}
       {isSlider && (

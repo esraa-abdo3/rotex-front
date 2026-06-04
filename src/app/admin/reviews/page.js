@@ -54,57 +54,7 @@ function SkeletonRow() {
 }
 
 function ReviewModal({ mode, review, onClose, onSave }) {
-//   const blank = { name: "", review: "", rating: 5, isVisible: true };
-//   const [form, setForm] = useState(mode === "edit" ? { ...review } : blank);
-//   const [imageFile, setImageFile] = useState(null);
-//   const [imagePreview, setImagePreview] = useState(mode === "edit" ? review?.image : null);
-//   const [saving, setSaving] = useState(false);
-//   const [err, setErr] = useState("");
 
-//   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
-
-//   const handleImageChange = (e) => {
-//     const file = e.target.files[0];
-//     if (!file) return;
-//     setImageFile(file);
-//     setImagePreview(URL.createObjectURL(file));
-//   };
-
- 
-// const handleSave = async () => {
-//   if (!form.name.trim() || !form.review.trim()) {
-//     setErr("Name and review text are required.");
-//     return;
-//   }
-//   setSaving(true);
-//   setErr("");
-//   try {
-//     const url = mode === "edit" ? `${API}/Review/${review._id}` : `${API}/Review`;
-//     const method = mode === "edit" ? "PATCH" : "POST";
-
-//     const formData = new FormData();
-//     formData.append("name", form.name.trim());
-//     formData.append("review", form.review.trim());
-//     formData.append("rating", form.rating);
-//     formData.append("isVisible", form.isVisible);
-
-//     if (imageFile) {
-//       formData.append("image", imageFile);
-//     } else if (mode === "edit" && imagePreview === null && review?.image) {
-  
-//       formData.append("removeImage", "true");
-//     }
-
-//     const res = await fetch(url, { method, body: formData });
-//     if (!res.ok) throw new Error("Request failed");
-//     const data = await res.json();
-//     onSave(data.data, mode);
-//   } catch {
-//     setErr("Something went wrong. Please try again.");
-//   } finally {
-//     setSaving(false);
-//   }
-  // };
     const blank = {
     name: "",
     review: "",

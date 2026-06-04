@@ -5,6 +5,7 @@ import Review      from "../componets/review/review";
 import Result      from "../componets/result/result";
 import Headersection from "../componets/herosection/Headersection";
 import CTA from "../componets/CTA/CTA.jsx"
+import FloatingButton from "../componets/FloatingButton/FloatingButton";
 
 async function getProduct() {
   try {
@@ -45,7 +46,7 @@ function renderSection(key, props) {
     case "product":    return <Product       key="product" product={props.product} />;
     case "after":      return <Result        key="after" />;
     case "review":     return <Review        key="review" reviewss={props.reviews} />;
-    case "CTA":        return <CTA           key="CTA" />;
+    case "CTA":        return <CTA           key="CTA" product={props.product} />;
     default:           return null;
   }
 }
@@ -66,6 +67,7 @@ export default async function Home() {
       {sortedSections.map((key) =>
         renderSection(key, { product: product.data, reviews })
       )}
+      <FloatingButton  product={product.data}/>
   
     </div>
   );

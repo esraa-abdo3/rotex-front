@@ -1,810 +1,4 @@
-// "use client";
 
-// import { useEffect, useRef, useState } from "react";
-// import axios from "axios";
-
-// const API = "https://rootex-backend.vercel.app/api/v1";
-
-// const TEXT_FIELDS = [
-//   { key: "text1",      label: "Text 1",       desc: "First line of the hero hook" },
-//   { key: "text2",      label: "Text 2",       desc: "Second line of the hero hook" },
-//   { key: "highlight1", label: "Highlight 1",  desc: "First highlighted word" },
-//   { key: "highlight2", label: "Highlight 2",  desc: "Second highlighted word" },
-//   { key: "buttonText", label: "Button Text",  desc: "CTA button label" },
-// ];
-
-// const COLOR_FIELDS = [
-//   { key: "primaryDark",   label: "Primary Dark",    desc: "Main dark background color" },
-//   { key: "secondaryDark", label: "Secondary Dark",  desc: "Secondary dark tone" },
-//   { key: "primary",       label: "Primary",         desc: "Main brand color" },
-//   { key: "gold",          label: "Gold",            desc: "Accent gold color" },
-//   { key: "goldLight",     label: "Gold Light",      desc: "Light gold / highlight" },
-// ];
-// const FONTS = [
-//   // عربي
-//   "Cairo", "Tajawal", "Almarai", "Amiri", "Lateef","Learning Curve",
-//   // سيريف - فرق واضح جداً
-//   "Playfair Display", "Cormorant Garamond", "Libre Baskerville", "Lora",
-//   // ديسبلاي / شخصية قوية
-//   "Oswald", "Bebas Neue", "Abril Fatface", "Righteous",
-//   // هاندرايتينج
-//   "Pacifico", "Dancing Script", "Satisfy",
-//   // مونوسبيس - فرق صارخ
-//   "Courier Prime", "Space Mono", "IBM Plex Mono",
-// ];
-// export default function SettingsPage() {
-//   const [loading, setLoading] = useState(true);
-//   const [saving,  setSaving]  = useState(false);
-//   const [toast,   setToast]   = useState(null);
-//   const [fontOpen, setFontOpen] = useState(false);
-//   const [heroPreview,   setHeroPreview]   = useState("");
-//   const [heroFile,      setHeroFile]      = useState(null);
-//  const [resultPreview, setResultPreview] = useState([]);
-// const [resultFiles, setResultFiles] = useState([]);
-//   const heroRef   = useRef();
-//   const resultRef = useRef();
-//   const [form, setForm] = useState({
-//     text1_ar: "", text1_en: "",
-//     text2_ar: "", text2_en: "",
-//     highlight1_ar: "", highlight1_en: "",
-//     highlight2_ar: "", highlight2_en: "",
-//     buttonText_ar: "", buttonText_en: "",
-//     primaryDark: "#000000", secondaryDark: "#000000",
-//     primary: "#000000", gold: "#000000", goldLight: "#000000",
-//     Fontfamily:""
-//   });
-//  const [existingImages, setExistingImages] = useState([]);
-
-//   const showToast = (msg, ok = true) => {
-//     setToast({ msg, ok });
-//     setTimeout(() => setToast(null), 3000);
-//   };
-
-//   useEffect(() => {
-//     axios.get(`${API}/setting`)
-//       .then(({ data }) => {
-//         const s = data.settings;
-//         setForm({
-//             Fontfamily:  s?.Fontfamily ||"Cairo",
-//           text1_ar:      s?.hook?.text1?.ar      || "",
-//           text1_en:      s?.hook?.text1?.en      || "",
-//           text2_ar:      s?.hook?.text2?.ar      || "",
-//           text2_en:      s?.hook?.text2?.en      || "",
-//           highlight1_ar: s?.hook?.highlight1?.ar || "",
-//           highlight1_en: s?.hook?.highlight1?.en || "",
-//           highlight2_ar: s?.hook?.highlight2?.ar || "",
-//           highlight2_en: s?.hook?.highlight2?.en || "",
-//           buttonText_ar: s?.buttonText?.ar       || "",
-//           buttonText_en: s?.buttonText?.en       || "",
-//           primaryDark:   s?.colors?.primaryDark   || "#000000",
-//           secondaryDark: s?.colors?.secondaryDark || "#000000",
-//           primary:       s?.colors?.primary       || "#000000",
-//           gold:          s?.colors?.gold          || "#000000",
-//           goldLight: s?.colors?.goldLight || "#000000",
-          
-//         })
-//         setHeroPreview(s?.images?.herosection || "");
-//         setExistingImages(s?.images?.resultBg || []);
-// setResultPreview(s?.images?.resultBg || []);
-      
-//       })
-//       .catch(() => showToast("Failed to load settings", false))
-//       .finally(() => setLoading(false));
-//   }, []);
-//   useEffect(() => {
-//   FONTS.forEach(fontName => {
-//     const id = `preview-font-${fontName.replace(/ /g, "-")}`;
-//     if (document.getElementById(id)) return;
-//     const link = document.createElement("link");
-//     link.id = id;
-//     link.rel = "stylesheet";
-//     link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(/ /g, "+")}:wght@400;700&display=swap`;
-//     document.head.appendChild(link);
-//   });
-// }, []);
-//     console.log(form.Fontfamily)
-
-//   const handleChange = (e) =>
-//     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-//   setSaving(true);
-
-//   try {
-//     const fd = new FormData();
-
-//     Object.entries(form).forEach(([key, value]) => {
-//       if (value !== "") {
-//         fd.append(key, value);
-//       }
-//     });
-
-//     // Hero Image
-//     if (heroFile) {
-//       fd.append("herosection", heroFile);
-//     }
-
-//     // الصور القديمة اللي لسه موجودة
-//     fd.append(
-//       "existingResultBg",
-//       JSON.stringify(existingImages)
-//     );
-
-//     // الصور الجديدة
-//     resultFiles.forEach((file) => {
-//       fd.append("resultBg", file);
-//     });
-
-//     const { data } = await axios.patch(
-//       `${API}/setting`,
-//       fd,
-//       {
-//         headers: {
-//           "Content-Type": "multipart/form-data",
-//         },
-//       }
-//     );
-
-//     setHeroPreview(
-//       data.settings?.images?.herosection || heroPreview
-//     );
-
-//     setHeroFile(null);
-
-//     setExistingImages(
-//       data.settings?.images?.resultBg || []
-//     );
-
-//     setResultPreview(
-//       data.settings?.images?.resultBg || []
-//     );
-
-//     setResultFiles([]);
-
-//     showToast("Settings saved successfully");
-//   } catch (err) {
-//     console.log(err);
-
-//     showToast(
-//       err?.response?.data?.message ||
-//       "Something went wrong",
-//       false
-//     );
-//   } finally {
-//     setSaving(false);
-//   }
-// };
-// const removeResultImage = (index) => {
-//   const image = resultPreview[index];
-
-//   // صورة قديمة من السيرفر
-//   if (existingImages.includes(image)) {
-//     setExistingImages(prev =>
-//       prev.filter(img => img !== image)
-//     );
-//   }
-
-//   setResultPreview(prev =>
-//     prev.filter((_, i) => i !== index)
-//   );
-// };
-//   // ── Skeleton ──────────────────────────────────────────────
-//   if (loading) {
-//     return (
-//       <div style={s.page}>
-//         <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 8 }}>
-//           <div style={{ ...s.skel, height: 32, width: 220 }} />
-//           <div style={{ ...s.skel, height: 16, width: 300 }} />
-//         </div>
-//         {[1, 2, 3].map((i) => (
-//           <div key={i} style={{ ...s.card, display: "flex", flexDirection: "column", gap: 16 }}>
-//             <div style={{ ...s.skel, height: 20, width: 120 }} />
-//             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-//               {Array.from({ length: 4 }).map((_, j) => (
-//                 <div key={j} style={{ ...s.skel, height: 42, borderRadius: 10 }} />
-//               ))}
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-//     );
-//   }
-
-//   // ── Page ──────────────────────────────────────────────────
-//   return (
-//     <div style={s.page}>
-//       {/* Toast */}
-//       {toast && (
-//         <div style={{ ...s.toast, background: toast.ok ? "#166534" : "#b91c1c" }}>
-//           {toast.ok ? "✓" : "✗"} {toast.msg}
-//         </div>
-//       )}
-
-//       {/* Header */}
-//       <div style={s.pageHeader}>
-//         <div>
-//           <h1 style={s.title}>Website Settings</h1>
-//           <p style={s.subtitle}>Manage hero texts, brand colors, and images</p>
-//         </div>
-//         <button
-//           form="settings-form"
-//           type="submit"
-//           disabled={saving}
-//           style={{ ...s.saveBtn, opacity: saving ? 0.6 : 1, cursor: saving ? "not-allowed" : "pointer" }}
-//         >
-//           {saving
-//             ? <><span style={s.spinner} /></>
-//             : " Save Settings"}
-//         </button>
-//       </div>
-
-//       <form id="settings-form" onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-
-//         {/* ── HERO TEXTS ──────────────────── */}
-//         <div style={s.card}>
-//           <div style={s.cardHeader}>
-//             <span style={s.cardIcon}>✍️</span>
-//             <div>
-//               <h2 style={s.cardTitle}>Hero Texts</h2>
-//               <p style={s.cardDesc}>Edit the main headline and CTA copy shown on the homepage</p>
-//             </div>
-//           </div>
-
-//           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-//             {TEXT_FIELDS.map((field) => (
-//               <div key={field.key} style={s.fieldBlock}>
-//                 <div style={s.fieldMeta}>
-//                   <span style={s.fieldLabel}>{field.label}</span>
-//                   <span style={s.fieldDesc}>{field.desc}</span>
-//                 </div>
-//                 <div style={s.fieldInputs}>
-//                   <div style={s.inputGroup}>
-//                     <label style={s.inputLabel}>English</label>
-//                     <input
-//                       type="text"
-//                       name={`${field.key}_en`}
-//                       value={form[`${field.key}_en`]}
-//                       onChange={handleChange}
-//                       placeholder={`${field.label} in English`}
-//                       style={s.input}
-//                     />
-//                   </div>
-//                   <div style={s.inputGroup}>
-//                     <label style={{ ...s.inputLabel, textAlign: "right" }}>عربي</label>
-//                     <input
-//                       type="text"
-//                       name={`${field.key}_ar`}
-//                       value={form[`${field.key}_ar`]}
-//                       onChange={handleChange}
-//                       placeholder={`${field.label} بالعربي`}
-//                       dir="rtl"
-//                       style={s.input}
-//                     />
-//                   </div>
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-
-//         {/* ── COLORS ──────────────────────── */}
-//         <div style={s.card}>
-//           <div style={s.cardHeader}>
-//             <span style={s.cardIcon}>🎨</span>
-//             <div>
-//               <h2 style={s.cardTitle}>Brand Colors</h2>
-//               <p style={s.cardDesc}>Pick the color palette used across the whole website</p>
-//             </div>
-//           </div>
-
-//           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
-//             {COLOR_FIELDS.map((c) => (
-//               <div key={c.key} style={s.colorBlock}>
-//                 <label style={s.inputLabel}>{c.label}</label>
-//                 <p style={{ ...s.fieldDesc, margin: "2px 0 10px" }}>{c.desc}</p>
-//                 <div style={s.colorRow}>
-//                   <div style={{ position: "relative", flexShrink: 0 }}>
-//                     <div style={{ ...s.colorSwatch, background: form[c.key] }} />
-//                     <input
-//                       type="color"
-//                       name={c.key}
-//                       value={form[c.key]}
-//                       onChange={handleChange}
-//                       style={s.colorInput}
-//                       title="Pick color"
-//                     />
-//                   </div>
-//                   <input
-//                     type="text"
-//                     name={c.key}
-//                     value={form[c.key]}
-//                     onChange={handleChange}
-//                     placeholder="#000000"
-//                     style={{ ...s.input, flex: 1, fontFamily: "monospace", fontSize: 13 }}
-//                   />
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-// {/* <label>Font Family</label>
-// <select
-//   value={form.Fontfamily || "Cairo"}
-//   onChange={(e) => setForm(f => ({ ...f, Fontfamily: e.target.value }))}
-//   style={{ ...s.input, direction: "ltr" }}
-//   size={1}
-
-//   onMouseDown={(e) => {
-//     const select = e.currentTarget;
-//     const rect = select.getBoundingClientRect();
-//     const spaceBelow = window.innerHeight - rect.bottom;
-//     const spaceAbove = rect.top;
-//     if (spaceBelow < 200 && spaceAbove > spaceBelow) {
-//       select.style.position = "relative";
-//     }
-//   }}
-// >
-//   {FONTS.map(f => (
-//     <option key={f} value={f} style={{ fontFamily: f }}>
-//       {f}
-//     </option>
-//   ))}
-// </select>
-
-// <p style={{
-//   fontFamily: `'${form.Fontfamily}', sans-serif`,
-//   fontSize: 26,
-//   fontWeight: 700,
-//   marginTop: 8,
-//   color: "#222",
-//   lineHeight: 1.7,
-//   transition: "font-family 0.3s",
-//   border: "1px solid #e0e0de",
-//   borderRadius: 10,
-//   padding: "14px 16px",
-//   background: "#fafaf9",
-// }}>
-//   منتج روتكس للشعر الطبيعي — RooteX Hair 123
-// </p> */}
-//         <div style={{ position: "relative" }}>
-//   {/* Trigger */}
-//   <div
-//     onClick={() => setFontOpen(o => !o)}
-//     style={{
-//       ...s.input,
-//       cursor: "pointer",
-//       display: "flex",
-//       justifyContent: "space-between",
-//       alignItems: "center",
-//       fontFamily: `'${form.Fontfamily}', sans-serif`,
-//       fontSize: 16,
-//       fontWeight: 600,
-//     }}
-//   >
-//     <span>{form.Fontfamily || "Cairo"}</span>
-//     <span style={{ fontSize: 12, color: "#aaa" }}>{fontOpen ? "▲" : "▼"}</span>
-//   </div>
-
-//   {/* Dropdown */}
-//   {fontOpen && (
-//     <div style={{
-//       position: "absolute",
-//       bottom: "110%",
-//       left: 0, right: 0,
-//       background: "white",
-//       border: "1px solid #e0e0de",
-//       borderRadius: 12,
-//       boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
-//       zIndex: 999,
-//       maxHeight: 320,
-//       overflowY: "auto",
-//     }}>
-//       {FONTS.map(f => (
-//         <div
-//           key={f}
-//           onClick={() => { setForm(p => ({ ...p, Fontfamily: f })); setFontOpen(false); }}
-//           style={{
-//             padding: "12px 16px",
-//             fontFamily: `'${f}', sans-serif`,
-//             fontSize: 16,
-//             fontWeight: 600,
-//             cursor: "pointer",
-//             background: form.Fontfamily === f ? "#f5f5f3" : "white",
-//             borderBottom: "1px solid #f5f5f3",
-//             color: "#111",
-//             transition: "background 0.15s",
-//           }}
-//           onMouseEnter={e => e.currentTarget.style.background = "#fafaf9"}
-//           onMouseLeave={e => e.currentTarget.style.background = form.Fontfamily === f ? "#f5f5f3" : "white"}
-//         >
-//           {/* كل فونت مكتوب بنفسه */}
-//           The quick brown fox — أهلاً بالعالم
-//           <span style={{ fontSize: 12, color: "#aaa", marginRight: 8, fontFamily: "inherit" }}>
-//             {" "}({f})
-//           </span>
-//         </div>
-//       ))}
-//     </div>
-//   )}
-// </div>
-//         {/* ── IMAGES ──────────────────────── */}
-//         <div style={s.card}>
-//           <div style={s.cardHeader}>
-//             <span style={s.cardIcon}>🖼️</span>
-//             <div>
-//               <h2 style={s.cardTitle}>Images</h2>
-//               <p style={s.cardDesc}>Upload images used in the hero section and results background</p>
-//             </div>
-//           </div>
-
-        
-//             {/* Hero Image */}
-//             <ImageUpload
-//               label="Hero Section"
-//               desc="Main background or product image on the homepage"
-//               preview={heroPreview}
-//               fileRef={heroRef}
-//               onChange={(file) => {
-//                 setHeroFile(file);
-//                 setHeroPreview(URL.createObjectURL(file));
-//               }}
-//               onClear={() => { setHeroFile(null); setHeroPreview(""); }}
-//               newFile={heroFile}
-//             />
-
-// <div
-//   style={{
-//     marginTop: 24,
-//     paddingTop: 24,
-//     borderTop: "1px solid #ececec",
-//   }}
-// >
-//   <div style={{ marginBottom: 16 }}>
-//     <p style={s.inputLabel}>RESULT BACKGROUND</p>
-//     <p style={s.fieldDesc}>
-//       Background images for results / reviews section
-//     </p>
-//   </div>
-
-//   <div
-//     style={{
-//       display: "grid",
-//       gridTemplateColumns:
-//         "repeat(auto-fill,minmax(180px,1fr))",
-//       gap: 16,
-//     }}
-//   >
-//     {resultPreview.map((img, index) => (
-//       <div
-//         key={index}
-//         style={{
-//           position: "relative",
-//           borderRadius: 16,
-//           overflow: "hidden",
-//           border: "1px solid #e5e5e5",
-//           background: "#fff",
-//           height: 220,
-//         }}
-//       >
-//         <img
-//           src={img}
-//           alt=""
-//           style={{
-//             width: "100%",
-//             height: "100%",
-//             objectFit: "cover",
-//             display: "block",
-//           }}
-//         />
-
-//         <button
-//           type="button"
-//           onClick={() => removeResultImage(index)}
-//           style={{
-//             position: "absolute",
-//             top: 10,
-//             right: 10,
-//             width: 34,
-//             height: 34,
-//             borderRadius: "50%",
-//             border: "none",
-//             background: "rgba(0,0,0,.7)",
-//             color: "#fff",
-//             cursor: "pointer",
-//             fontSize: 18,
-//             fontWeight: 700,
-//             zIndex: 2,
-//           }}
-//         >
-//           ×
-//         </button>
-//       </div>
-//     ))}
-
-//     {/* Add Image Card */}
-//     <div
-//       onClick={() => resultRef.current?.click()}
-//       style={{
-//         height: 220,
-//         borderRadius: 16,
-//         border: "2px dashed #d7d7d7",
-//         background: "#fafaf9",
-//         display: "flex",
-//         flexDirection: "column",
-//         alignItems: "center",
-//         justifyContent: "center",
-//         cursor: "pointer",
-//         transition: ".2s",
-//       }}
-//     >
-//       <div
-//         style={{
-//           width: 52,
-//           height: 52,
-//           borderRadius: "50%",
-//           background: "#f2f2f2",
-//           display: "flex",
-//           alignItems: "center",
-//           justifyContent: "center",
-//           fontSize: 26,
-//           marginBottom: 10,
-//         }}
-//       >
-//         +
-//       </div>
-
-//       <p
-//         style={{
-//           margin: 0,
-//           fontWeight: 600,
-//           color: "#333",
-//         }}
-//       >
-//         Add Images
-//       </p>
-
-//       <span
-//         style={{
-//           fontSize: 12,
-//           color: "#999",
-//           marginTop: 4,
-//         }}
-//       >
-//         Upload multiple files
-//       </span>
-//     </div>
-//   </div>
-
-//   <input
-//     ref={resultRef}
-//     type="file"
-//     multiple
-//     accept="image/*"
-//     style={{ display: "none" }}
-//     onChange={(e) => {
-//       const files = Array.from(e.target.files);
-
-//       if (files.length) {
-//         setResultFiles((prev) => [
-//           ...prev,
-//           ...files,
-//         ]);
-
-//         setResultPreview((prev) => [
-//           ...prev,
-//           ...files.map((file) =>
-//             URL.createObjectURL(file)
-//           ),
-//         ]);
-//       }
-
-//       e.target.value = "";
-//     }}
-//   />
-
-//   {resultPreview.length > 0 && (
-//     <button
-//       type="button"
-//       onClick={() => {
-//         setResultFiles([]);
-//         setResultPreview([]);
-//       }}
-//       style={{
-//         marginTop: 16,
-//         ...s.clearBtn,
-//       }}
-//     >
-//       Remove All Images
-//     </button>
-//   )}
-// </div>
-//           </div>
-      
-
-//         {/* Mobile Save button (bottom) */}
-//         <button
-//           type="submit"
-//           disabled={saving}
-//           style={{
-//             ...s.saveBtn,
-//             width: "100%",
-//             justifyContent: "center",
-//             opacity: saving ? 0.6 : 1,
-//             cursor: saving ? "not-allowed" : "pointer",
-//           }}
-//         >
-//           {saving
-//             ? <><span style={s.spinner} /> Saving…</>
-//             : "💾 Save Settings"}
-//         </button>
-
-//       </form>
-//     </div>
-//   );
-// }
-
-// // ── Image Upload Sub-Component ──────────────────────────────
-// function ImageUpload({ label, desc, preview, fileRef, onChange, onClear, newFile }) {
-//   return (
-//     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-//       <div>
-//         <p style={s.inputLabel}>{label}</p>
-//         <p style={{ ...s.fieldDesc, marginTop: 2 }}>{desc}</p>
-//       </div>
-
-//       {preview ? (
-//         <div style={{ position: "relative" }}>
-//           {/* eslint-disable-next-line @next/next/no-img-element */}
-//           <img
-//             src={preview}
-//             alt={label}
-//             style={{ width: "100%", height: 180, objectFit: "cover", borderRadius: 12, border: "1px solid #e8e8e6", display: "block" }}
-//           />
-//           {newFile && (
-//             <div style={s.newBadge}>New</div>
-//           )}
-//         </div>
-//       ) : (
-//         <div style={s.imagePlaceholder}>
-//           <span style={{ fontSize: 32 }}>🖼️</span>
-//           <p style={{ margin: "8px 0 0", fontSize: 13, color: "#aaa" }}>No image uploaded</p>
-//         </div>
-//       )}
-
-//       <div style={{ display: "flex", gap: 8 }}>
-//         <button
-//           type="button"
-//           onClick={() => fileRef.current?.click()}
-//           style={s.uploadBtn}
-//         >
-//           {preview ? "Replace Image" : "Upload Image"}
-//         </button>
-//         {preview && (
-//           <button type="button" onClick={onClear} style={s.clearBtn}>
-//             Clear
-//           </button>
-//         )}
-//         <input
-//           ref={fileRef}
-//           type="file"
-//           accept="image/*"
-//           style={{ display: "none" }}
-//           onChange={(e) => {
-//             const file = e.target.files[0];
-//             if (file) onChange(file);
-//             e.target.value = "";
-//           }}
-//         />
-//       </div>
-
-//       {newFile && (
-//         <p style={{ fontSize: 12, color: "#b45309", background: "#fffbeb", padding: "6px 10px", borderRadius: 8, margin: 0 }}>
-//           ⚠️ New file selected: <strong>{newFile.name}</strong> — will upload on save
-//         </p>
-//       )}
-//     </div>
-//   );
-// }
-
-// // ── Styles ─────────────────────────────────────────────────
-// const s = {
-//   page: {
-//     display: "flex", flexDirection: "column", gap: 24,
-//     fontFamily: "'DM Sans', sans-serif", position: "relative",
-//     maxWidth: "100%",
-//   },
-//   toast: {
-//     position: "fixed", top: 20, right: 24, color: "white",
-//     padding: "12px 20px", borderRadius: 10, fontSize: 14, fontWeight: 500,
-//     zIndex: 9999, boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
-//     display: "flex", alignItems: "center", gap: 8,
-//   },
-//   pageHeader: {
-//     display: "flex", alignItems: "flex-start",
-//     justifyContent: "space-between", flexWrap: "wrap", gap: 16,
-//   },
-//   title:    { fontSize: 26, fontWeight: 700, color: "#111", margin: 0 },
-//   subtitle: { color: "#888", fontSize: 14, margin: "4px 0 0" },
-//   saveBtn: {
-//     display: "inline-flex", alignItems: "center", gap: 8,
-//     padding: "11px 22px", background: "#1a1f0e", color: "white",
-//     border: "none", borderRadius: 10, fontSize: 14, fontWeight: 600,
-//     transition: "opacity 0.2s", whiteSpace: "nowrap",
-//   },
-//   spinner: {
-//     display: "inline-block", width: 14, height: 14,
-//     border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "white",
-//     borderRadius: "50%", animation: "spin 0.8s linear infinite",
-//   },
-//   card: {
-//     background: "white", borderRadius: 14,
-//     border: "1px solid #e8e8e6", padding: "22px 24px",
-//     display: "flex", flexDirection: "column", gap: 20,
-//   },
-//   cardHeader: { display: "flex", alignItems: "flex-start", gap: 14 },
-//   cardIcon:   { fontSize: 22, marginTop: 1, flexShrink: 0 },
-//   cardTitle:  { fontSize: 16, fontWeight: 600, color: "#111", margin: 0 },
-//   cardDesc:   { fontSize: 13, color: "#999", margin: "3px 0 0" },
-
-//   fieldBlock: {
-//     display: "flex", gap: 16, alignItems: "flex-start", flexWrap: "wrap",
-//     paddingBottom: 16, borderBottom: "1px solid #f5f5f3",
-//   },
-//   fieldMeta:   { width: 160, flexShrink: 0 },
-//   fieldLabel:  { fontSize: 14, fontWeight: 600, color: "#333", display: "block" },
-//   fieldDesc:   { fontSize: 12, color: "#aaa", marginTop: 3, display: "block" },
-//   fieldInputs: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, flex: 1, minWidth: 260 },
-
-//   inputGroup: { display: "flex", flexDirection: "column", gap: 5 },
-//   inputLabel: { fontSize: 11, fontWeight: 600, color: "#888", textTransform: "uppercase", letterSpacing: "0.4px" },
-//   input: {
-//     padding: "10px 12px", borderRadius: 10,
-//     border: "1px solid #e0e0de", fontSize: 14, outline: "none",
-//     background: "#fafaf9", fontFamily: "inherit", width: "100%",
-//     boxSizing: "border-box", transition: "border-color 0.2s",
-//     color:"black"
-//   },
-
-//   colorBlock: { display: "flex", flexDirection: "column" },
-//   colorRow:   { display: "flex", alignItems: "center", gap: 10 },
-//   colorSwatch: {
-//     width: 42, height: 42, borderRadius: 10,
-//     border: "1px solid #e0e0de", cursor: "pointer",
-//     transition: "transform 0.15s",
-//   },
-//   colorInput: {
-
-//     position: "absolute", inset: 0, opacity: 0,
-//     width: "100%", height: "100%", cursor: "pointer", border: "none",
-//   },
-
-//   imagePlaceholder: {
-//     width: "100%", height: 180, background: "#fafaf9",
-//     borderRadius: 12, border: "2px dashed #e0e0de",
-//     display: "flex", flexDirection: "column",
-//     alignItems: "center", justifyContent: "center",
-//   },
-//   newBadge: {
-//     position: "absolute", top: 8, right: 8,
-//     background: "#1a1f0e", color: "white",
-//     fontSize: 11, fontWeight: 600, padding: "3px 8px", borderRadius: 20,
-//   },
-//   uploadBtn: {
-//     flex: 1, padding: "9px 14px", background: "#f5f5f3",
-//     border: "1px solid #e0e0de", borderRadius: 9,
-//     fontSize: 13, fontWeight: 500, cursor: "pointer",
-//     color: "#333", transition: "background 0.2s",
-//   },
-//   clearBtn: {
-//     padding: "9px 14px", background: "#fef2f2",
-//     border: "none", borderRadius: 9,
-//     fontSize: 13, fontWeight: 500, cursor: "pointer",
-//     color: "#b91c1c",
-//   },
-
-//   skel: { background: "#f0f0ef", borderRadius: 8, display: "block" },
-// };
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
@@ -819,13 +13,32 @@ const TEXT_FIELDS = [
   { key: "highlight2", label: "Highlight 2",  desc: "Second highlighted word" },
   { key: "buttonText", label: "Button Text",  desc: "CTA button label" },
 ];
-
 const COLOR_FIELDS = [
-  { key: "primaryDark",   label: "Primary Dark",   desc: "Main dark background" },
-  { key: "secondaryDark", label: "Secondary Dark",  desc: "Secondary dark tone" },
-  { key: "primary",       label: "Primary",         desc: "Main brand color" },
-  { key: "gold",          label: "Gold",            desc: "Accent gold color" },
-  { key: "goldLight",     label: "Gold Light",      desc: "Light gold / highlight" },
+  {
+    key: "backgroundColor",
+    label: "Background Color",
+    desc: "Main page background color",
+  },
+  {
+    key: "buttonbackground",
+    label: "Button Background",
+    desc: "CTA and button background color",
+  },
+  {
+    key: "buttontext",
+    label: "Button Text",
+    desc: "Button text color",
+  },
+  {
+    key: "textColor",
+    label: "Text Color",
+    desc: "Main text color",
+  },
+  {
+    key: "highlightColor",
+    label: "Highlight Color",
+    desc: "Accent / highlighted text color",
+  },
 ];
 
 const FONTS = [
@@ -861,11 +74,34 @@ export default function SettingsPage() {
   const [form, setForm] = useState({
     text1_ar: "", text1_en: "",
     text2_ar: "", text2_en: "",
+
+
     highlight1_ar: "", highlight1_en: "",
     highlight2_ar: "", highlight2_en: "",
+
+
     buttonText_ar: "", buttonText_en: "",
-    primaryDark: "#000000", secondaryDark: "#000000",
-    primary: "#000000", gold: "#000000", goldLight: "#000000",
+
+
+    reviewText_ar: "",
+    reviewText_en: "",
+
+    reviewParagraph_ar: "",
+    reviewParagraph_en: "",
+
+    fansText_ar: "",
+    fansText_en: "",
+      shippingSignature_ar: "",
+    shippingSignature_en: "",
+   shippingPrice: 60,
+
+    Brand: "",
+    floatingButton_visible: true,
+  floatingButton_text_ar: "",
+  floatingButton_text_en: "",
+  
+    backgroundColor: "#000000", buttonbackground: "#000000",
+    buttontext: "#000000", textColor: "#000000", highlightColor: "#000000",
     Fontfamily: "Cairo",
   });
 
@@ -879,7 +115,6 @@ export default function SettingsPage() {
   useEffect(() => {
     axios.get(`${API}/setting`)
       .then(({ data }) => {
-        console.log(data)
         const s = data.settings;
         setForm({
           Fontfamily:    s?.Fontfamily         || "Cairo",
@@ -893,11 +128,29 @@ export default function SettingsPage() {
           highlight2_en: s?.hook?.highlight2?.en || "",
           buttonText_ar: s?.buttonText?.ar       || "",
           buttonText_en: s?.buttonText?.en       || "",
-          primaryDark:   s?.colors?.primaryDark   || "#000000",
-          secondaryDark: s?.colors?.secondaryDark || "#000000",
-          primary:       s?.colors?.primary       || "#000000",
-          gold:          s?.colors?.gold          || "#000000",
-          goldLight:     s?.colors?.goldLight     || "#000000",
+          backgroundColor:   s?.colors?.backgroundColor   || "#000000",
+          buttonbackground: s?.colors?.buttonbackground|| "#000000",
+          buttontext:       s?.colors?.buttontext      || "#000000",
+          textColor:          s?.colors?.textColor         || "#000000",
+          highlightColor: s?.colors?.highlightColor || "#000000",
+          reviewText_ar: s?.reviewheader?.text?.ar || "",
+          reviewText_en: s?.reviewheader?.text?.en || "",
+          reviewParagraph_ar: s?.reviewheader?.paragraph?.ar || "",
+          reviewParagraph_en: s?.reviewheader?.paragraph?.en || "",
+          fansText_ar: s?.fansText?.ar || "",
+          fansText_en: s?.fansText?.en || "",
+           shippingSignature_ar: s?.shippingSignature?.ar || "",
+          shippingSignature_en: s?.shippingSignature?.en || "",
+          Brand: s?.Brand || "root",
+          shippingPrice: s?.shippingPrice || 60,
+           floatingButton_visible:
+  s?.floatingButton?.visible ?? true,
+
+floatingButton_text_ar:
+  s?.floatingButton?.text?.ar || "",
+
+floatingButton_text_en:
+  s?.floatingButton?.text?.en || "",
         });
         setHeroPreview(s?.images?.herosection || "");
         const existing = (s?.images?.resultBg || []).map(url => ({
@@ -965,6 +218,20 @@ export default function SettingsPage() {
       resultImages
         .filter(img => img.type === "new")
         .forEach(img => fd.append("resultBg", img.file));
+      fd.append("textreview_ar", form.reviewText_ar);
+fd.append("textreview_en", form.reviewText_en);
+
+fd.append(
+  "paragraphreview_ar",
+  form.reviewParagraph_ar
+);
+
+fd.append(
+  "paragraphreview_en",
+  form.reviewParagraph_en
+      );
+
+
 
       const { data } = await axios.patch(`${API}/setting`, fd, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -1057,7 +324,353 @@ export default function SettingsPage() {
             </div>
           ))}
         </Section>
+        <Section
+  icon="💬"
+  title="Review Section"
+  desc="Reviews section heading and description"
+>
+  <div style={css.fieldBlock}>
+    <div style={css.fieldMeta}>
+      <span style={css.fieldLabel}>Review Title</span>
+      <span style={css.fieldDesc}>
+        Main title above customer reviews
+      </span>
+    </div>
 
+    <div style={css.fieldInputs}>
+      <div style={css.inputGroup}>
+        <label style={css.inputLabel}>English</label>
+        <input
+          type="text"
+          name="reviewText_en"
+          value={form.reviewText_en}
+          onChange={handleChange}
+          placeholder="Customer Reviews"
+          style={css.input}
+        />
+      </div>
+
+      <div style={css.inputGroup}>
+        <label
+          style={{
+            ...css.inputLabel,
+            textAlign: "right",
+          }}
+        >
+          عربي
+        </label>
+
+        <input
+          type="text"
+          name="reviewText_ar"
+          value={form.reviewText_ar}
+          onChange={handleChange}
+          placeholder="آراء العملاء"
+          dir="rtl"
+          style={css.input}
+        />
+      </div>
+    </div>
+  </div>
+
+  <div style={css.fieldBlock}>
+    <div style={css.fieldMeta}>
+      <span style={css.fieldLabel}>
+        Review Description
+      </span>
+
+      <span style={css.fieldDesc}>
+        Paragraph under reviews title
+      </span>
+    </div>
+
+    <div style={css.fieldInputs}>
+      <div style={css.inputGroup}>
+        <label style={css.inputLabel}>English</label>
+
+        <textarea
+          name="reviewParagraph_en"
+          value={form.reviewParagraph_en}
+          onChange={handleChange}
+          placeholder="What our customers say about Rootex..."
+          style={{
+            ...css.input,
+            minHeight: 100,
+          }}
+        />
+      </div>
+
+      <div style={css.inputGroup}>
+        <label
+          style={{
+            ...css.inputLabel,
+            textAlign: "right",
+          }}
+        >
+          عربي
+        </label>
+
+        <textarea
+          name="reviewParagraph_ar"
+          value={form.reviewParagraph_ar}
+          onChange={handleChange}
+          placeholder="ماذا يقول عملاؤنا عن روتكس..."
+          dir="rtl"
+          style={{
+            ...css.input,
+            minHeight: 100,
+          }}
+        />
+      </div>
+    </div>
+  </div>
+        </Section>
+        <Section
+  icon="💛"
+  title="Fans Text"
+  desc="Text shown beside the fans/results counter"
+>
+  <div style={css.fieldBlock}>
+    <div style={css.fieldMeta}>
+      <span style={css.fieldLabel}>Fans Text</span>
+
+      <span style={css.fieldDesc}>
+        Example: girls loved the results 💛
+      </span>
+    </div>
+
+    <div style={css.fieldInputs}>
+      <div style={css.inputGroup}>
+        <label style={css.inputLabel}>English</label>
+
+        <input
+          type="text"
+          name="fansText_en"
+          value={form.fansText_en}
+          onChange={handleChange}
+          placeholder="girls loved the results 💛"
+          style={css.input}
+        />
+      </div>
+
+      <div style={css.inputGroup}>
+        <label
+          style={{
+            ...css.inputLabel,
+            textAlign: "right",
+          }}
+        >
+          عربي
+        </label>
+
+        <input
+          type="text"
+          name="fansText_ar"
+          value={form.fansText_ar}
+          onChange={handleChange}
+          placeholder="بنات حبّوا النتيجة 💛"
+          dir="rtl"
+          style={css.input}
+        />
+      </div>
+    </div>
+  </div>
+        </Section>
+        <Section
+  icon="🚚"
+  title="Shipping Signature"
+  desc="Short text shown under the buy button"
+>
+  <div style={css.fieldBlock}>
+    <div style={css.fieldMeta}>
+      <span style={css.fieldLabel}>Shipping Text</span>
+
+      <span style={css.fieldDesc}>
+        Example: Fast delivery all over Egypt
+      </span>
+    </div>
+
+    <div style={css.fieldInputs}>
+      <div style={css.inputGroup}>
+        <label style={css.inputLabel}>English</label>
+
+        <input
+          type="text"
+          name="shippingSignature_en"
+          value={form.shippingSignature_en}
+          onChange={handleChange}
+          placeholder="Fast delivery all over Egypt"
+          style={css.input}
+        />
+      </div>
+
+      <div style={css.inputGroup}>
+        <label
+          style={{
+            ...css.inputLabel,
+            textAlign: "right",
+          }}
+        >
+          عربي
+        </label>
+
+        <input
+          type="text"
+          name="shippingSignature_ar"
+          value={form.shippingSignature_ar}
+          onChange={handleChange}
+          placeholder="شحن سريع لجميع أنحاء مصر"
+          dir="rtl"
+          style={css.input}
+        />
+      </div>
+    </div>
+  </div>
+        </Section>
+        <Section
+  icon="🏷️"
+  title="Brand"
+  desc="Brand name displayed across the website"
+>
+  <div style={css.fieldBlock}>
+    <div style={css.fieldMeta}>
+      <span style={css.fieldLabel}>Brand Name</span>
+
+      <span style={css.fieldDesc}>
+        Example: Rootex
+      </span>
+    </div>
+
+    <div style={{ flex: 1 }}>
+      <input
+        type="text"
+        name="Brand"
+        value={form.Brand}
+        onChange={handleChange}
+        placeholder="Rootex"
+        style={css.input}
+      />
+    </div>
+  </div>
+        </Section>
+        <Section
+  icon="💰"
+  title="Shipping Cost"
+  desc="Default shipping cost added to every order"
+>
+  <div style={css.fieldBlock}>
+    <div style={css.fieldMeta}>
+      <span style={css.fieldLabel}>Shipping Cost</span>
+
+      <span style={css.fieldDesc}>
+        Example: 60 EGP
+      </span>
+    </div>
+
+    <div style={{ flex: 1 }}>
+      <input
+        type="number"
+        name="shippingPrice"
+        value={form.shippingPrice}
+        onChange={handleChange}
+        placeholder="60"
+        style={css.input}
+      />
+    </div>
+  </div>
+</Section>
+<Section
+  icon="📌"
+  title="Floating Button"
+  desc="Sticky button shown at the bottom of the page"
+>
+  {/* Visibility */}
+  <div style={css.fieldBlock}>
+    <div style={css.fieldMeta}>
+      <span style={css.fieldLabel}>Visibility</span>
+
+      <span style={css.fieldDesc}>
+        Show or hide the floating button
+      </span>
+    </div>
+
+    <div style={{ flex: 1 }}>
+      <label
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          color: "#111",
+        }}
+      >
+        <input
+          type="checkbox"
+          checked={form.floatingButton_visible}
+          onChange={(e) =>
+            setForm((prev) => ({
+              ...prev,
+              floatingButton_visible:
+                e.target.checked,
+            }))
+          }
+        />
+
+        Show Floating Button
+      </label>
+    </div>
+  </div>
+
+  {/* Text */}
+  <div style={css.fieldBlock}>
+    <div style={css.fieldMeta}>
+      <span style={css.fieldLabel}>
+        Button Text
+      </span>
+
+      <span style={css.fieldDesc}>
+        Text displayed inside the floating button
+      </span>
+    </div>
+
+    <div style={css.fieldInputs}>
+      <div style={css.inputGroup}>
+        <label style={css.inputLabel}>
+          English
+        </label>
+
+        <input
+          type="text"
+          name="floatingButton_text_en"
+          value={form.floatingButton_text_en}
+          onChange={handleChange}
+          placeholder="Buy Now"
+          style={css.input}
+        />
+      </div>
+
+      <div style={css.inputGroup}>
+        <label
+          style={{
+            ...css.inputLabel,
+            textAlign: "right",
+          }}
+        >
+          عربي
+        </label>
+
+        <input
+          type="text"
+          name="floatingButton_text_ar"
+          value={form.floatingButton_text_ar}
+          onChange={handleChange}
+          placeholder="اشتري الآن"
+          dir="rtl"
+          style={css.input}
+        />
+      </div>
+    </div>
+  </div>
+</Section>
         {/* ── Brand Colors ── */}
         <Section icon="🎨" title="Brand Colors" desc="Color palette used across the whole website">
           <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:16 }}>

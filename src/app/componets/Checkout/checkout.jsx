@@ -35,7 +35,7 @@ const GOVS = {
   "دمياط": ["دمياط","رأس البر","الزرقا","فارسكور","كفر سعد","عزبة البرج"],
 };
 
-const SHIPPING = 60;
+
   const Field = ({ label, error, children , settings}) => (
     <div className="flex flex-col gap-1">
       <label className="text-xs font-semibold" style={{ color: settings?.colors?.primary }}>{label}</label>
@@ -46,6 +46,7 @@ const SHIPPING = 60;
 
 export default function Checkout({ product }) {
   const settings = useSettings();
+  const SHIPPING = settings?.shippingPrice || 60;
   const { lang } = useLang();
   const searchParams = useSearchParams();
   const initialQty = Number(searchParams.get("qty")) || 1;
@@ -182,6 +183,11 @@ if (payMethod === "paymob") {
   const gold = settings?.colors?.gold ?? "#c8a93e";
   const goldLight = settings?.colors?.goldLight ?? "#d4b84a";
   const primary = settings?.colors?.primary ?? "#3a4520";
+    const buttonbackground = settings?.colors?.buttonbackground 
+  const backgroundColor = settings?.colors?.backgroundColor 
+  const highlightColor = settings?.colors?.highlightColor
+  const textColor = settings?.colors?.textColor ;
+  const buttontext = settings?.colors?.buttontext;
   const dir = lang === "ar" ? "rtl" : "ltr";
 
   const productName = product?.name?.[lang] || product?.name?.ar;
@@ -194,31 +200,26 @@ if (payMethod === "paymob") {
     >
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-extrabold" style={{ color: primary }}>{t.title[lang]}</h1>
+          <h1 className="text-2xl font-extrabold" style={{ color: textColor }}>{t.title[lang]}</h1>
           <p className="text-sm text-gray-400 mt-1">{t.subtitle[lang]}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-[1fr_380px] gap-6">
 
         
-          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 flex flex-col gap-5">
+          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 flex flex-col gap-2">
             <p className="text-xs font-bold uppercase tracking-widest text-gray-400 border-b border-gray-100 pb-3">
               {t.delivery[lang]}
             </p>
 
-            <div className="grid grid-cols-2 gap-4">
+            
               <Field label={t.name[lang]} error={errors.name}>
                 <input className={inputCls("name")} placeholder={t.namePh[lang]}
                   value={form.name} onChange={e => set("name", e.target.value)}
                   style={{ color: primary }} />
               </Field>
-              <Field label={t.email[lang]} error={errors.email}>
-                <input className={inputCls("email")} placeholder="example@email.com"
-                  type="email" dir="ltr" value={form.email}
-                  onChange={e => set("email", e.target.value)}
-                  style={{ color: primary }} />
-              </Field>
-            </div>
+        
+  
 
             <Field label={t.phone[lang]} error={errors.phone}>
               <input className={inputCls("phone")} placeholder="01xxxxxxxxx"
@@ -278,7 +279,7 @@ if (payMethod === "paymob") {
     onChange={e => set("address", e.target.value)}
     style={{ color: primary }}
   />
-</Field>
+             </Field>
 
             <div className="flex flex-col gap-3 pt-1">
               <p className="text-xs font-bold uppercase tracking-widest text-gray-400">{t.payMethod[lang]}</p>

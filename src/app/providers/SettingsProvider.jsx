@@ -11,20 +11,26 @@ export function SettingsProvider({ children, initialSettings }) {
     fetch("https://rootex-backend.vercel.app/api/v1/setting")
       .then(r => r.json())
       .then(data => {
+        console.log(data)
         setSettings({
-          brand: "RooteX",
+          brand: data?.settings?.Brand,
+           shippingSignature: data?.settings?.shippingSignature,
           hook: data?.settings?.hook,
           buttonText: data?.settings?.buttonText,
+          shippingPrice: data?.settings?.shippingPrice,
+         floatingButton: data?.settings?.floatingButton,
           colors: {
-            primaryDark: data?.settings?.colors?.primaryDark,
-            secondaryDark: data?.settings?.colors?.secondaryDark,
-            primary: data?.settings?.colors?.primary,
-            gold: data?.settings?.colors?.gold,
-            goldLight: data?.settings?.colors?.goldLight,
+            backgroundColor: data?.settings?.colors?.backgroundColor,
+            buttonbackground: data?.settings?.colors?.buttonbackground,
+            buttontext: data?.settings?.colors?.buttontext,
+            textColor: data?.settings?.colors?.textColor,
+            highlightColor: data?.settings?.colors?.highlightColor,
           },
           image: data?.settings?.images?.herosection,
           resultBg:data?.settings?.images?.resultBg,
           Fontfamily: data?.settings?.Fontfamily,
+          reviews: data?.settings?.reviewheader,
+          fansText: data?.settings?.fansText,
         });
       })
       .catch(err => console.error("settings error:", err));
@@ -50,7 +56,7 @@ export function SettingsProvider({ children, initialSettings }) {
 
 const fontFamily = settings?.Fontfamily
   ? `${settings.Fontfamily}`
-  : "Cairo, sans-serif"; // default font
+  : "Cairo, sans-serif"; 
 
 
   return (

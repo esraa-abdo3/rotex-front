@@ -1,386 +1,175 @@
-
 "use client";
 import { useSettings } from "@/app/providers/SettingsProvider";
 import { useLang } from "@/app/providers/LanguageProvider";
 import { useEffect, useState, useRef } from "react";
+import { renderHighlighted } from "../utils/highlight";
 
-
-const Stars = ({ rating = 5, gold }) => {
+const Stars = ({ rating = 5 }) => {
   const n = Math.min(5, Math.max(1, Math.round(rating)));
+  return <span style={{ color: "#e9da73", letterSpacing: 2, fontSize: 22 }}>{"★".repeat(n)}{"☆".repeat(5 - n)}</span>;
+};
+
+const BeforeAfterSlider = ({ review }) => {
+  const [sliderPos, setSliderPos] = useState(50);
+  const containerRef = useRef(null);
+  const isDragging = useRef(false);
+  const updatePos = (clientX) => {
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    setSliderPos(Math.min(100, Math.max(0, ((clientX - rect.left) / rect.width) * 100)));
+  };
+  const onPointerDown = (e) => { isDragging.current = true; e.currentTarget.setPointerCapture(e.pointerId); updatePos(e.clientX); };
+  const onPointerMove = (e) => { if (isDragging.current) updatePos(e.clientX); };
+  const onPointerUp   = () => { isDragging.current = false; };
+
+  if (!review.beforeImage && !review.imageAfter) {
+    return (
+      <div style={{ width: "100%", aspectRatio: "4/3", borderRadius: "16px 16px 0 0", overflow: "hidden" }}>
+        <img src={review.image} alt={review.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+      </div>
+    );
+  }
+  const before = review.beforeImage || review.image;
+  const after  = review.imageAfter  || review.image;
   return (
-    <span style={{ color: gold, letterSpacing: 3, fontSize: 18 }}>
-      {"★".repeat(n)}{"☆".repeat(5 - n)}
-    </span>
+    <div ref={containerRef} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp}
+      style={{ position: "relative", width: "100%", aspectRatio: "4/3", borderRadius: "16px 16px 0 0", overflow: "hidden", cursor: "ew-resize", userSelect: "none", touchAction: "none" }}>
+      <img src={before} alt="before" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+      <div style={{ position: "absolute", inset: 0, clipPath: `inset(0 0 0 ${sliderPos}%)` }}>
+        <img src={after} alt="after" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+      </div>
+      <div style={{ position: "absolute", top: 0, bottom: 0, left: `${sliderPos}%`, width: 2, background: "#fff", transform: "translateX(-50%)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", top: "50%", left: `${sliderPos}%`, transform: "translate(-50%, -50%)", width: 40, height: 40, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 12px rgba(0,0,0,0.25)", pointerEvents: "none", fontSize: 16, fontWeight: 700, color: "#333" }}>‹›</div>
+      <div style={{ position: "absolute", bottom: 12, left: 12, background: "rgba(50,50,50,0.75)", color: "#fff", fontSize: 13, fontWeight: 700, padding: "4px 14px", borderRadius: 20 }}>قبل</div>
+      <div style={{ position: "absolute", bottom: 12, right: 12, background: "#5b2d8e", color: "#fff", fontSize: 13, fontWeight: 700, padding: "4px 14px", borderRadius: 20 }}>بعد</div>
+    </div>
   );
 };
 
-
-const ReviewCard = ({ review, extraStyle = {}, gold, goldLight, primary, lang }) => (
-  <div className="rv-card-lift" style={{ ...cardBase, ...extraStyle }}>
-
-    {/* stars + badge */}
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-      <Stars rating={review.rating} gold={gold} />
-      <span style={{
-        fontSize: 11, fontWeight: 700, letterSpacing: 1,
-        color: "#1a1a0a", background: gold,
-        padding: "4px 12px", borderRadius: 20,
-      }}>
-        {review.rating}.0 / 5
-      </span>
-    </div>
-
-    {/* text + image */}
-    <div style={{
-      display: "flex", gap: 14, alignItems: "flex-start", flex: 1,
-      flexDirection: lang === "ar" ? "row-reverse" : "row",
-    }}>
-          <div style={{
-        width: 90, height: 90, flexShrink: 0,
-        borderRadius: 14, overflow: "hidden",
-        border: `1.5px solid ${gold}55`,
-        background: `linear-gradient(135deg, ${gold}15, ${goldLight}22)`,
-        display: "flex", alignItems: "center", justifyContent: "center",
-      }}>
-        {review.image ? (
-      <img
-  src={review.image}
-  alt={review.name}
-  fetchPriority="high"
-  loading="eager"
-  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-/>
-        ) : (
-          <span style={{ fontSize: 32, opacity: 0.25 }}>🖼️</span>
-        )}
+const ReviewCard = ({ review, extraStyle = {}, lang, buttonbackground, buttontext, textColor, highlightColor }) => (
+  <div className="rv-card-lift" style={{ background: "#fff", border: "1px solid rgba(91,45,142,0.15)", borderRadius: 20, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.08)", display: "flex", flexDirection: "column", ...extraStyle }}>
+    <BeforeAfterSlider review={review} />
+    <div style={{ padding: "5px 16px", display: "flex", flexDirection: "column", gap: 5 }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <Stars rating={review.rating} />
+        <span style={{ fontSize: 11, fontWeight: 700, color: buttontext, background: buttonbackground, padding: "3px 10px", borderRadius: 20 }}>
+          {review.rating}.0 / 5
+        </span>
       </div>
-      <p style={{
-        fontSize: 15, lineHeight: 1.85, margin: 0, flex: 1,
-        color: primary,
-        fontFamily: lang === "ar" ? "serif" : "inherit",
-      }}>
-       { review.review[lang]}
+      <p style={{ fontSize: 14, lineHeight: 1.5, margin: 0, color: textColor, fontWeight: 500, textAlign: "center" }}>
+        {renderHighlighted(review.review?.[lang], highlightColor)}
       </p>
-
-
-  
-    </div>
-
-    {/* author */}
-    <div style={{
-      display: "flex", alignItems: "center", gap: 10,
-      paddingTop: 12, borderTop: `1px solid ${gold}44`,
-    }}>
-      <div style={{
-        width: 36, height: 36, borderRadius: "50%", flexShrink: 0,
-        background: `linear-gradient(135deg, ${gold}, ${goldLight})`,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        fontSize: 14, fontWeight: 800, color: "#1a1a0a",
-        boxShadow: `0 0 0 3px ${gold}33`,
-      }}>
-        {review.name?.[0]?.toUpperCase() ?? "?"}
-      </div>
-      <span style={{ fontWeight: 700, fontSize: 14, color: primary }}>
-        — {review.name}
-      </span>
     </div>
   </div>
 );
 
-// ── Base styles ───────────────────────────────────────────────────────────────
-const cardBase = {
-  background: "rgba(255,255,255,0.82)",
-  border: "1px solid rgba(200,169,62,0.3)",
-  borderRadius: 24,
-  padding: "26px 28px",
-  backdropFilter: "blur(14px)",
-  boxShadow: "0 8px 32px rgba(0,0,0,0.10)",
-  display: "flex", flexDirection: "column", gap: 14,
-};
-
-const arrowBtn = (gold) => ({
-  position: "absolute",
-  top: "42%",
-  transform: "translateY(-50%)",
-  width: 44, height: 44,
-  borderRadius: "50%",
-  display: "flex", alignItems: "center", justifyContent: "center",
-  fontSize: 22, fontWeight: 700,
-  background: gold,
-  border: "none",
-  color: "#1a1a0a",
-  cursor: "pointer",
-  zIndex: 2,
-  boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
-});
-
-// ── Main Component ────────────────────────────────────────────────────────────
 export default function Review({ reviewss }) {
   const settings = useSettings();
   const { lang } = useLang();
-console.log("reviewssss",reviewss)
-  const [reviews] = useState(reviewss ?? []);
-  
 
-useEffect(() => {
-  reviews.forEach((r) => {
-    if (r.image) {
-      const img = new Image();
-      img.src = r.image;
-    }
-  });
-}, [reviews]);
-  const [current, setCurrent] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStartX, setDragStartX] = useState(0);
-  const [dragDeltaX, setDragDeltaX] = useState(0);
+  const buttonbackground = settings?.colors?.buttonbackground;
+  const backgroundColor  = settings?.colors?.backgroundColor;
+  const highlightColor   = settings?.colors?.highlightColor;
+  const textColor        = settings?.colors?.textColor;
+  const buttontext       = settings?.colors?.buttontext;
+
+  const [reviews] = useState(reviewss ?? []);
+  const arrowBtn  = () => ({ position: "absolute", lineHeight: 1.3, top: "42%", transform: "translateY(-50%)", width: 42, height: 42, borderRadius: "50%", display: "flex", justifyContent: "center", fontSize: 26, fontWeight: 700, background: backgroundColor, border: "none", color: "#fff", cursor: "pointer", zIndex: 2, boxShadow: "0 4px 16px rgba(91,45,142,0.35)", textAlign: "center" });
+
+  useEffect(() => {
+    reviews.forEach((r) => [r.image, r.beforeImage, r.imageAfter].filter(Boolean).forEach((src) => { const img = new Image(); img.src = src; }));
+  }, [reviews]);
+
+  const [current, setCurrent]           = useState(0);
+  const [isDragging, setIsDragging]     = useState(false);
+  const [dragStartX, setDragStartX]     = useState(0);
+  const [dragDeltaX, setDragDeltaX]     = useState(0);
   const [visibleCount, setVisibleCount] = useState(3);
   const sliderRef = useRef(null);
 
-
-  // ── Responsive ────────────────────────────────────────────────────────────
   useEffect(() => {
-    const updateVisible = () => {
-      const w = window.innerWidth;
-      if (w < 640) setVisibleCount(1);
-      else if (w < 1024) setVisibleCount(2);
-      else setVisibleCount(3);
-    };
-    updateVisible();
-    window.addEventListener("resize", updateVisible);
-    return () => window.removeEventListener("resize", updateVisible);
+    const update = () => { const w = window.innerWidth; if (w < 640) setVisibleCount(1); else if (w < 1024) setVisibleCount(2); else setVisibleCount(3); };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
   }, []);
 
   const isSlider = reviews.length > visibleCount;
   const maxIndex = Math.max(0, reviews.length - visibleCount);
+  const dir      = lang === "ar" ? "rtl" : "ltr";
+  const gapPx    = 20;
+  const prev     = () => setCurrent((c) => Math.max(0, c - 1));
+  const next     = () => setCurrent((c) => Math.min(maxIndex, c + 1));
 
-  const handleScroll = () =>
-    document.getElementById("product")?.scrollIntoView({ behavior: "smooth" });
+  const onPointerDown = (e) => { setIsDragging(true); setDragStartX(e.clientX); setDragDeltaX(0); sliderRef.current?.setPointerCapture(e.pointerId); };
+  const onPointerMove = (e) => { if (isDragging) setDragDeltaX(e.clientX - dragStartX); };
+  const onPointerUp   = () => { if (!isDragging) return; setIsDragging(false); if (dragDeltaX < -60) next(); else if (dragDeltaX > 60) prev(); setDragDeltaX(0); };
 
-  const t = {
-    label: { ar: "آراء العملاء",               en: "Customer Reviews" },
-    title: { ar: "البنات اللي جرّبوا",         en: "Girls who tried" },
-    felt:  { ar: "حسّوا بالفرق",               en: "felt the difference" },
-    cta:   { ar: "ابدئي رحلتك مع RooteX الآن", en: "Start your RooteX journey now" },
-    fans:  { ar: "بنت حبّوا النتيجة 💛",        en: "girls loved the results 💛" },
-    empty: { ar: "لا توجد تقييمات بعد",         en: "No reviews yet" },
-  };
-
-  // ── Nav ───────────────────────────────────────────────────────────────────
-  const prev = () => setCurrent((c) => Math.max(0, c - 1));
-  const next = () => setCurrent((c) => Math.min(maxIndex, c + 1));
-
-  // ── Drag ──────────────────────────────────────────────────────────────────
-  const onPointerDown = (e) => {
-    setIsDragging(true);
-    setDragStartX(e.clientX);
-    setDragDeltaX(0);
-    sliderRef.current?.setPointerCapture(e.pointerId);
-  };
-  const onPointerMove = (e) => {
-    if (!isDragging) return;
-    setDragDeltaX(e.clientX - dragStartX);
-  };
-  const onPointerUp = () => {
-    if (!isDragging) return;
-    setIsDragging(false);
-    if (dragDeltaX < -60) next();
-    else if (dragDeltaX > 60) prev();
-    setDragDeltaX(0);
-  };
-
-  // ── Auto-advance ──────────────────────────────────────────────────────────
-  useEffect(() => {
-    if (!isSlider) return;
-    const id = setInterval(
-      () => setCurrent((c) => (c >= maxIndex ? 0 : c + 1)),
-      5000
-    );
-    return () => clearInterval(id);
-  }, [isSlider, maxIndex]);
-
-  // ── Reset on resize ───────────────────────────────────────────────────────
-  useEffect(() => {
-    setCurrent((c) => Math.min(c, maxIndex));
-  }, [maxIndex]);
+  useEffect(() => { if (!isSlider) return; const id = setInterval(() => setCurrent((c) => (c >= maxIndex ? 0 : c + 1)), 5000); return () => clearInterval(id); }, [isSlider, maxIndex]);
+  useEffect(() => { setCurrent((c) => Math.min(c, maxIndex)); }, [maxIndex]);
 
   if (!settings) return null;
 
-  const gold      = settings.colors?.gold          ?? "#c8a93e";
-  const goldLight = settings.colors?.goldLight      ?? "#d4b84a";
-  const primary   = settings.colors?.primary        ?? "#3a4520";
-  const secDark   = settings.colors?.secondaryDark  ?? "#2d3518";
-  const dir       = lang === "ar" ? "rtl" : "ltr";
-  const gapPx     = 20;
-
-  const sign = dir === "rtl" ? "" : "-";
+  const sign            = dir === "rtl" ? "" : "-";
   const sliderTransform = `translateX(calc(${sign}${current} * (${100 / visibleCount}% + ${gapPx}px) + ${dragDeltaX}px))`;
-
-  
-  const cardProps = { gold, goldLight, primary, lang };
+  const cardProps       = { lang, buttonbackground, buttontext, textColor, highlightColor };
 
   return (
-    <section id="reviews" style={{ padding: "20px 20px 60px 20px", direction: dir }}>
+    <section id="reviews" dir={dir} style={{ padding: "10px 2px", background: "transparent" }}>
       <style>{`
-        .rv-card-lift {
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .rv-card-lift:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 20px 55px rgba(0,0,0,0.15) !important;
-        }
+        .rv-card-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .rv-card-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.12) !important; }
         .rv-dot { transition: all 0.25s; cursor: pointer; }
         .rv-dot:hover { opacity: 0.75; transform: scale(1.2); }
-        .rv-arrow {
-          transition: background 0.2s, transform 0.15s, opacity 0.2s;
-          cursor: pointer;
-        }
-        .rv-arrow:hover:not(:disabled) {
-          transform: translateY(-50%) scale(1.1) !important;
-        }
-        .rv-arrow:active:not(:disabled) {
-          transform: translateY(-50%) scale(0.93) !important;
-        }
+        .rv-arrow { transition: transform 0.15s, opacity 0.2s; }
+        .rv-arrow:hover { transform: translateY(-50%) scale(1.08) !important; }
+        .rv-arrow:active { transform: translateY(-50%) scale(0.94) !important; }
       `}</style>
 
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
 
-        {/* ── Header ── */}
-        <div style={{ textAlign: "center", marginBottom: 52 }}>
-          <p style={{
-            fontSize: 16, letterSpacing: 5, color: gold,
-            textTransform: "uppercase", fontWeight: 700,
-            margin: "0 0 14px",
-          }}>
-            {t.label[lang]}
+        {/* Header */}
+        <div style={{ textAlign: "center", marginBottom: 0 }}>
+          <p style={{ fontSize: 14, letterSpacing: 4, color: textColor, textTransform: "uppercase", fontWeight: 600, margin: "0 0 0px 0" }}>
+            {renderHighlighted(settings?.reviews?.text?.[lang], highlightColor)}
           </p>
-          <h2 style={{
-            fontSize: "clamp(26px, 4.5vw, 46px)",
-            fontWeight: 800, lineHeight: 1.3, margin: 0,
-            color: primary,
-          }}>
-            {t.title[lang]}{" "}
-            Roote<span style={{ color: gold }}>x</span>{" "}
-            {t.felt[lang]}
+          <h2 style={{ fontSize: "clamp(24px, 4vw, 40px)", fontWeight: 800, lineHeight: 1.3, margin: "0 0 3px 0", color: textColor }}>
+            {renderHighlighted(settings?.reviews?.paragraph?.[lang], highlightColor)}
           </h2>
         </div>
 
-        {/* ── Cards ── */}
         {reviews.length === 0 ? (
-          <div style={{
-            ...cardBase, textAlign: "center",
-            padding: "60px 24px",
-            color: `${primary}88`, fontSize: 15,
-          }}>
-            {t.empty[lang]}
+          <div style={{ textAlign: "center", padding: "20px 24px", color: "#999", fontSize: 15 }}>
+            {lang === "ar" ? "لا توجد تقييمات بعد" : "No reviews yet"}
           </div>
-
         ) : isSlider ? (
-          /* ══════════════ SLIDER ══════════════ */
-          <div style={{ position: "relative", padding: "0 56px" }}>
-
+          <div style={{ position: "relative", padding: "0 10px" }}>
             <div style={{ overflow: "hidden", borderRadius: 24 }}>
-              <div
-                ref={sliderRef}
-                onPointerDown={onPointerDown}
-                onPointerMove={onPointerMove}
-                onPointerUp={onPointerUp}
-                onPointerCancel={onPointerUp}
-                style={{
-                  display: "flex",
-                  gap: gapPx,
-                  transform: sliderTransform,
-                  transition: isDragging
-                    ? "none"
-                    : "transform 0.28s cubic-bezier(0.25, 1, 0.5, 1)",
-                  willChange: "transform",
-                  cursor: isDragging ? "grabbing" : "grab",
-                  userSelect: "none",
-                  padding: "8px 2px 16px",
-                }}
-              >
+              <div ref={sliderRef} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}
+                style={{ display: "flex", gap: gapPx, transform: sliderTransform, transition: isDragging ? "none" : "transform 0.28s cubic-bezier(0.25,1,0.5,1)", willChange: "transform", cursor: isDragging ? "grabbing" : "grab", userSelect: "none", padding: "8px 2px 16px" }}>
                 {reviews.map((r) => (
-                  <ReviewCard
-                    key={r._id}
-                    review={r}
-                    {...cardProps}
-                    extraStyle={{
-                      flex: `0 0 calc(${100 / visibleCount}% - ${gapPx * (visibleCount - 1) / visibleCount}px)`,
-                      minWidth: 0,
-                      boxSizing: "border-box",
-                    }}
-                  />
+                  <ReviewCard key={r._id} review={r} {...cardProps}
+                    extraStyle={{ flex: `0 0 calc(${100 / visibleCount}% - ${gapPx * (visibleCount - 1) / visibleCount}px)`, minWidth: 0, boxSizing: "border-box" }} />
                 ))}
               </div>
             </div>
-
-            {/* Arrow prev */}
-            <button
-              className="rv-arrow"
-              onClick={dir === "rtl" ? next : prev}
-              disabled={current === (dir === "rtl" ? maxIndex : 0)}
-              style={{
-                ...arrowBtn(gold),
-                [dir === "rtl" ? "right" : "left"]: 0,
-                opacity: current === (dir === "rtl" ? maxIndex : 0) ? 0.3 : 1,
-              }}
-            >
-              {dir === "rtl" ? "›" : "‹"}
-            </button>
-
-            {/* Arrow next */}
-            <button
-              className="rv-arrow"
-              onClick={dir === "rtl" ? prev : next}
-              disabled={current === (dir === "rtl" ? 0 : maxIndex)}
-              style={{
-                ...arrowBtn(gold),
-                [dir === "rtl" ? "left" : "right"]: 0,
-                opacity: current === (dir === "rtl" ? 0 : maxIndex) ? 0.3 : 1,
-              }}
-            >
-              {dir === "rtl" ? "‹" : "›"}
-            </button>
-
-            {/* Dots */}
-            <div style={{
-              display: "flex", justifyContent: "center",
-              gap: 8, marginTop: 20,
-            }}>
+            {current !== (dir === "rtl" ? maxIndex : 0) && (
+              <button className="rv-arrow" onClick={dir === "rtl" ? next : prev} style={{ ...arrowBtn(), [dir === "rtl" ? "right" : "left"]: "-10px" }}>{dir === "rtl" ? "›" : "‹"}</button>
+            )}
+            {current !== (dir === "rtl" ? 0 : maxIndex) && (
+              <button className="rv-arrow" onClick={dir === "rtl" ? prev : next} style={{ ...arrowBtn(), [dir === "rtl" ? "left" : "right"]: 0 }}>{dir === "rtl" ? "‹" : "›"}</button>
+            )}
+            <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 0 }}>
               {Array.from({ length: maxIndex + 1 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="rv-dot"
-                  onClick={() => setCurrent(i)}
-                  style={{
-                    height: 8,
-                    width: i === current ? 28 : 8,
-                    borderRadius: 4,
-                    background: i === current ? gold : `${gold}55`,
-                    boxShadow: i === current ? `0 0 8px ${gold}88` : "none",
-                  }}
-                />
+                <div key={i} className="rv-dot" onClick={() => setCurrent(i)} style={{ height: 8, width: i === current ? 28 : 8, borderRadius: 4, background: i === current ? backgroundColor : "#5b2d8e44" }} />
               ))}
             </div>
           </div>
-
         ) : (
-          /* ══════════════ FLEX GRID ══════════════ */
           <div style={{ display: "flex", gap: 22, flexWrap: "wrap" }}>
-            {reviews.map((r) => (
-              <ReviewCard
-                key={r._id}
-                review={r}
-                {...cardProps}
-                extraStyle={{ flex: "1 1 280px" }}
-              />
-            ))}
+            {reviews.map((r) => <ReviewCard key={r._id} review={r} {...cardProps} extraStyle={{ flex: "1 1 280px" }} />)}
           </div>
         )}
-
-  
-   
-
       </div>
     </section>
   );

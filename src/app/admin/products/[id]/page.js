@@ -21,9 +21,10 @@ export default function EditProductPage() {
     nameEn: "", nameAr: "",
     descEn: "", descAr: "",
     price: "", stock: "",
+      oldPrice: "",
   });
-  const [newImages, setNewImages] = useState([]); // File objects
-  const [previews,  setPreviews]  = useState([]); // object URLs
+  const [newImages, setNewImages] = useState([]); 
+  const [previews,  setPreviews]  = useState([]); 
 
   const showToast = (msg, ok = true) => {
     setToast({ msg, ok });
@@ -35,6 +36,7 @@ export default function EditProductPage() {
       .then((r) => r.json())
       .then((d) => {
         const p = d.data;
+        console.log(p)
         setProduct(p);
         setForm({
           nameEn: p.name?.en || "",
@@ -42,7 +44,8 @@ export default function EditProductPage() {
           descEn: p.description?.en || "",
           descAr: p.description?.ar || "",
           price:  p.price?.toString() || "",
-          stock:  p.stock?.toString() || "",
+          stock: p.stock?.toString() || "",
+            oldPrice: p.oldPrice?.toString() || "",
         });
         setLoading(false);
       })
@@ -65,7 +68,8 @@ export default function EditProductPage() {
       const fd = new FormData();
       fd.append("name",        JSON.stringify({ en: form.nameEn, ar: form.nameAr }));
       fd.append("description", JSON.stringify({ en: form.descEn, ar: form.descAr }));
-      fd.append("price",  form.price);
+      fd.append("price", form.price);
+      fd.append("oldPrice", form.oldPrice);
       fd.append("stock",  form.stock);
       newImages.forEach((f) => fd.append("images", f));
 
@@ -216,6 +220,15 @@ if (loading) {
                 <Field label="Stock"       name="stock" value={form.stock} onChange={handleChange} type="number" min="0" />
               </div>
             </div>
+
+<Field
+  label="Old Price (EGP)"
+  name="oldPrice"
+  value={form.oldPrice}
+  onChange={handleChange}
+  type="number"
+  min="0"
+/>
           </div>
 
           {/* Right */}
@@ -387,7 +400,7 @@ const styles = {
   grid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 20, alignItems: "start" },
   card: { background: "white", borderRadius: 14, padding: "20px 22px", border: "1px solid #e8e8e6" },
   cardTitle: { fontSize: 15, fontWeight: 600, color: "#111", margin: "0 0 16px", paddingBottom: 12, borderBottom: "1px solid #f0f0ee" },
-  formGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 },
+  formGrid: { display: "grid", gap: 14 },
   imagesGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(80px, 1fr))", gap: 10 },
   imgWrap: { borderRadius: 8, overflow: "hidden", border: "1px solid #e8e8e6" },
   dropZone: {

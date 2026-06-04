@@ -142,7 +142,7 @@ export default function AdminHome() {
                   return (
                     <tr key={order._id} style={styles.tr}>
                       <td style={styles.td}>
-                        <span style={styles.orderId}>#{order._id.slice(-6).toUpperCase()}</span>
+                        <span style={styles.orderId}>{order.orderNumber}</span>
                       </td>
                       <td style={styles.td}>
                         <div style={{ fontWeight: 500, fontSize: 14 }}>{order.name}</div>

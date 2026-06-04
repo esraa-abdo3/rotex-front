@@ -20,6 +20,7 @@ export default function EditProduct() {
 
     price: "",
     stock: "",
+    oldPrice: "",
 
     category: "",
 
@@ -34,7 +35,7 @@ export default function EditProduct() {
       );
 
       const data = res.data;
-      console.log(data)
+     
 
       setForm({
         nameAr: data.name.ar,
@@ -47,6 +48,7 @@ export default function EditProduct() {
         stock: data.stock,
 
         category: data.category,
+         oldPrice: data.oldPrice || "",
 
         image: data.images[0],
       });
@@ -89,6 +91,9 @@ export default function EditProduct() {
 
           price: Number(form.price),
           stock: Number(form.stock),
+          oldPrice: form.oldPrice
+  ? Number(form.oldPrice)
+  : null,
 
           category: form.category,
         }
@@ -173,7 +178,7 @@ export default function EditProduct() {
         </div>
 
         {/* price + stock */}
-        <div className="grid2">
+        {/* <div className="grid2">
           <div className="inputGroup">
             <label>Price</label>
 
@@ -195,7 +200,41 @@ export default function EditProduct() {
               onChange={handleChange}
             />
           </div>
-        </div>
+        </div> */}
+        <div className="grid2">
+  <div className="inputGroup">
+    <label>Price</label>
+
+    <input
+      type="number"
+      name="price"
+      value={form.price}
+      onChange={handleChange}
+    />
+  </div>
+
+  <div className="inputGroup">
+    <label>Old Price</label>
+
+    <input
+      type="number"
+      name="oldPrice"
+      value={form.oldPrice}
+      onChange={handleChange}
+    />
+  </div>
+</div>
+
+<div className="inputGroup">
+  <label>Stock</label>
+
+  <input
+    type="number"
+    name="stock"
+    value={form.stock}
+    onChange={handleChange}
+  />
+</div>
 
         {/* category */}
         <div className="inputGroup">

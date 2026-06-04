@@ -1,127 +1,95 @@
 "use client";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSettings } from "@/app/providers/SettingsProvider";
 import { useLang } from "@/app/providers/LanguageProvider";
+import { useQuantity } from "@/app/providers/QuantityProvider";
+import { renderHighlighted } from "../utils/highlight";
 
 export default function Product({ product }) {
   const settings = useSettings();
   const { lang } = useLang();
+  const { qty, increment, decrement } = useQuantity();
   const item = product?.[0];
-  const [qty, setQty] = useState(1);
   const router = useRouter();
+
+  const buttonbackground  = settings?.colors?.buttonbackground;
+  const backgroundColor   = settings?.colors?.backgroundColor;
+  const highlightColor    = settings?.colors?.highlightColor;
+  const textColor         = settings?.colors?.textColor;
+  const buttontext        = settings?.colors?.buttontext;
+  const shippingSignature = settings?.shippingSignature;
 
   if (!item || !settings) return null;
 
-  const name = item.name?.[lang] || item.name?.ar;
+  const name        = item.name?.[lang]        || item.name?.ar;
   const description = item.description?.[lang] || item.description?.ar;
-  const nameParts = name?.split("-");
+  const nameParts   = name?.split("-");
 
   const t = {
-    buy: { ar: " اشتري الآن", en: "🛒 Buy Now" },
-    shipping: { ar: "✓ شحن سريع", en: "✓ Fast Shipping" },
-    quality: { ar: "✓ ضمان الجودة", en: "✓ Quality Guarantee" },
-    payment: { ar: "✓ دفع آمن", en: "✓ Secure Payment" },
-    currency: { ar: "جنيه", en: "EGP" },
+    buy:       { ar: "اشتري الآن", en: "🛒 Buy Now"  },
+    currency:  { ar: "جنيه",       en: "EGP"         },
+    insteadOf: { ar: "بدلاً من",   en: "Instead of"  },
   };
 
+  const QtyPill = () => (
+    <div style={{ display: "flex", alignItems: "center", background: `${backgroundColor}22`, borderRadius: 16, overflow: "hidden", width: "fit-content", height: 35 }}>
+      <button onClick={decrement} style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", background: `${backgroundColor}33`, border: "none", fontSize: 16, fontWeight: 500, color: textColor, cursor: "pointer" }}>−</button>
+      <span style={{ width: 44, textAlign: "center", fontSize: 16, fontWeight: 700, color: textColor, background: `${backgroundColor}22` }}>{qty}</span>
+      <button onClick={increment} style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", background: `${backgroundColor}33`, border: "none", fontSize: 16, fontWeight: 500, color: textColor, cursor: "pointer" }}>+</button>
+    </div>
+  );
+
   return (
-    <section
-      id="product"
-      dir={lang === "ar" ? "rtl" : "ltr"}
-      className="w-[90%] max-w-5xl m-auto flex flex-col md:flex-row items-center justify-center gap-16 px-6 py-4"
-      style={{ margin: "60px auto", color: "#fff" }}
-    >
-      <div className="flex-1 flex justify-center">
-        <div className="relative">
-          <div
-            className="absolute inset-0 rounded-3xl blur-2xl opacity-20 scale-90"
-            style={{ background: settings.colors.gold }}
-          />
-          <img
-            src={item.images?.[0]}
-            alt={name}
-            className="relative w-[280px] md:w-[460px] rounded-3xl shadow-2xl object-cover"
-          />
-        </div>
-      </div>
+    <section id="product" dir={lang === "ar" ? "rtl" : "ltr"} style={{ padding: "10px 20px", width: "100%", boxSizing: "border-box" }}>
+      <div style={{ maxWidth: 960, margin: "0 auto", display: "flex", flexDirection: "column", gap: 10 }} className="product-inner">
 
-      <div className="flex-1 flex flex-col gap-6">
-        <div>
-          <h2 className="text-4xl font-extrabold leading-tight" style={{ color: settings.colors.primary }}>
-            {nameParts?.[0]}
-            {nameParts?.[1] && (
-              <span style={{ color: settings.colors.gold }}> {nameParts[1]}</span>
-            )}
+        <div style={{ width: "100%", borderRadius: 24, overflow: "hidden" }}>
+          <img src={item.images?.[0]} alt={name} style={{ width: "85%", maxHeight: 830, objectFit: "cover", borderRadius: 24, display: "block", margin: "0 auto" }} />
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+
+          {/* Title */}
+          <h2 style={{ fontSize: 26, fontWeight: 900, color: textColor, margin: 0, textTransform: "uppercase", letterSpacing: 0.5, textAlign: "center" }}>
+            {renderHighlighted(nameParts?.[0], highlightColor)}
+            {nameParts?.[1] && <span> {renderHighlighted(nameParts[1], highlightColor)}</span>}
           </h2>
-          <div className="mt-3 h-[2px] w-16 rounded-full" style={{ background: settings.colors.gold }} />
-        </div>
 
-        <p className="text-sm leading-8 opacity-80 whitespace-pre-line" style={{ color: settings.colors.primary }}>
-          {description}
-        </p>
+          {/* Description */}
+          <p style={{ fontSize: 16, color: textColor, margin: 0, whiteSpace: "pre-line", fontWeight: 500, textAlign: "center", lineHeight: 1.5 }}>
+            {renderHighlighted(description, highlightColor)}
+          </p>
 
-        <div className="w-full h-[1px] opacity-20" style={{ background: settings.colors.primary }} />
+          <div style={{ height: 1, background: "#c5bfb0", opacity: 0.5 }} />
 
-        <div className="flex items-center justify-between">
-          <div
-            className="flex items-center gap-3 rounded-2xl px-4 py-2 shadow-sm border"
-            style={{ borderColor: settings.colors.gold +"33", background: "#fff" }}
-          >
-            <button
-              onClick={() => setQty(q => Math.max(1, q - 1))}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-xl font-bold transition hover:opacity-70 cursor-pointer"
-              style={{ color: settings.colors.primary }}
-            >−</button>
-            <span className="min-w-[28px] text-center text-lg font-bold" style={{ color: settings.colors.gold }}>
-              {qty}
-            </span>
-            <button
-              onClick={() => setQty(q => q + 1)}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-xl font-bold transition hover:opacity-70 cursor-pointer"
-              style={{ color: settings.colors.primary }}
-            >+</button>
+          {/* Price + Qty */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", gap: 10, direction: lang === "ar" ? "rtl" : "ltr" }}>
+            <QtyPill />
+            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+              <span style={{ fontSize: 16, fontWeight: 900, color: textColor }}>{item.price * qty} {t.currency[lang]}</span>
+              <span style={{ fontSize: 13, color: textColor, opacity: 0.6 }}>{t.insteadOf[lang]}</span>
+              <span style={{ fontSize: 12, color: textColor, textDecoration: "line-through", fontWeight: 500, opacity: 0.5 }}>{item.oldPrice ?? item.originalPrice ?? 2700} {t.currency[lang]}</span>
+            </div>
           </div>
 
-          {item.price && (
-            <div className="text-right">
-              <span className="text-2xl font-extrabold" style={{ color: settings.colors.gold }}>
-                {item.price * qty} {t.currency[lang]}
-              </span>
-            </div>
-          )}
-        </div>
+          {/* Buy Button */}
+          <button onClick={() => router.push(`/checkoutpage?qty=${qty}`)} style={{ width: "100%", padding: "15px 0", borderRadius: 50, background: buttonbackground, color: buttontext, fontWeight: 800, fontSize: 18, border: "none", cursor: "pointer", letterSpacing: 0.5, transition: "transform 0.15s", fontFamily: "inherit" }}>
+            {renderHighlighted(t.buy[lang], highlightColor)}
+          </button>
 
-        <button
-          onClick={() => router.push(`/checkoutpage?qty=${qty}`)}
-          className="w-full py-4 rounded-2xl font-bold text-lg tracking-wide transition-all duration-300 hover:scale-[1.02] hover:shadow-lg cursor-pointer"  
-             style={{
-                padding: "14px 38px", borderRadius: 50,
-                background: `linear-gradient(to right, ${settings.colors.gold}, ${settings.colors.goldLight})`,
-                color: "#1a1a0a", fontWeight: 800, fontSize: 16,
-                border: "none", cursor: "pointer",
-                boxShadow: `0 10px 30px ${settings.colors.goldLight}44`,
-                transition: "transform 0.2s, box-shadow 0.2s",
-                fontFamily: "inherit",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "scale(.98)";
-                e.currentTarget.style.boxShadow = `0 16px 40px ${settings.colors.gold}55`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.boxShadow = `0 10px 30px ${settings.colors.gold}44`;
-              }}
-        >
-          {t.buy[lang]}
-        </button>
-
-        <div className="flex items-center justify-center gap-6 opacity-50 text-xs" style={{ color: settings.colors.primary }}>
-          <span>{t.shipping[lang]}</span>
-          <span>{t.quality[lang]}</span>
-          <span>{t.payment[lang]}</span>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20, fontSize: 12, color: textColor, opacity: 0.7, flexWrap: "wrap" }}>
+            <span>{renderHighlighted(shippingSignature?.[lang], highlightColor)}</span>
+          </div>
         </div>
       </div>
+
+      <style>{`
+        @media (min-width: 768px) {
+          .product-inner { flex-direction: ${lang === "ar" ? "row" : "row-reverse"} !important; align-items: center; }
+          .product-inner > div:first-child { flex: 1; }
+          .product-inner > div:last-child  { flex: 1; }
+        }
+      `}</style>
     </section>
   );
 }
