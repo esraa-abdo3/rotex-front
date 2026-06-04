@@ -8,9 +8,7 @@ const API = "https://rootex-backend.vercel.app/api/v1";
 
 const TEXT_FIELDS = [
   { key: "text1",      label: "Text 1",       desc: "First line of the hero hook" },
-  { key: "text2",      label: "Text 2",       desc: "Second line of the hero hook" },
-  { key: "highlight1", label: "Highlight 1",  desc: "First highlighted word" },
-  { key: "highlight2", label: "Highlight 2",  desc: "Second highlighted word" },
+
   { key: "buttonText", label: "Button Text",  desc: "CTA button label" },
 ];
 const COLOR_FIELDS = [
@@ -73,12 +71,6 @@ export default function SettingsPage() {
 
   const [form, setForm] = useState({
     text1_ar: "", text1_en: "",
-    text2_ar: "", text2_en: "",
-
-
-    highlight1_ar: "", highlight1_en: "",
-    highlight2_ar: "", highlight2_en: "",
-
 
     buttonText_ar: "", buttonText_en: "",
 
@@ -120,12 +112,6 @@ export default function SettingsPage() {
           Fontfamily:    s?.Fontfamily         || "Cairo",
           text1_ar:      s?.hook?.text1?.ar      || "",
           text1_en:      s?.hook?.text1?.en      || "",
-          text2_ar:      s?.hook?.text2?.ar      || "",
-          text2_en:      s?.hook?.text2?.en      || "",
-          highlight1_ar: s?.hook?.highlight1?.ar || "",
-          highlight1_en: s?.hook?.highlight1?.en || "",
-          highlight2_ar: s?.hook?.highlight2?.ar || "",
-          highlight2_en: s?.hook?.highlight2?.en || "",
           buttonText_ar: s?.buttonText?.ar       || "",
           buttonText_en: s?.buttonText?.en       || "",
           backgroundColor:   s?.colors?.backgroundColor   || "#000000",
