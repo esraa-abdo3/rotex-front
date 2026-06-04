@@ -292,16 +292,15 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/app/providers/AuthProvider";
+import { useAuth } from "../../providers/AuthProvider";
 import "./login.css"
 
-
 const colors = {
-  primaryDark: "#1a1f0e",
-  secondaryDark: "#2d3518",
-  primary: "#3a4520",
-  gold: "#c8a93e",
-  goldLight: "#d4b84a",
+  primaryDark: "#ffffff",
+  secondaryDark: "#f5f5f5",
+  primary: "#111111",
+  gold: "#000000",
+  goldLight: "#333333",
 };
 
 export default function LoginPage() {
@@ -387,83 +386,77 @@ const handleSubmit = async (e) => {
   }
 };
   return (
-    <div
-      className="login"
-      style={{
-        minHeight: "100vh",
-        background: colors.primaryDark,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontFamily: "'Cairo', sans-serif",
-        direction: "rtl",
-        padding: "20px",
-      }}
-    >
+<div
+  className="login"
+  style={{
+    minHeight: "100vh",
+    background: "#fff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontFamily: "'Cairo', sans-serif",
+    direction: "rtl",
+    padding: "20px",
+  }}
+>
+
+
 
       <div
-        style={{
-          position: "fixed",
-          top: "20%",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: 600,
-          height: 600,
-          borderRadius: "50%",
-          background: `radial-gradient(circle, ${colors.gold}18 0%, transparent 70%)`,
-          pointerEvents: "none",
-        }}
-      />
-
-      <div
-        style={{
-          width: "100%",
-          maxWidth: 440,
-          background: "rgba(255,255,255,0.04)",
-          border: `1px solid ${colors.gold}33`,
-          borderRadius: 24,
-          padding: "40px 36px",
-          backdropFilter: "blur(12px)",
-          boxShadow: "0 24px 60px rgba(0,0,0,0.4)",
-          position: "relative",
-          zIndex: 1,
-        }}
+  style={{
+    width: "100%",
+    maxWidth: 440,
+    background: colors.card,
+    border: `1px solid ${colors.border}`,
+    borderRadius: 24,
+    padding: "40px 36px",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+    position: "relative",
+    zIndex: 1,
+  }}
       >
        
         <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <h1
-            style={{
-              fontSize: 32,
-              fontWeight: 900,
-              color: colors.primary,
-              margin: 0,
-              letterSpacing: 1,
-            }}
-          >
-            Roote
-            <span style={{ color: colors.gold }}>x</span>
-          </h1>
-          <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, marginTop: 6 }}>
-            تسجيل الدخول للوحة التحكم
-          </p>
+    <h1
+  style={{
+    fontSize: 32,
+    fontWeight: 900,
+    color: "black",
+    margin: 0,
+    letterSpacing: 1,
+  }}
+>
+  Roote
+  <span style={{ color: "#000" }}>x</span>
+</h1>
+
+<p
+  style={{
+    color: "#777",
+    fontSize: 14,
+    marginTop: 6,
+  }}
+>
+  تسجيل الدخول للوحة التحكم
+</p>
         </div>
 
         {/* Error */}
         {error && (
-          <div
-            style={{
-              background: "rgba(239,68,68,0.12)",
-              border: "1px solid rgba(239,68,68,0.3)",
-              color: "#fca5a5",
-              borderRadius: 12,
-              padding: "12px 16px",
-              fontSize: 14,
-              marginBottom: 20,
-              textAlign: "center",
-            }}
-          >
-            {error}
-          </div>
+      <div
+  style={{
+    background: "#fff5f5",
+    border: "1px solid #fecaca",
+    color: "#dc2626",
+    borderRadius: 12,
+    padding: "12px 16px",
+    fontSize: 14,
+    marginBottom: 20,
+    textAlign: "center",
+  }}
+>
+  {error}
+</div>
         )}
 
     
@@ -478,8 +471,8 @@ const handleSubmit = async (e) => {
               placeholder="admin@rootex.com"
               required
               style={inputStyle}
-              onFocus={(e) => (e.target.style.borderColor = colors.gold)}
-              onBlur={(e) => (e.target.style.borderColor = "rgba(255,255,255,0.1)")}
+              onFocus={(e) => (e.target.style.borderColor = "#111")}
+onBlur={(e) => (e.target.style.borderColor = "#dcdcdc")}
             />
           </div>
 
@@ -498,65 +491,39 @@ const handleSubmit = async (e) => {
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              marginTop: 8,
-              padding: "14px",
-              borderRadius: 12,
-              border: "none",
-              background: loading
-                ? "rgba(200,169,62,0.4)"
-                : `linear-gradient(135deg, ${colors.gold}, ${colors.goldLight})`,
-              color: "#1a1a0a",
-              fontSize: 16,
-              fontWeight: 700,
-              cursor: loading ? "not-allowed" : "pointer",
-              transition: "all 0.3s",
-              fontFamily: "'Cairo', sans-serif",
-            }}
+    <button
+  type="submit"
+  disabled={loading}
+  style={{
+    marginTop: 8,
+    padding: "14px",
+    borderRadius: 12,
+    border: "none",
+    background: loading ? "#999" : "#111",
+    color: "white",
+    fontSize: 16,
+    fontWeight: 700,
+    cursor: loading ? "not-allowed" : "pointer",
+    transition: "0.3s",
+    fontFamily: "'Cairo', sans-serif",
+  }}
           >
-  {loading ? (
-    <>
-      <span
-        style={{
-          width: "18px",
-          height: "18px",
-          border: "2px solid #fff",
-          borderTop: "2px solid transparent",
-          borderRadius: "50%",
-          display: "inline-block",
-          animation: "spin 0.7s linear infinite",
-        }}
-      ></span>
-
-      <style jsx>{`
-        @keyframes spin {
-          to {
-            transform: rotate(360deg);
-          }
-        }
-      `}</style>
-    </>
-  ) : (
-    "دخول"
-  )}
-          </button>
+            تسجيل دخول
+</button>
         </form>
 
         {/* Back to site */}
         <div style={{ textAlign: "center", marginTop: 24 }}>
-          <a
-            href="/"
-            style={{
-              color: "rgba(255,255,255,0.35)",
-              fontSize: 13,
-              textDecoration: "none",
-            }}
-          >
-            ← الرجوع للموقع
-          </a>
+   <a
+  href="/"
+  style={{
+    color: "#666",
+    fontSize: 13,
+    textDecoration: "none",
+  }}
+>
+  ← الرجوع للموقع
+</a>
         </div>
       </div>
     </div>
@@ -565,7 +532,7 @@ const handleSubmit = async (e) => {
 
 const labelStyle = {
   display: "block",
-  color: "rgba(255,255,255,0.6)",
+  color: "#444",
   fontSize: 13,
   marginBottom: 8,
   fontWeight: 600,
@@ -574,13 +541,13 @@ const labelStyle = {
 const inputStyle = {
   width: "100%",
   padding: "13px 16px",
-  background: "rgba(255,255,255,0.05)",
-  border: "1px solid rgba(255,255,255,0.1)",
+  background: "#fff",
+  border: "1px solid #dcdcdc",
   borderRadius: 12,
-  color: "white",
+  color: "#111",
   fontSize: 16,
   fontFamily: "'Cairo', sans-serif",
   outline: "none",
   boxSizing: "border-box",
-  transition: "border-color 0.2s",
+  transition: "all 0.2s",
 };
