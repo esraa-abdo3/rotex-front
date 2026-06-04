@@ -57,3 +57,15 @@ input::placeholder{
   transform: rotate(-8deg);
   transform-origin: center;
 }
+  .checkoutpage{
+    border-radius: 14px ;
+    -webkit-border-radius: 14px ;
+    -moz-border-radius: 14px ;
+    -ms-border-radius: 14px ;
+    -o-border-radius: 14px ;
+}
+@media(max-width:767px){
+  .checkoutpage{
+    margin: 0 !important;
+  }
+}

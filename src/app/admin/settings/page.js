@@ -191,6 +191,8 @@ floatingButton_text_en:
         if (v !== "") fd.append(k, v);
       });
 
+   
+console.log(form.text1_ar);
       // hero image
       if (heroFile) fd.append("herosection", heroFile);
 
@@ -222,7 +224,7 @@ fd.append(
       const { data } = await axios.patch(`${API}/setting`, fd, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
+console.log(data)
       // sync state with server response
       setHeroPreview(data.settings?.images?.herosection || heroPreview);
       setHeroFile(null);
@@ -232,6 +234,7 @@ fd.append(
       setResultImages(synced);
 
       showToast("Settings saved successfully ✓");
+      
     } catch (err) {
       showToast(err?.response?.data?.message || "Something went wrong", false);
     } finally {
@@ -296,15 +299,27 @@ fd.append(
               <div style={css.fieldInputs}>
                 <div style={css.inputGroup}>
                   <label style={css.inputLabel}>English</label>
-                  <input type="text" name={`${field.key}_en`}
-                    value={form[`${field.key}_en`]} onChange={handleChange}
-                    placeholder={`${field.label} in English`} style={css.input} />
+
+                    <textarea
+            name={`${field.key}_en`}
+            value={form[`${field.key}_en`] || ""}
+            onChange={handleChange}
+            placeholder={`${field.label} in English`}
+            style={css.input}
+            rows={5}
+          />
                 </div>
                 <div style={css.inputGroup}>
                   <label style={{ ...css.inputLabel, textAlign:"right" }}>عربي</label>
-                  <input type="text" name={`${field.key}_ar`}
-                    value={form[`${field.key}_ar`]} onChange={handleChange}
-                    placeholder={`${field.label} بالعربي`} dir="rtl" style={css.input} />
+                     <textarea
+            name={`${field.key}_ar`}
+            value={form[`${field.key}_ar`] || ""}
+            onChange={handleChange}
+            placeholder={`${field.label} بالعربي`}
+            dir="rtl"
+            style={css.input}
+            rows={5}
+          />
                 </div>
               </div>
             </div>

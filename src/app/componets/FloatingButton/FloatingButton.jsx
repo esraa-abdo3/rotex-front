@@ -43,13 +43,13 @@ const totalOldPrice = oldPrice * qty;
       {/* Qty + Price */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", gap: 10, direction: lang === "ar" ? "rtl" : "ltr" }}>
         <QtyPill />
-        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-          <span style={{ fontSize: 16, fontWeight: 900, color: textColor }}>{item?.price * qty} {t.currency[lang]}</span>
-          <span style={{ fontSize: 13, color: textColor, opacity: 0.6 }}>{t.insteadOf[lang]}</span>
-       <span className="old-price" style={{color:textColor}}>
+           <div style={{ display: "flex", alignItems: "center", gap: 3, flexWrap: "wrap" , justifyContent:"center" }}>
+            <span style={{ fontSize: 24, fontWeight: 900, color: textColor }}>{item?.price * qty} {t.currency[lang]}</span>
+            <span style={{ fontSize: 12, color: textColor, opacity: 0.6 }}>{t.insteadOf[lang]}</span>
+<span className="old-price" style={{color:textColor}}>
   {totalOldPrice} {t.currency[lang]}
 </span>
-        </div>
+          </div>
       </div>
 
       {/* Buy Button */}
