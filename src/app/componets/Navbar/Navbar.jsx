@@ -67,7 +67,7 @@ export default function Navbar() {
             className="setting-desctop"
             
             >
-              {lang === "ar" ? "English" : "arabic"}
+              {lang === "ar" ? "English" : "عربي"}
             </button>
 
             {!loading && user?.role === "admin" && (
