@@ -4,14 +4,16 @@
 }
 
 
-.old-price {
+.old-price,
+.old-pricee {
   position: relative;
   display: inline-block;
   color: inherit;
   font-weight: 700;
 }
 
-.old-price::after {
+.old-price::after,
+.old-pricee::after {
   content: "";
   position: absolute;
   left: -5%;

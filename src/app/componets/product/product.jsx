@@ -26,7 +26,7 @@ export default function Product({ product }) {
   const nameParts   = name?.split("-");
 
   const t = {
-    buy:       { ar: "اشتري الآن", en: " Buy Now"  },
+    buy:       { ar: "اشترى الآن", en: " Buy Now"  },
     currency:  { ar: "جنيه",       en: "EGP"         },
     insteadOf: { ar: "بدلاً من",   en: "Instead of"  },
   };
@@ -70,7 +70,7 @@ const totalOldPrice = oldPrice * qty;
           <div style={{ display: "flex", alignItems: "center", gap: 3, flexWrap: "wrap" , justifyContent:"center" }}>
             <span style={{ fontSize: 24, fontWeight: 900, color: textColor }}>{item?.price * qty} {t.currency[lang]}</span>
             <span style={{ fontSize: 12, color: textColor, opacity: 0.6 }}>{t.insteadOf[lang]}</span>
-<span className="old-price" style={{color:textColor}}>
+<span className="old-pricee" style={{color:textColor}}>
   {totalOldPrice} {t.currency[lang]}
 </span>
           </div>

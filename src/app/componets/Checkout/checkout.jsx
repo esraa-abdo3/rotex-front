@@ -493,7 +493,7 @@ const totalOldPrice = oldPrice * qty;
     govPh: { ar: "اختر المحافظة", en: "Select Governorate" },
     city: { ar: "المدينة / المركز", en: "City / District" },
     cityPh: { ar: "اختر المدينة / المركز", en: "Select City" },
-    cityFirst: { ar: "اختر المحافظة أولاً", en: "Select governorate first" },
+    cityFirst: { ar: "اختر المحافظة أولاً", en: "⬅️government first" },
     address: { ar: "العنوان بالتفاصيل", en: "Detailed Address" },
     addressPh: { ar: "الشارع، رقم المبنى، الدور، الشقة...", en: "Street, building number, floor, apartment..." },
     payMethod: { ar: "طريقة الدفع", en: "Payment Method" },
