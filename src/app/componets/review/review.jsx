@@ -134,7 +134,7 @@ export default function Review({ reviewss }) {
   const cardProps       = { lang, buttonbackground, buttontext, textColor, highlightColor };
 
   return (
-    <section id="reviews" dir={dir} style={{ padding: "10px 2px", background: "transparent" }}>
+    <section id="reviews" dir={dir} style={{ padding: "10px 2px", background: "transparent",fontFamily: settings?.Fontfamily ,  }}>
       <style>{`
         .rv-card-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .rv-card-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.12) !important; }
@@ -149,7 +149,7 @@ export default function Review({ reviewss }) {
 
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 0 }}>
-          <p style={{ fontSize: 14, letterSpacing: 4, color: textColor, textTransform: "uppercase", fontWeight: 600, margin: "0 0 0px 0" }}>
+          <p style={{ fontSize: 14, letterSpacing: 1, color: textColor, textTransform: "uppercase", fontWeight: 600, margin: "0 0 0px 0" }}>
             {renderHighlighted(settings?.reviews?.text?.[lang], highlightColor)}
           </p>
           <h2 style={{ fontSize: "clamp(24px, 4vw, 40px)", fontWeight: 800, lineHeight: 1.3, margin: "0 0 3px 0", color: textColor }}>
