@@ -26,7 +26,7 @@ export default function Product({ product }) {
   const nameParts   = name?.split("-");
 
   const t = {
-    buy:       { ar: "اشتري الآن", en: "🛒 Buy Now"  },
+    buy:       { ar: "اشتري الآن", en: " Buy Now"  },
     currency:  { ar: "جنيه",       en: "EGP"         },
     insteadOf: { ar: "بدلاً من",   en: "Instead of"  },
   };

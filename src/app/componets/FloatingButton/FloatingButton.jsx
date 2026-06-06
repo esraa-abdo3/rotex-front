@@ -25,13 +25,14 @@ export default function FloatingButton({ product }) {
      cta:       { ar: settings?.buttonText?.ar,                        en: settings?.buttonText?.en },
     currency:  { ar: "جنيه",     en: "EGP"        },
     insteadOf: { ar: "بدلاً من", en: "Instead of" },
+      fans:      { ar: settings?.fansText?.ar || "بنت حبّوا النتيجة ", en: settings?.fansText?.en || "girls loved the results 💛" },
   };
   const oldPrice = item?.oldPrice ?? item?.originalPrice ?? 2700;
 const totalOldPrice = oldPrice * qty;
 
 
   const QtyPill = () => (
-    <div style={{ display: "flex", alignItems: "center",background: `${buttonbackground}`, borderRadius: 16, overflow: "hidden", width: "fit-content", height: 35 }}>
+    <div className="qtypill" style={{ display: "flex", alignItems: "center",background: `${buttonbackground}`, borderRadius: 16, overflow: "hidden", width: "fit-content", height: 35 }}>
       <button onClick={decrement} style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", background:  `${buttonbackground}`, border: "none", fontSize: 16, fontWeight: 500, color: buttontext, cursor: "pointer" }}>−</button>
       <span style={{ width: 44, textAlign: "center", fontSize: 16, fontWeight: 700, color: buttontext, background: `${buttonbackground}` }}>{qty}</span>
       <button onClick={increment} style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", background: `${buttonbackground}`, border: "none", fontSize: 16, fontWeight: 500, color: buttontext, cursor: "pointer" }}>+</button>
@@ -43,16 +44,18 @@ const totalOldPrice = oldPrice * qty;
 
     <>
 
-    <div className="container-floating" style={{ position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)", zIndex: 999, width: "100%" }}>
-        <div className="textafter" style={{ width: "75%", margin:"10px auto 3px auto" }}>
-
+    <div className="container-floating" style={{ position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)", zIndex: 999, width: "100%"  , marginTop:"100px"}}>
+        <div className="textafter" style={{ width: "75%", margin:"0px auto 3px auto" }}>
+            <div style={{ fontSize: 14, color: textColor, margin: "3px 0 0px 0", textAlign: "center" }}>
+          {renderHighlighted(t.fans[lang], highlightColor)}
+        </div>
 
      
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", gap: 10, direction: lang === "ar" ? "rtl" : "ltr" }}>
+        <div className="price-desc" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", gap: 10, direction: lang === "ar" ? "rtl" : "ltr" }}>
           <QtyPill />
           <div style={{ display: "flex", alignItems: "center", gap: 3, flexWrap: "wrap" , justifyContent:"center" }}>
-            <span style={{ fontSize: 24, fontWeight: 900, color: textColor }}>{item?.price * qty} {t.currency[lang]}</span>
-            <span style={{ fontSize: 12, color: textColor, opacity: 0.6 }}>{t.insteadOf[lang]}</span>
+            <span className="currentprice" style={{ fontSize: 24, fontWeight: 900, color: textColor }}>{item?.price * qty} {t.currency[lang]}</span>
+            <span className="insteadof" style={{ fontSize: 12, color: textColor, opacity: 0.6 }}>{t.insteadOf[lang]}</span>
 <span className="old-price" style={{color:textColor}}>
   {totalOldPrice} {t.currency[lang]}
 </span>
@@ -66,7 +69,7 @@ const totalOldPrice = oldPrice * qty;
         {/* Buy Button */}
         <button
           onClick={() => router.push(`/checkoutpage?qty=${qty}`)}
-          style={{ padding: "12px 38px", borderRadius: 16, background: buttonbackground, color: buttontext, fontWeight: 800, border: "none", cursor: "pointer", boxShadow: `0 10px 30px ${buttonbackground}44`, transition: "transform 0.2s, box-shadow 0.2s", fontFamily: "inherit", width: "100%", margin: "5px 0", fontSize: 25 }}
+          style={{ padding: "5px 38px", borderRadius: 16, background: buttonbackground, color: buttontext, fontWeight: 800, border: "none", cursor: "pointer", boxShadow: `0 10px 30px ${buttonbackground}44`, transition: "transform 0.2s, box-shadow 0.2s", fontFamily: "inherit", width: "100%", margin: "2px 0", fontSize: 23 }}
         >
           {renderHighlighted(t.cta[lang], highlightColor)}
         </button>

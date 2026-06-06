@@ -409,6 +409,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { FiUser, FiPhone } from "react-icons/fi";
 import { FiCreditCard } from "react-icons/fi";
+import "../CTA/CTA.css"
 
 const GOVS = {
   "القاهرة": ["القاهرة","مدينة نصر","شبرا","المطرية","عين شمس","حلوان","المعادي","مصر الجديدة","الزيتون","الأميرية","بولاق","السلام","الخليفة","الدرب الأحمر","الموسكي","الساحل","شبرا الخيمة","الوايلي"],
@@ -498,9 +499,9 @@ const totalOldPrice = oldPrice * qty;
     payMethod: { ar: "طريقة الدفع", en: "Payment Method" },
     cash: { ar: "الدفع عند الاستلام", en: "Cash on Delivery" },
     cashSub: { ar: "كاش عند الإستلام", en: "Cash" },
-    visa: { ar: "فيزا / ماستر كارد", en: "Credit Card" },
-    visaSub: { ar: "ادفع أونلاين بأمان", en: "Pay online securely" },
-    total: { ar: "الإجمالي ", en: "Total" },
+    visa: { ar: "فيزا / ماستر كارد", en: "Credit / Debit Card" },
+    visaSub: { ar: "ادفع أونلاين بأمان", en: "Pay securely online" },
+    total: { ar: "إجمالي", en: "Total" },
     confirm: { ar: "إكمال الطلب", en: "Complete Order" },
     currency: { ar: "جنيه", en: "EGP" },
     qty: { ar: "الكمية", en: "Quantity" },
@@ -620,24 +621,24 @@ const totalOldPrice = oldPrice * qty;
     
         <div className="bg-white px-5 py-3">
           <div className="flex items-center gap-2 mb-2 justify-center text-center">
-            <span style={{ color: backgroundColor, fontSize: 18 }}>< FiCreditCard/></span>
+            <span style={{ color: backgroundColor, fontSize: 16 }}>< FiCreditCard/></span>
             <span className="text-sm font-bold" style={{ color: textColor }}>{t.payMethod[lang]}</span>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2">
             {[
               { key: "cash", label: t.cash[lang], sub: t.cashSub[lang], icon: "💵" },
               { key: "paymob", label: t.visa[lang], sub: t.visaSub[lang], icon: "💳" },
             ].map(opt => (
-              <button key={opt.key} onClick={() => setPayMethod(opt.key)}
-                className="flex items-center gap-2 px-1 py-3 rounded-2xl border-2 text-right transition-all"
+              <button style={{fontSize:"16px"}} key={opt.key} onClick={() => setPayMethod(opt.key)}
+                className="flex items-center gap-1 px-1 py-3 rounded-2xl border-2 text-center transition-all"
                 style={{
                   borderColor: payMethod === opt.key ?`${buttonbackground}22` : "#e8e3f5",
                   background: payMethod === opt.key ?`${buttonbackground}22` : "#faf9fe",
                 }}>
-                <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0"
+                <div className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
                   style={{ borderColor: payMethod === opt.key ? `${buttonbackground}` : "#c0b8e0" }}>
                   {payMethod === opt.key && (
-                    <div className="w-2.5 h-2.5 rounded-full" style={{ background: `${buttonbackground}` }} />
+                    <div className="w-2.3 h-2.3 rounded-full" style={{ background: `${buttonbackground}` }} />
                   )}
                 </div>
                 <div className="flex-1">
@@ -651,9 +652,7 @@ const totalOldPrice = oldPrice * qty;
         </div>
 
         <div className="h-2" style={{ background:"#f0eef8"  }} />
-
-        
-        <div className="bg-white px-5 py-2">
+        <div className="bg-white  px-1 lg:px-4 py-2">
           <div className="flex items-center justify-between pb-3 border-b border-[#f0eef8]">
             <span className="text-sm font-semibold" style={{ color: textColor }}>
               {productName} × {qty}
@@ -671,10 +670,11 @@ const totalOldPrice = oldPrice * qty;
 
           </div>
           <div className="pb-3 border-b border-[#f0eef8]"></div>
-          <div className="flex justify-between items-end pt-0">
-            <span className="text-sm" style={{ color: textColor }}>{t.total[lang]} </span>
+         {/* test */}
+          <div className=" price-desc flex justify-between items-center pt-0">
+            <span  className="text-sm tota-checkout" style={{ color: textColor }}>{t.total[lang]} </span>
                 <div style={{ display: "flex", alignItems: "center", gap: 3, flexWrap: "wrap" , justifyContent:"center" }}>
-            <span style={{ fontSize: 24, fontWeight: 900, color: textColor }}>{(product?.price * qty)+SHIPPING} {t.currency[lang]}</span>
+            <span className="tota-checkout" style={{ fontSize: 24, fontWeight: 900, color: textColor }}>{(product?.price * qty)+SHIPPING} {t.currency[lang]}</span>
             <span style={{ fontSize: 12, color: textColor, opacity: 0.6 }}>{t.insteadOf[lang]}</span>
 <span className="old-price" style={{color:textColor}}>
   {totalOldPrice +SHIPPING} {t.currency[lang]}
@@ -682,12 +682,12 @@ const totalOldPrice = oldPrice * qty;
           </div>
           </div>
         </div>
-          <div className="bg-white px-5 pb-3 pt-3">
+          <div className="bg-white px-5 pb-2 pt-2">
           <button onClick={handleSubmit} disabled={loading}
             className="w-full py-4 rounded-2xl font-black text-lg text-white flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-70 cursor-pointer"
             style={{ background: buttonbackground, color:buttontext, boxShadow: "0 8px 24px rgba(59,47,140,0.3)" }}>
             {loading
-              ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               : <> {t.confirm[lang]}</>
             }
           </button>

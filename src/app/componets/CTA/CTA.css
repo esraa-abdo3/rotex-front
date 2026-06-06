@@ -17,7 +17,7 @@
   left: -5%;
   top: 50%;
   width: 110%;
-  height: 1.5px;
+  height: 1px;
   background: red;
   transform: rotate(-8deg);
   transform-origin: center;
@@ -33,10 +33,22 @@
 
 }
 @media(max-width:767px){
+
+  .qtypill{
+    height: 30px !important;
+  }
     .cta-section,
     .textafter{
     width: 95% !important;
 }
+  .qtypill button{
+    width: 30px !important;
+    height: 30px !important;
+    
+  }
+    .qtypill span{
+      width: 30px !important;
+    }
 .itemcta{
     justify-content: center !important;
 }
@@ -44,5 +56,69 @@
 
   padding: 0 ;
 }
+  .currentprice,
+  .tota-checkout{
+    font-size: 20px !important;
+  }
 
+}
+@media(max-width:380px){
+    .qtypill{
+    height: 30px !important;
+  }
+
+  .qtypill button{
+    width: 28px !important;
+    height: 20px !important;
+    
+  }
+    .qtypill span{
+      width: 30px !important;
+      font-size: 14px !important;
+    }
+  .textafter{
+    width: 95% !important;
+  }
+  .price-desc{
+    gap: 0px !important;
+
+  }
+
+  .currentprice,
+  .tota-checkout{
+    font-size: 20px !important;
+  }
+  .insteadof,
+  .old-price{
+    font-size: 11px;
+
+  }
+}
+@media(max-width:290px){
+
+  .qtypill button{
+    width: 20px !important;
+    height: 20px !important;
+    
+  }
+    .qtypill span{
+      width: 20px !important;
+    }
+  .textafter{
+    width: 95% !important;
+  }
+  .price-desc{
+    gap: 0px !important;
+
+  }
+
+  .currentprice,
+  .tota-checkout{
+    font-size: 16px !important;
+  }
+  .insteadof,
+  .old-price{
+    font-size: 11px;
+
+  }
 }
