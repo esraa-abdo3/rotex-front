@@ -22,6 +22,7 @@ export default function FloatingButton({ product }) {
   const item             = product?.[0];
 
   const t = {
+     cta:       { ar: settings?.buttonText?.ar,                        en: settings?.buttonText?.en },
     currency:  { ar: "جنيه",     en: "EGP"        },
     insteadOf: { ar: "بدلاً من", en: "Instead of" },
   };
@@ -38,27 +39,44 @@ const totalOldPrice = oldPrice * qty;
   );
 
   return (
-    <div style={{ position: "fixed", bottom: 20, left: "50%", transform: "translateX(-50%)", zIndex: 999, width: "90%", maxWidth: 480, display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
 
-      {/* Qty + Price */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", gap: 10, direction: lang === "ar" ? "rtl" : "ltr" }}>
-        <QtyPill />
-           <div style={{ display: "flex", alignItems: "center", gap: 3, flexWrap: "wrap" , justifyContent:"center" }}>
+
+    <>
+
+    <div className="container-floating" style={{ position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)", zIndex: 999, width: "100%" }}>
+        <div className="textafter" style={{ width: "75%", margin:"10px auto 3px auto" }}>
+
+
+     
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", gap: 10, direction: lang === "ar" ? "rtl" : "ltr" }}>
+          <QtyPill />
+          <div style={{ display: "flex", alignItems: "center", gap: 3, flexWrap: "wrap" , justifyContent:"center" }}>
             <span style={{ fontSize: 24, fontWeight: 900, color: textColor }}>{item?.price * qty} {t.currency[lang]}</span>
             <span style={{ fontSize: 12, color: textColor, opacity: 0.6 }}>{t.insteadOf[lang]}</span>
 <span className="old-price" style={{color:textColor}}>
   {totalOldPrice} {t.currency[lang]}
 </span>
           </div>
-      </div>
+        </div>
+      </div>   
+       <div className="cta-section" style={{ borderRadius: 16, overflow: "hidden", width: "75%", margin: "5px auto 0px auto", backgroundColor: backgroundColor, paddingBottom: 0 }}>
+      <div className="itemcta" style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", flexWrap: "wrap", gap: 5, padding: "0px 5px" }}>
 
-      {/* Buy Button */}
-      <button
-        onClick={() => router.push(`/checkoutpage?qty=${qty}`)}
-        style={{ width: "100%", background: buttonbackground, color: buttontext, border: "none", padding: "14px 28px", borderRadius: 14, fontWeight: 700, fontSize: 20, boxShadow: "0 8px 25px rgba(0,0,0,.15)", cursor: "pointer", fontFamily: "inherit", textAlign: "center" }}
-      >
-        {renderHighlighted(settings?.floatingButton?.text?.[lang], highlightColor)}
-      </button>
+  
+        {/* Buy Button */}
+        <button
+          onClick={() => router.push(`/checkoutpage?qty=${qty}`)}
+          style={{ padding: "12px 38px", borderRadius: 16, background: buttonbackground, color: buttontext, fontWeight: 800, border: "none", cursor: "pointer", boxShadow: `0 10px 30px ${buttonbackground}44`, transition: "transform 0.2s, box-shadow 0.2s", fontFamily: "inherit", width: "100%", margin: "5px 0", fontSize: 25 }}
+        >
+          {renderHighlighted(t.cta[lang], highlightColor)}
+        </button>
+      </div>
     </div>
+        </div>
+
+  
+  
+    </>
+
   );
 }

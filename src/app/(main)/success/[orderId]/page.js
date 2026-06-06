@@ -169,7 +169,7 @@ export default function SuccessPage() {
       style={{
         padding:"25px 0",
         minHeight: "100vh",
-        background: "linear-gradient(160deg, #f7f5f0 0%, #eee8d5 50%, #f7f5f0 100%)",
+        background: "#e3e1da",
         fontFamily: "'Cairo', sans-serif",
         position: "relative",
         overflow: "hidden",
@@ -187,7 +187,7 @@ export default function SuccessPage() {
         right: dir === "rtl" ? "-120px" : "auto",
         left: dir === "rtl" ? "auto" : "-120px",
         width: 340, height: 340, borderRadius: "50%",
-        background: `radial-gradient(circle, ${gold}22 0%, transparent 70%)`,
+        
         pointerEvents: "none",
       }} />
       <div style={{
@@ -316,104 +316,6 @@ export default function SuccessPage() {
           </div>
         </div>
  
-     
-        <div style={{
-          background: "#fff",
-          borderRadius: "1.75rem",
-          padding: "1.4rem 1.5rem",
-          border: "1px solid #f0ead6",
-          marginBottom: "1.5rem",
-          opacity: cardsVisible ? 1 : 0,
-          transform: cardsVisible ? "translateY(0)" : "translateY(20px)",
-          transition: "opacity .5s ease .1s, transform .5s ease .1s",
-        }}>
-          <p style={{
-            fontSize: "0.7rem", fontWeight: 700, color: "#bbb",
-            letterSpacing: "0.06em", textTransform: "uppercase", margin: "0 0 1rem",
-          }}>
-            {t.trackTitle[lang]}
-          </p>
- 
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            {t.steps[lang].map((s, i) => (
-              <div key={i} style={{ display: "flex", gap: "0.9rem", alignItems: "stretch" }}>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: 28, flexShrink: 0 }}>
-                  <div style={{
-                    width: 28, height: 28, borderRadius: "50%",
-                    background: i === 0
-                      ? `linear-gradient(135deg, ${gold}, ${goldLight})`
-                      : i === 1 ? `${gold}33` : "#f0ead6",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: "0.85rem", flexShrink: 0,
-                    boxShadow: i === 0 ? `0 4px 12px ${gold}55` : "none",
-                    opacity: cardsVisible ? 1 : 0,
-                    transition: `opacity .4s ease ${0.2 + i * 0.12}s`,
-                  }}>
-                    {i === 0 ? "✓" : s.icon}
-                  </div>
-                  {i < t.steps[lang].length - 1 && (
-                    <div style={{
-                      width: 2, flex: 1, minHeight: 20,
-                      background: i === 0
-                        ? `linear-gradient(to bottom, ${gold}, ${gold}44)`
-                        : "#f0ead6",
-                      margin: "3px 0", borderRadius: 2,
-                    }} />
-                  )}
-                </div>
- 
-                <div style={{
-                  paddingBottom: i < t.steps[lang].length - 1 ? "0.85rem" : 0,
-                  paddingTop: "0.2rem",
-                  opacity: cardsVisible ? 1 : 0,
-                  transform: cardsVisible ? "translateX(0)" : `translateX(${dir === "rtl" ? 12 : -12}px)`,
-                  transition: `opacity .4s ease ${0.25 + i * 0.12}s, transform .4s ease ${0.25 + i * 0.12}s`,
-                }}>
-                  <p style={{
-                    fontWeight: i === 0 ? 800 : 600,
-                    fontSize: "0.82rem",
-                    color: i === 0 ? primary : "#999",
-                    margin: "0 0 2px",
-                  }}>
-                    {s.title}
-                  </p>
-                  <p style={{ fontSize: "0.72rem", color: "#bbb", margin: 0 }}>{s.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
- 
-        <div style={{
-          display: "flex", gap: "0.75rem",
-          opacity: cardsVisible ? 1 : 0,
-          transform: cardsVisible ? "translateY(0)" : "translateY(16px)",
-          transition: "opacity .5s ease .4s, transform .5s ease .4s",
-        }}
-         
-        >
-<a
-  href="/"
-  className="flex-1 text-center py-3 rounded-2xl border-2 font-bold text-sm no-underline flex items-center justify-center gap-2 transition-all duration-300 text-[#c8a93e] hover:bg-[#c8a93e] hover:text-white"
-  style={{
-    borderColor: gold,
-   
-  
-  }}
->
-  {t.backHome[lang]}
-</a>
-          {/* <button style={{
-            flex: 1, padding: "0.9rem", borderRadius: "1.2rem", border: "none",
-            background: `linear-gradient(135deg, ${primary}, #6b8a3a)`,
-            color: "#fff", fontWeight: 700, fontSize: "0.9rem",
-            cursor: "pointer", fontFamily: "'Cairo', sans-serif",
-            display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem",
-            boxShadow: `0 6px 20px ${primary}44`,
-          }}>
-            📦 {t.trackOrder[lang]}
-          </button> */}
-        </div>
  
      
  

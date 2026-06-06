@@ -38,8 +38,8 @@ const totalPrice = item?.price * qty;
 
   return (
     <>
-      <div className="textafter" style={{ width: "75%", margin:"3px auto 3px auto" }}>
-                <div style={{ fontSize: 14, color: textColor, margin: "3px 0", textAlign: "center" }}>
+      <div className="textafter" style={{ width: "75%", margin:"3px auto 0px auto" }}>
+                <div style={{ fontSize: 14, color: textColor, margin: "3px 0 5px 0", textAlign: "center" }}>
           {renderHighlighted(t.fans[lang], highlightColor)}
         </div>
 
@@ -56,14 +56,14 @@ const totalPrice = item?.price * qty;
         </div>
       </div>   
 
-   <div className="cta-section" style={{ borderRadius: 16, overflow: "hidden", width: "75%", margin: "5px auto 0px auto", backgroundColor: backgroundColor, paddingBottom: 10 }}>
-      <div className="itemcta" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexDirection: "column", flexWrap: "wrap", gap: 5, padding: "0px 5px" }}>
+   <div className="cta-section" style={{ borderRadius: 16, overflow: "hidden", width: "75%", margin: "5px auto 0px auto", backgroundColor: backgroundColor, paddingBottom: 0 }}>
+      <div className="itemcta" style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", flexWrap: "wrap", gap: 5, padding: "0px 5px" }}>
 
   
         {/* Buy Button */}
         <button
           onClick={() => router.push(`/checkoutpage?qty=${qty}`)}
-          style={{ padding: "25px 38px", borderRadius: 16, background: buttonbackground, color: buttontext, fontWeight: 800, border: "none", cursor: "pointer", boxShadow: `0 10px 30px ${buttonbackground}44`, transition: "transform 0.2s, box-shadow 0.2s", fontFamily: "inherit", width: "100%", margin: "5px 0", fontSize: 25 }}
+          style={{ padding: "12px 38px", borderRadius: 16, background: buttonbackground, color: buttontext, fontWeight: 800, border: "none", cursor: "pointer", boxShadow: `0 10px 30px ${buttonbackground}44`, transition: "transform 0.2s, box-shadow 0.2s", fontFamily: "inherit", width: "100%", margin: "5px 0", fontSize: 25 }}
         >
           {renderHighlighted(t.cta[lang], highlightColor)}
         </button>

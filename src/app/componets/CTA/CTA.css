@@ -2,16 +2,7 @@
     width: 80%;
     cursor: default;
 }
-@media(max-width:767px){
-    .cta-section,
-    .textafter{
-    width: 95% !important;
-}
-.itemcta{
-    justify-content: center !important;
-}
 
-}
 
 .old-price {
   position: relative;
@@ -30,4 +21,28 @@
   background: red;
   transform: rotate(-8deg);
   transform-origin: center;
+}
+.container-floating {
+  background-color: #e3e1da;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  padding: 0px !important;
+
+}
+@media(max-width:767px){
+    .cta-section,
+    .textafter{
+    width: 95% !important;
+}
+.itemcta{
+    justify-content: center !important;
+}
+.container-floating{
+
+  padding: 0 ;
+}
+
 }

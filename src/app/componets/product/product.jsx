@@ -76,13 +76,13 @@ const totalOldPrice = oldPrice * qty;
           </div>
           </div>
 
-          {/* Buy Button */}
+          
           <button onClick={() => router.push(`/checkoutpage?qty=${qty}`)} style={{ width: "100%", padding: "15px 0", borderRadius: 50, background: buttonbackground, color: buttontext, fontWeight: 800, fontSize: 18, border: "none", cursor: "pointer", letterSpacing: 0.5, transition: "transform 0.15s", fontFamily: "inherit" }}>
             {renderHighlighted(t.buy[lang], highlightColor)}
           </button>
 
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20, fontSize: 12, color: textColor, flexWrap: "wrap" }}>
-            <span style={{color:textColor}}>{renderHighlighted(shippingSignature?.[lang], textColor)}</span>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20, fontSize: 14, color: textColor, flexWrap: "wrap" }}>
+            <span style={{color:textColor}}>{renderHighlighted(shippingSignature?.[lang], highlightColor)}</span>
           </div>
         </div>
       </div>

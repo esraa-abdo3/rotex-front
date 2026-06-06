@@ -478,6 +478,9 @@ export default function Checkout({ product }) {
   const total = subtotal + SHIPPING;
   const dir = lang === "ar" ? "rtl" : "ltr";
   const productName = product?.name?.[lang] || product?.name?.ar;
+  const totalPrice = product?.price * qty;
+  const oldPrice = product?.oldPrice ?? product?.originalPrice ?? 2700;
+const totalOldPrice = oldPrice * qty;
 
   const t = {
     title: { ar: "إتمام الطلب", en: "Complete Order" },
@@ -497,7 +500,7 @@ export default function Checkout({ product }) {
     cashSub: { ar: "كاش عند الإستلام", en: "Cash" },
     visa: { ar: "فيزا / ماستر كارد", en: "Credit Card" },
     visaSub: { ar: "ادفع أونلاين بأمان", en: "Pay online securely" },
-    total: { ar: "الإجمالي النهائي شامل الشحن", en: "Total incl. shipping" },
+    total: { ar: "الإجمالي ", en: "Total" },
     confirm: { ar: "إكمال الطلب", en: "Complete Order" },
     currency: { ar: "جنيه", en: "EGP" },
     qty: { ar: "الكمية", en: "Quantity" },
@@ -511,6 +514,9 @@ export default function Checkout({ product }) {
     errCityText: { ar: "أدخل اسم المدينة", en: "Enter city name" },
     trust: { ar: "بياناتك محمية وآمنة ولن يتم مشاركتها مع أي جهة أخرى", en: "Your data is safe and will never be shared" },
     dashboard: { ar: "لوحة التحكم", en: "Dashboard" },
+    price: { ar: "السعر", en: "price" },
+    shippingCost: { ar: "تكلفة الشحن", en: "Shipping Cost" },
+     insteadOf: { ar: "بدلاً من", en: "Instead of" },
   };
 
   const validate = () => {
@@ -625,13 +631,13 @@ export default function Checkout({ product }) {
               <button key={opt.key} onClick={() => setPayMethod(opt.key)}
                 className="flex items-center gap-2 px-1 py-3 rounded-2xl border-2 text-right transition-all"
                 style={{
-                  borderColor: payMethod === opt.key ?`${buttonbackground/22}` : "#e8e3f5",
-                  background: payMethod === opt.key ?`${buttonbackground/22}` : "#faf9fe",
+                  borderColor: payMethod === opt.key ?`${buttonbackground}22` : "#e8e3f5",
+                  background: payMethod === opt.key ?`${buttonbackground}22` : "#faf9fe",
                 }}>
                 <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0"
-                  style={{ borderColor: payMethod === opt.key ? `${buttonbackground/22}` : "#c0b8e0" }}>
+                  style={{ borderColor: payMethod === opt.key ? `${buttonbackground}` : "#c0b8e0" }}>
                   {payMethod === opt.key && (
-                    <div className="w-2.5 h-2.5 rounded-full" style={{ background: `${buttonbackground/22}` }} />
+                    <div className="w-2.5 h-2.5 rounded-full" style={{ background: `${buttonbackground}` }} />
                   )}
                 </div>
                 <div className="flex-1">
@@ -654,21 +660,29 @@ export default function Checkout({ product }) {
             </span>
     
           </div>
+          <div className="flex gap-2 items-center pt-2" style={{fontWeight:"700"}}>
+            <span className="text-sm" style={{ color: textColor }}>{t.price[lang]}: </span>
+            <span style={{ color: textColor }}>{ totalPrice} {t.currency[lang]}</span>
+
+          </div>
+                    <div className="flex gap-2 items-center pt-0" style={{fontWeight:"700"}}>
+            <span className="text-sm" style={{ color: textColor }}>{t.shippingCost[lang]}: </span>
+            <span style={{ color: textColor }}>{ SHIPPING} {t.currency[lang]}</span>
+
+          </div>
+          <div className="pb-3 border-b border-[#f0eef8]"></div>
           <div className="flex justify-between items-end pt-0">
-            <span className="text-sm" style={{ color: textColor }}>{t.total[lang]}</span>
-            <div className="text-left">
-              <div>
-                <span className="text-3xl font-black" style={{ color: textColor }}>{total.toLocaleString()}</span>
-                <span className="text-sm font-bold mr-1" style={{ color: textColor }}> {t.currency[lang]}</span>
-              </div>
-              <p className="text-xs line-through text-right" style={{ color: textColor }}>
-                بدلاً من {(qty * 2700 + SHIPPING).toLocaleString()} {t.currency[lang]}
-              </p>
-            </div>
+            <span className="text-sm" style={{ color: textColor }}>{t.total[lang]} </span>
+                <div style={{ display: "flex", alignItems: "center", gap: 3, flexWrap: "wrap" , justifyContent:"center" }}>
+            <span style={{ fontSize: 24, fontWeight: 900, color: textColor }}>{(product?.price * qty)+SHIPPING} {t.currency[lang]}</span>
+            <span style={{ fontSize: 12, color: textColor, opacity: 0.6 }}>{t.insteadOf[lang]}</span>
+<span className="old-price" style={{color:textColor}}>
+  {totalOldPrice +SHIPPING} {t.currency[lang]}
+</span>
+          </div>
           </div>
         </div>
-
-        <div className="bg-white px-5 pb-3 pt-3">
+          <div className="bg-white px-5 pb-3 pt-3">
           <button onClick={handleSubmit} disabled={loading}
             className="w-full py-4 rounded-2xl font-black text-lg text-white flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-70 cursor-pointer"
             style={{ background: buttonbackground, color:buttontext, boxShadow: "0 8px 24px rgba(59,47,140,0.3)" }}>
@@ -680,7 +694,7 @@ export default function Checkout({ product }) {
           <p className="text-center text-xs my-3 flex items-center justify-center gap-1" style={{ color: "#9b8fc7" }}>
             🛡 {t.trust[lang]}
           </p>
-        </div>
+          </div>
 
       </div>
     </div>
