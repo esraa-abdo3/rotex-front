@@ -124,7 +124,7 @@ export default function Review({ reviewss }) {
   const onPointerMove = (e) => { if (isDragging) setDragDeltaX(e.clientX - dragStartX); };
   const onPointerUp   = () => { if (!isDragging) return; setIsDragging(false); if (dragDeltaX < -60) next(); else if (dragDeltaX > 60) prev(); setDragDeltaX(0); };
 
-  useEffect(() => { if (!isSlider) return; const id = setInterval(() => setCurrent((c) => (c >= maxIndex ? 0 : c + 1)), 4000); return () => clearInterval(id); }, [isSlider, maxIndex]);
+  useEffect(() => { if (!isSlider) return; const id = setInterval(() => setCurrent((c) => (c >= maxIndex ? 0 : c + 1)), 3000); return () => clearInterval(id); }, [isSlider, maxIndex]);
   useEffect(() => { setCurrent((c) => Math.min(c, maxIndex)); }, [maxIndex]);
 
   if (!settings) return null;
