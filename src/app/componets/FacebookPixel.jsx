@@ -8,6 +8,7 @@ const PIXEL_ID = "2496490754109919";
 export default function FacebookPixel() {
   const pathname = usePathname();
   const initialized = useRef(false);
+  const allowedPaths = ["/"];
 
   useEffect(() => {
     if (!initialized.current) {
@@ -40,10 +41,10 @@ export default function FacebookPixel() {
       window.fbq("init", PIXEL_ID);
     }
 
-    // PageView بس في الصفحة الرئيسية
-    if (pathname === "/" && window.fbq) {
-      window.fbq("track", "PageView");
-    }
+   
+if (allowedPaths.includes(pathname) && window.fbq) {
+  window.fbq("track", "PageView");
+}
 
   }, [pathname]);
 
