@@ -534,6 +534,9 @@ const totalOldPrice = oldPrice * qty;
 
   const handleSubmit = async () => {
     if (!validate()) return;
+     if (typeof window.fbq !== "undefined") {
+    window.fbq("track", "InitiateCheckout");
+  }
     try {
       setLoading(true);
       const payload = {
@@ -548,6 +551,10 @@ const totalOldPrice = oldPrice * qty;
         items: [{ product: "6a105fe04036081b1eda3108", quantity: qty }],
       };
       const res = await axios.post("https://rootex-backend.vercel.app/api/v1/order/createorder", payload);
+          if (typeof window.fbq !== "undefined") {
+      window.fbq("track", "Lead");
+    }
+
       if (payMethod === "cash") router.push(`/success/${res.data.data.orderNumber}`);
       if (payMethod === "paymob") window.location.href = res.data.data.checkoutUrl;
     } catch (error) {
@@ -556,6 +563,7 @@ const totalOldPrice = oldPrice * qty;
       setLoading(false);
     }
   };
+  
 
   return (
     <div dir={dir} className="checkoutpage"  style={{  fontFamily: "'Cairo', sans-serif", borderRadius:"4px", margin:"20px 0" }}>

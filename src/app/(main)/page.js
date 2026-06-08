@@ -6,6 +6,7 @@ import Result      from "../componets/result/result";
 import Headersection from "../componets/herosection/Headersection";
 import CTA from "../componets/CTA/CTA.jsx"
 import FloatingButton from "../componets/FloatingButton/FloatingButton";
+import ViewContentTracker from "../componets/ViewContentTracker";
 
 async function getProduct() {
   try {
@@ -41,12 +42,12 @@ async function getSectionOrder() {
 }
 function renderSection(key, props) {
   switch (key) {
-    case "Heroheader": return <Headersection key="Heroheader" />;
-    case "Hero":       return <Herosection   key="Hero" />;
-    case "product":    return <Product       key="product" product={props.product} />;
-    case "after":      return <Result        key="after" />;
-    case "review":     return <Review        key="review" reviewss={props.reviews} />;
-    case "CTA":        return <CTA           key="CTA" product={props.product} />;
+    case "Heroheader": return <Headersection id={`section-${key}`} key="Heroheader" />;
+    case "Hero":       return <Herosection id={`section-${key}`}  key="Hero" />;
+    case "product":    return <Product  id={`section-${key}`}     key="product" product={props.product} />;
+    case "after":      return <Result  id={`section-${key}`}      key="after" />;
+    case "review":     return <Review id={`section-${key}`}       key="review" reviewss={props.reviews} />;
+    case "CTA":        return <CTA    id={`section-${key}`}       key="CTA" product={props.product} />;
     default:           return null;
   }
 }
@@ -61,10 +62,11 @@ export default async function Home() {
   const sortedSections = Object.entries(sectionOrder)
     .sort(([, a], [, b]) => a - b)
     .map(([key]) => key);
+    const thirdSectionKey = sortedSections[2]
 
   return (
     <div>
- 
+      <ViewContentTracker targetId={`section-${thirdSectionKey}`} />
       {sortedSections.map((key) =>
         renderSection(key, { product: product.data, reviews })
       )}

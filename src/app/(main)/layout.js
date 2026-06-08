@@ -2,6 +2,7 @@
 import { QuantityProvider } from "../providers/QuantityProvider";
 import { SettingsProvider } from "../providers/SettingsProvider";
 import Navbar from "../componets/Navbar/Navbar";
+import FacebookPixel from "../componets/FacebookPixel";
 
 async function getSettings() {
   try {
@@ -36,10 +37,11 @@ async function getSettings() {
 }
 
 export default async function MainLayout({ children }) {
-  const settings = await getSettings();          // ✅ SSR fetch
+  const settings = await getSettings();      
 
   return (
     <SettingsProvider initialSettings={settings}>
+      <FacebookPixel/>
       <Navbar/>
       <QuantityProvider>
         {children}
