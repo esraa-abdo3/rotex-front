@@ -6,7 +6,7 @@ import Result      from "../componets/result/result";
 import Headersection from "../componets/herosection/Headersection";
 import CTA from "../componets/CTA/CTA.jsx"
 import FloatingButton from "../componets/FloatingButton/FloatingButton";
-import ViewContentTracker from "../componets/ViewContentTracker";
+// import ViewContentTracker from "../componets/ViewContentTracker";
 
 async function getProduct() {
   try {
@@ -68,12 +68,12 @@ export default async function Home() {
   const sortedSections = Object.entries(sectionOrder)
     .sort(([, a], [, b]) => a - b)
     .map(([key]) => key);
-    const thirdSectionKey = sortedSections[2]
+    // const thirdSectionKey = sortedSections[2]
 
   return (
     <div>
   
-      <ViewContentTracker targetId={`section-${thirdSectionKey}`} />
+      {/* <ViewContentTracker targetId={`section-${thirdSectionKey}`} /> */}
       {sortedSections.map((key) =>
         renderSection(key, { product: product.data, reviews })
       )}
