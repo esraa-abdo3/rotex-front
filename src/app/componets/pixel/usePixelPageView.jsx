@@ -6,15 +6,9 @@ export function usePixelPageView() {
     if (typeof window === "undefined") return;
     if (!window.fbq) return;
 
-    const fired = sessionStorage.getItem("pixel_pv_fired");
-
-      if (fired) {
-          console.log("exist")
-          
-        
+    if (!window.__pixelPageViewFired) {
+      window.fbq("track", "PageView");
+      window.__pixelPageViewFired = true;
     }
-
-    window.fbq("track", "PageView");
-    sessionStorage.setItem("pixel_pv_fired", "1");
   }, []);
 }
