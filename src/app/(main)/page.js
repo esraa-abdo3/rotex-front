@@ -42,16 +42,22 @@ async function getSectionOrder() {
 }
 function renderSection(key, props) {
   switch (key) {
-    case "Heroheader": return <Headersection id={`section-${key}`} key="Heroheader" />;
-    case "Hero":       return <Herosection id={`section-${key}`}  key="Hero" />;
-    case "product":    return <Product  id={`section-${key}`}     key="product" product={props.product} />;
-    case "after":      return <Result  id={`section-${key}`}      key="after" />;
-    case "review":     return <Review id={`section-${key}`}       key="review" reviewss={props.reviews} />;
-    case "CTA":        return <CTA    id={`section-${key}`}       key="CTA" product={props.product} />;
-    default:           return null;
+    case "Heroheader":
+      return <div id={`section-${key}`} key="Heroheader"><Headersection /></div>;
+    case "Hero":
+      return <div id={`section-${key}`} key="Hero"><Herosection /></div>;
+    case "product":
+      return <div id={`section-${key}`} key="product"><Product product={props.product} /></div>;
+    case "after":
+      return <div id={`section-${key}`} key="after"><Result /></div>;
+    case "review":
+      return <div id={`section-${key}`} key="review"><Review reviewss={props.reviews} /></div>;
+    case "CTA":
+      return <div id={`section-${key}`} key="CTA"><CTA product={props.product} /></div>;
+    default:
+      return null;
   }
 }
-
 
 export default async function Home() {
   const [product, reviews, sectionOrder] = await Promise.all([
