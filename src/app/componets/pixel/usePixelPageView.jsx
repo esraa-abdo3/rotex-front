@@ -9,8 +9,11 @@ export function usePixelPageView() {
     if (typeof window === "undefined") return;
     if (!window.fbq) return;
 
-    if (pathname === "/") {
+    const alreadyTracked = sessionStorage.getItem("landing_pv_fired");
+
+    if (pathname === "/" && !alreadyTracked) {
       window.fbq("track", "PageView");
+      sessionStorage.setItem("landing_pv_fired", "1");
     }
   }, [pathname]);
 }
