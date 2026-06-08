@@ -37,7 +37,3 @@ export function trackCustomEvent(eventName, params = {}) {
   fbq("trackCustom", eventName, params);
 }
 
-/** PageView — called by usePageView hook; guarded at hook level */
-export function trackPageView() {
-  fbq("track", PixelEvent.PAGE_VIEW);
-}
