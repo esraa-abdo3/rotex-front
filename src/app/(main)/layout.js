@@ -156,12 +156,8 @@ export default async function MainLayout({ children }) {
     <html lang="en">
       <body>
        <PixelInit />
-<PageViewTracker />
         <SettingsProvider initialSettings={settings}>
           <Navbar />
-
-       
-
           <QuantityProvider>
             {children}
           </QuantityProvider>
