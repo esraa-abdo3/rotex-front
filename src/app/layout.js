@@ -53,7 +53,7 @@ import { SettingsProvider } from "./providers/SettingsProvider";
 import { AuthProvider } from "./providers/AuthProvider";
 import { LanguageProvider } from "./providers/LanguageProvider";
 import MetaPixelScript from "./componets/pixel/MetaPixelScript";
-import PixelPageTracker from "./componets/pixel/PixelPageTracker";
+
 import "./globals.css";
 
 async function getSettings() {
@@ -95,7 +95,7 @@ export default async function RootLayout({ children }) {
           ────────────────────────────────────────────────────────────────────
         */}
         <MetaPixelScript />
-        <PixelPageTracker />
+       
 
         <SettingsProvider initialSettings={settings}>
           <AuthProvider>
