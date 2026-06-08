@@ -128,6 +128,7 @@ import { AuthProvider } from "./providers/AuthProvider";
 import { LanguageProvider } from "./providers/LanguageProvider";
 import Script from "next/script";
 import "./globals.css";
+import PixelProvider from "./providers/PixelProvider";
 
 const PIXEL_ID = "2496490754109919";
 
@@ -180,26 +181,22 @@ export default async function RootLayout({ children }) {
                 fbq('set','autoConfig', false, '${PIXEL_ID}');
                 fbq('init','${PIXEL_ID}');
 
-                // Fire PageView once per session only (not on every reload).
-                // sessionStorage clears when the tab is closed — so returning
-                // visitors in a new tab always get a fresh PageView.
-                if (!sessionStorage.getItem('pixel_pv_fired')) {
-                  sessionStorage.setItem('pixel_pv_fired', '1');
-                  fbq('track', 'PageView');
-                }
+         
               `,
             }}
           />
         )}
       </head>
       <body className="min-h-full flex flex-col">
+        <PixelProvider>
         <SettingsProvider initialSettings={settings}>
           <AuthProvider>
             <LanguageProvider>
               {children}
             </LanguageProvider>
           </AuthProvider>
-        </SettingsProvider>
+          </SettingsProvider>
+          </PixelProvider>
       </body>
     </html>
   );
