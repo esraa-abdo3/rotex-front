@@ -7,6 +7,7 @@ import Headersection from "../componets/herosection/Headersection";
 import CTA from "../componets/CTA/CTA.jsx"
 import FloatingButton from "../componets/FloatingButton/FloatingButton";
 import ViewContentTracker from "../componets/ViewContentTracker";
+import PixelPageView from "../componets/PixelPageView";
 
 
 
@@ -74,8 +75,7 @@ export default async function Home() {
 
   return (
     <div>
-  
-
+      <PixelPageView />
       <ViewContentTracker targetId={`section-${thirdSectionKey}`} />
       {sortedSections.map((key) =>
         renderSection(key, { product: product.data, reviews })
