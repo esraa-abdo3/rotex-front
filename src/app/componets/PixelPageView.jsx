@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { trackFB } from "@/utils/fbPixel";
+import { trackFB } from "./utils/fbPixel";
 
 export default function PixelPageView() {
   const pathname = usePathname();

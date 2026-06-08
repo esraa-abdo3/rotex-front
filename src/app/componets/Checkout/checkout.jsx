@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { FiUser, FiPhone } from "react-icons/fi";
 import { FiCreditCard } from "react-icons/fi";
 import "../CTA/CTA.css"
-import { trackFB } from "@/utils/fbPixel";
+import { trackFB } from "../utils/fbPixel";
 
 const GOVS = {
   "القاهرة": ["القاهرة","مدينة نصر","شبرا","المطرية","عين شمس","حلوان","المعادي","مصر الجديدة","الزيتون","الأميرية","بولاق","السلام","الخليفة","الدرب الأحمر","الموسكي","الساحل","شبرا الخيمة","الوايلي"],

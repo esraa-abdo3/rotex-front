@@ -31,7 +31,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { trackFB } from "@/utils/fbPixel";
+import { trackFB } from "./utils/fbPixel";
 
 export default function ViewContentTracker({ targetId }) {
   const fired = useRef(false);
