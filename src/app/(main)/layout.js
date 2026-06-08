@@ -2,8 +2,6 @@
 import { QuantityProvider } from "../providers/QuantityProvider";
 import { SettingsProvider } from "../providers/SettingsProvider";
 import Navbar from "../componets/Navbar/Navbar";
-import FacebookPixel from "../componets/FacebookPixel";
-;
 
 async function getSettings() {
   try {
@@ -42,7 +40,7 @@ export default async function MainLayout({ children }) {
 
   return (
     <SettingsProvider initialSettings={settings}>
-   <FacebookPixel/>
+    
       <Navbar/>
       <QuantityProvider>
         {children}

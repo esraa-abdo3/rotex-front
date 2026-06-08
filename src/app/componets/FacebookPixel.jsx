@@ -1,21 +1,17 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname } from "next/navigation";
 
 const PIXEL_ID = "2496490754109919";
 
 export default function FacebookPixel() {
-  const pathname = usePathname();
-
   useEffect(() => {
-    console.log("PAGE VIEW FIRED");
-    // اشتغل فقط في الصفحة الرئيسية
-    if (pathname !== "/") return;
+    // لو اتبعت قبل كده في نفس الجلسة متبعتوش تاني
+    if (sessionStorage.getItem("pageview_sent")) {
+      return;
+    }
 
-    // امنع تكرار PageView في نفس الجلسة
-    if (sessionStorage.getItem("pv")) return;
-    sessionStorage.setItem("pv", "1");
+    sessionStorage.setItem("pageview_sent", "true");
 
     !(function (f, b, e, v, n, t, s) {
       if (f.fbq) return;
@@ -43,17 +39,9 @@ export default function FacebookPixel() {
 
     window.fbq("init", PIXEL_ID);
     window.fbq("track", "PageView");
-  }, [pathname]);
 
-  return (
-    <noscript>
-      <img
-        height="1"
-        width="1"
-        style={{ display: "none" }}
-        src={`https://www.facebook.com/tr?id=${PIXEL_ID}&ev=PageView&noscript=1`}
-        alt=""
-      />
-    </noscript>
-  );
+    console.log("PAGE VIEW FIRED");
+  }, []);
+
+  return null;
 }
