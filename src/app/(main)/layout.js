@@ -113,7 +113,7 @@
 import { QuantityProvider } from "../providers/QuantityProvider";
 import { SettingsProvider } from "../providers/SettingsProvider";
 import Navbar from "../componets/Navbar/Navbar";
-import PixelInit from "../componets/PixelInit";
+import PixelInit from "../componets/utils/PixelInit";
 import PixelPageView from "../componets/PixelPageView";
 
 async function getSettings() {
