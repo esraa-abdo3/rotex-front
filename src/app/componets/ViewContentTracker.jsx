@@ -1,14 +1,21 @@
-
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef, useEffect } from "react";
+import { trackEvent, PixelEvent } from "@/app/lib/pixel/pixel";
 
-
+/**
+ * ViewContentTracker
+ *
+ * Fires fbq('track', 'ViewContent') once when the target section enters
+ * the viewport. Uses IntersectionObserver — no scroll listeners.
+ *
+ * @param {string} targetId - id attribute of the element to observe
+ */
 export default function ViewContentTracker({ targetId }) {
   const fired = useRef(false);
 
   useEffect(() => {
-    if (!targetId) return;
+    if (!targetId || fired.current) return;
 
     const section = document.getElementById(targetId);
     if (!section) return;
@@ -17,9 +24,7 @@ export default function ViewContentTracker({ targetId }) {
       (entries) => {
         if (entries[0].isIntersecting && !fired.current) {
           fired.current = true;
-
-       window.fbq("track", "ViewContent");
-
+          trackEvent(PixelEvent.VIEW_CONTENT);
           observer.disconnect();
         }
       },
