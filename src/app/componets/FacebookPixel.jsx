@@ -9,6 +9,7 @@ export default function FacebookPixel() {
   const pathname = usePathname();
 
   useEffect(() => {
+    console.log("PAGE VIEW FIRED");
     // اشتغل فقط في الصفحة الرئيسية
     if (pathname !== "/") return;
 
