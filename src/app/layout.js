@@ -128,7 +128,7 @@ import { AuthProvider } from "./providers/AuthProvider";
 import { LanguageProvider } from "./providers/LanguageProvider";
 import Script from "next/script";
 import "./globals.css";
-import PixelProvider from "./providers/PixelProvider";
+
 
 const PIXEL_ID = "2496490754109919";
 
@@ -188,7 +188,7 @@ export default async function RootLayout({ children }) {
         )}
       </head>
       <body className="min-h-full flex flex-col">
-        <PixelProvider>
+  
         <SettingsProvider initialSettings={settings}>
           <AuthProvider>
             <LanguageProvider>
@@ -196,7 +196,7 @@ export default async function RootLayout({ children }) {
             </LanguageProvider>
           </AuthProvider>
           </SettingsProvider>
-          </PixelProvider>
+         
       </body>
     </html>
   );
