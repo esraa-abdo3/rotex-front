@@ -66,7 +66,7 @@ export default function FacebookPixel() {
     if (initialized.current) return;
     
     initialized.current = true;
-    window.__pixelFired__ = true; // ← بيتذكر على مستوى الـ window كله
+    window.__pixelFired__ = true; 
 
     !(function (f, b, e, v, n, t, s) {
       if (f.fbq) return;

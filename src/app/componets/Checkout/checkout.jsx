@@ -534,9 +534,7 @@ const totalOldPrice = oldPrice * qty;
 
   const handleSubmit = async () => {
     if (!validate()) return;
-     if (typeof window.fbq !== "undefined") {
-    window.fbq("track", "InitiateCheckout");
-  }
+
     try {
       setLoading(true);
       const payload = {
