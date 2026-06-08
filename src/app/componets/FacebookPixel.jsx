@@ -1,56 +1,4 @@
-// "use client";
 
-// import { useEffect, useRef } from "react";
-// import { usePathname } from "next/navigation";
-
-// const PIXEL_ID = "2496490754109919";
-
-
-// export default function FacebookPixel() {
-//   const pathname = usePathname();
-//   const initialized = useRef(false);
-
-
-// useEffect(() => {
-//     if (!initialized.current) {
-//       initialized.current = true;
-
-//       !(function (f, b, e, v, n, t, s) {
-//         if (f.fbq) return;
-//         n = f.fbq = function () {
-//           n.callMethod
-//             ? n.callMethod.apply(n, arguments)
-//             : n.queue.push(arguments);
-//         };
-//         if (!f._fbq) f._fbq = n;
-//         n.push = n;
-//         n.loaded = !0;
-//         n.version = "2.0";
-//         n.queue = [];
-//         t = b.createElement(e);
-//         t.async = !0;
-//         t.src = v;
-//         s = b.getElementsByTagName(e)[0];
-//         s.parentNode.insertBefore(t, s);
-//       })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
-
-//       window.fbq("init", PIXEL_ID);
-
-
-//         window.fbq("track", "PageView");
-      
-//     }
-
-//   }, []);
-
-//   return (
-//     <noscript>
-//       <img height="1" width="1" style={{ display: "none" }}
-//         src={`https://www.facebook.com/tr?id=${PIXEL_ID}&ev=PageView&noscript=1`}
-//         alt="" />
-//     </noscript>
-//   );
-// }
 "use client";
 
 import { useEffect, useRef } from "react";
@@ -60,13 +8,9 @@ const PIXEL_ID = "2496490754109919";
 export default function FacebookPixel() {
   const initialized = useRef(false);
 
-  useEffect(() => {
-    // لو اتسجل قبل كده في أي حتة — وقف
-    if (window.__pixelFired__) return;
-    if (initialized.current) return;
-    
-    initialized.current = true;
-    window.__pixelFired__ = true; 
+useEffect(() => {
+    if (sessionStorage.getItem("pv")) return;
+    sessionStorage.setItem("pv", "1");
 
     !(function (f, b, e, v, n, t, s) {
       if (f.fbq) return;
@@ -76,13 +20,8 @@ export default function FacebookPixel() {
           : n.queue.push(arguments);
       };
       if (!f._fbq) f._fbq = n;
-      n.push = n;
-      n.loaded = !0;
-      n.version = "2.0";
-      n.queue = [];
-      t = b.createElement(e);
-      t.async = !0;
-      t.src = v;
+      n.push = n; n.loaded = !0; n.version = "2.0"; n.queue = [];
+      t = b.createElement(e); t.async = !0; t.src = v;
       s = b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t, s);
     })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
@@ -91,7 +30,6 @@ export default function FacebookPixel() {
     window.fbq("track", "PageView");
 
   }, []);
-
   return (
     <noscript>
       <img height="1" width="1" style={{ display: "none" }}
