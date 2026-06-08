@@ -180,6 +180,7 @@ export default async function RootLayout({ children }) {
                 'https://connect.facebook.net/en_US/fbevents.js');
                 fbq('set','autoConfig', false, '${PIXEL_ID}');
                 fbq('init','${PIXEL_ID}');
+                fbq('trackCustom', 'LandingPageView');
 
          
               `,
