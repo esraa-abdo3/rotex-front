@@ -10,7 +10,6 @@ export default function FacebookPixel() {
   const initialized = useRef(false);
 
   useEffect(() => {
- 
     if (!initialized.current) {
       initialized.current = true;
 
@@ -41,10 +40,11 @@ export default function FacebookPixel() {
       window.fbq("init", PIXEL_ID);
     }
 
-
-    if (window.fbq) {
+    // PageView بس في الصفحة الرئيسية
+    if (pathname === "/" && window.fbq) {
       window.fbq("track", "PageView");
     }
+
   }, [pathname]);
 
   return (
