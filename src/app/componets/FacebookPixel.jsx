@@ -3,12 +3,13 @@
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 
-const PIXEL_ID = "2496490754109919"; 
+const PIXEL_ID = "2496490754109919";
+const allowedPaths = ["/"];
 
 export default function FacebookPixel() {
   const pathname = usePathname();
   const initialized = useRef(false);
-  const allowedPaths = ["/"];
+  const pageViewFired = useRef(false); // ← جديد
 
   useEffect(() => {
     if (!initialized.current) {
@@ -31,32 +32,24 @@ export default function FacebookPixel() {
         t.src = v;
         s = b.getElementsByTagName(e)[0];
         s.parentNode.insertBefore(t, s);
-      })(
-        window,
-        document,
-        "script",
-        "https://connect.facebook.net/en_US/fbevents.js"
-      );
+      })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
 
       window.fbq("init", PIXEL_ID);
     }
 
-   
-if (allowedPaths.includes(pathname) && window.fbq) {
-  window.fbq("track", "PageView");
-}
+    // PageView مرة واحدة بس في الصفحة الرئيسية
+    if (allowedPaths.includes(pathname) && !pageViewFired.current && window.fbq) {
+      pageViewFired.current = true; // ← مش هيتسجل تاني
+      window.fbq("track", "PageView");
+    }
 
   }, [pathname]);
 
   return (
     <noscript>
-      <img
-        height="1"
-        width="1"
-        style={{ display: "none" }}
+      <img height="1" width="1" style={{ display: "none" }}
         src={`https://www.facebook.com/tr?id=${PIXEL_ID}&ev=PageView&noscript=1`}
-        alt=""
-      />
+        alt="" />
     </noscript>
   );
 }
