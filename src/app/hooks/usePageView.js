@@ -1,30 +1,28 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import { trackPageView } from "@/app/lib/pixel/pixel";
 
 /**
  * usePageView
  *
- * Fires fbq('track', 'PageView') once per unique pathname.
+ * Fires fbq('track', 'PageView') exactly ONCE per full browser session —
+ * only on the very first page load, never again on client-side navigation.
  *
- * Guards:
- *  - useRef tracks the last pathname that received a PageView,
- *    so React re-renders of the same page never fire a second event.
- *  - usePathname() from next/navigation triggers the effect only when
- *    the route genuinely changes (soft navigations included).
- *  - No window access during SSR — useEffect runs client-only.
+ * Strategy: sessionStorage flag "pixel_pv_fired".
+ * - On hard load / new tab: flag is absent → fire + set flag.
+ * - On client-side navigation (Next.js soft nav): component re-mounts
+ *   but flag is already set → skip.
+ * - On tab close / new session: sessionStorage is cleared → fires again
+ *   on the next hard load (correct behaviour).
  */
 export function usePageView() {
-  const pathname = usePathname();
-  const lastTrackedPath = useRef(null);
-
   useEffect(() => {
-    // Skip if we already fired for this path in this session
-    if (lastTrackedPath.current === pathname) return;
+    const FLAG = "pixel_pv_fired";
 
-    lastTrackedPath.current = pathname;
+    if (sessionStorage.getItem(FLAG)) return;
+
+    sessionStorage.setItem(FLAG, "1");
     trackPageView();
-  }, [pathname]);
+  }, []); // empty deps — runs once on mount, never again in this session
 }
