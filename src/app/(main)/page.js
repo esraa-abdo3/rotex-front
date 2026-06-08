@@ -7,7 +7,7 @@ import Headersection from "../componets/herosection/Headersection";
 import CTA from "../componets/CTA/CTA.jsx"
 import FloatingButton from "../componets/FloatingButton/FloatingButton";
 import ViewContentTracker from "../componets/ViewContentTracker";
-import FacebookPixel from "../componets/FacebookPixel";
+
 
 async function getProduct() {
   try {
@@ -73,7 +73,7 @@ export default async function Home() {
 
   return (
     <div>
-      <FacebookPixel/>
+
       <ViewContentTracker targetId={`section-${thirdSectionKey}`} />
       {sortedSections.map((key) =>
         renderSection(key, { product: product.data, reviews })
