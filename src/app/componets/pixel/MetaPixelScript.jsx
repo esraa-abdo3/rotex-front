@@ -1,23 +1,27 @@
-"use client";
+// No "use client" — this is a Server Component.
+// Next.js <Script> with strategy="afterInteractive" works fine in Server Components
+// and guarantees the script is injected only once into the HTML document,
+// never re-executed on client-side navigation or re-renders.
 
 import Script from "next/script";
 import { PIXEL_ID } from "@/app/lib/pixel/pixel";
 
 /**
- * MetaPixelScript
+ * MetaPixelScript  (Server Component)
  *
- * Renders the official fbq init snippet exactly once in the document.
- * Strategy "afterInteractive" means Next.js injects it after hydration —
- * never on the server, never duplicated across client navigations.
+ * Injects the official fbq base snippet once in the document.
+ * fbq('init') automatically fires one PageView — we do NOT fire
+ * an additional PageView anywhere else.
  *
- * Place this inside <body> in the root layout.
+ * Rules (per Meta docs):
+ *  - fbq('init', ID)  → runs once, auto-fires PageView
+ *  - NO manual fbq('track','PageView') needed or wanted
  */
 export default function MetaPixelScript() {
   if (!PIXEL_ID) return null;
 
   return (
     <>
-      {/* 1. Official fbq snippet — initialises the pixel */}
       <Script
         id="meta-pixel-init"
         strategy="afterInteractive"
@@ -35,8 +39,6 @@ export default function MetaPixelScript() {
           `,
         }}
       />
-
-      {/* 2. noscript fallback (Meta best practice) */}
       <noscript>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
