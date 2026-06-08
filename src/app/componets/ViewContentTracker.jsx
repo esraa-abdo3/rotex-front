@@ -31,7 +31,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { trackFB } from "./utils/fbPixel";
+
 
 export default function ViewContentTracker({ targetId }) {
   const fired = useRef(false);
@@ -47,7 +47,7 @@ export default function ViewContentTracker({ targetId }) {
         if (entries[0].isIntersecting && !fired.current) {
           fired.current = true;
 
-          trackFB("ViewContent");
+       window.fbq("track", "ViewContent");
 
           observer.disconnect();
         }
