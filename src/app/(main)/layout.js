@@ -52,8 +52,7 @@
 import { QuantityProvider } from "../providers/QuantityProvider";
 import { SettingsProvider } from "../providers/SettingsProvider";
 import Navbar from "../componets/Navbar/Navbar";
-import Script from "next/script";
-import { initPixel } from "../componets/utils/pixel";
+import PixelInit from "../componets/PixelInit";
 import PixelPageView from "../componets/PixelPageView";
 
 async function getSettings() {
@@ -90,27 +89,14 @@ async function getSettings() {
   }
 }
 
-const PIXEL_ID = "2496490754109919";
-
 export default async function MainLayout({ children }) {
   const settings = await getSettings();
 
   return (
     <html lang="en">
-        <head>
-        {/* Load the Meta Pixel SDK once. onLoad fires after the script is ready,
-            then initPixel bootstraps fbq and calls fbq('init').
-            PixelPageView fires fbq('track','PageView') exactly once after that. */}
-        <Script
-          id="meta-pixel-sdk"
-          strategy="afterInteractive"
-          src="https://connect.facebook.net/en_US/fbevents.js"
-          onLoad={() => initPixel(PIXEL_ID)}
-        />
-      </head>
-
       <body>
-          <PixelPageView />
+        <PixelInit />
+        <PixelPageView />
         <SettingsProvider initialSettings={settings}>
           <Navbar />
 
