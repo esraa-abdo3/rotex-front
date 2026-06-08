@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { FiUser, FiPhone } from "react-icons/fi";
 import { FiCreditCard } from "react-icons/fi";
 import "../CTA/CTA.css"
+import { trackFB } from "@/utils/fbPixel";
 
 const GOVS = {
   "القاهرة": ["القاهرة","مدينة نصر","شبرا","المطرية","عين شمس","حلوان","المعادي","مصر الجديدة","الزيتون","الأميرية","بولاق","السلام","الخليفة","الدرب الأحمر","الموسكي","الساحل","شبرا الخيمة","الوايلي"],
@@ -149,7 +150,7 @@ const totalOldPrice = oldPrice * qty;
       };
       const res = await axios.post("https://rootex-backend.vercel.app/api/v1/order/createorder", payload);
           if (typeof window.fbq !== "undefined") {
-      window.fbq("track", "Lead");
+   trackFB("Lead");
     }
 
       if (payMethod === "cash") router.push(`/success/${res.data.data.orderNumber}`);
