@@ -37,12 +37,11 @@ useEffect(() => {
       window.fbq("init", PIXEL_ID);
 
 
-      if (pathname === "/") {
         window.fbq("track", "PageView");
-      }
+      
     }
 
-  }, [pathname]);
+  }, []);
 
   return (
     <noscript>
