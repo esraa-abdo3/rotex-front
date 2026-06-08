@@ -4,14 +4,14 @@ import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 
 const PIXEL_ID = "2496490754109919";
-const allowedPaths = ["/"];
+
 
 export default function FacebookPixel() {
   const pathname = usePathname();
   const initialized = useRef(false);
-  const pageViewFired = useRef(false); // ← جديد
 
-  useEffect(() => {
+
+useEffect(() => {
     if (!initialized.current) {
       initialized.current = true;
 
@@ -35,16 +35,12 @@ export default function FacebookPixel() {
       })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
 
       window.fbq("init", PIXEL_ID);
+
+
+      if (pathname === "/") {
+        window.fbq("track", "PageView");
+      }
     }
-
-
-if (allowedPaths.includes(pathname) && window.fbq) {
-  const alreadyFired = sessionStorage.getItem("pv_fired");
-  if (!alreadyFired) {
-    sessionStorage.setItem("pv_fired", "1");
-    window.fbq("track", "PageView");
-  }
-}
 
   }, [pathname]);
 
