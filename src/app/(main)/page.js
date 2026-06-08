@@ -8,9 +8,6 @@ import CTA from "../componets/CTA/CTA.jsx"
 import FloatingButton from "../componets/FloatingButton/FloatingButton";
 import ViewContentTracker from "../componets/ViewContentTracker";
 
-
-
-
 async function getProduct() {
   try {
     const res = await fetch(

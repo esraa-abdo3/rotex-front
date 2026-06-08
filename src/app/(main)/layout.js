@@ -114,6 +114,7 @@ import { QuantityProvider } from "../providers/QuantityProvider";
 import { SettingsProvider } from "../providers/SettingsProvider";
 import Navbar from "../componets/Navbar/Navbar";
 import PixelInit from "../componets/utils/PixelInit";
+import PageViewTracker from "../componets/PageViewTracker";
 async function getSettings() {
   try {
     const res = await fetch("https://rootex-backend.vercel.app/api/v1/setting", {
@@ -154,7 +155,8 @@ export default async function MainLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <PixelInit />
+       <PixelInit />
+<PageViewTracker />
         <SettingsProvider initialSettings={settings}>
           <Navbar />
 
