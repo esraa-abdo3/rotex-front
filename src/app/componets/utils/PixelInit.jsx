@@ -7,7 +7,6 @@ const PIXEL_ID = "2496490754109919";
 export default function PixelInit() {
   return (
     <>
-      {/* Step 1: Define window.fbq inline — must run before fbevents.js */}
       <Script
         id="meta-pixel-inline"
         strategy="afterInteractive"
@@ -21,14 +20,13 @@ export default function PixelInit() {
               n.push=n;n.loaded=!0;n.version='2.0';
               n.queue=[];
             }(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '${PIXEL_ID}');
+            fbq('init', '${PIXEL_ID}', {}, { autoConfig: false });
             window._pixelInitialized = true;
             window.dispatchEvent(new Event('fbq:ready'));
           `,
         }}
       />
 
-   
       <Script
         id="meta-pixel-sdk"
         strategy="afterInteractive"
