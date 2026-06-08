@@ -37,11 +37,14 @@ export default function FacebookPixel() {
       window.fbq("init", PIXEL_ID);
     }
 
-    // PageView مرة واحدة بس في الصفحة الرئيسية
-    if (allowedPaths.includes(pathname) && !pageViewFired.current && window.fbq) {
-      pageViewFired.current = true; // ← مش هيتسجل تاني
-      window.fbq("track", "PageView");
-    }
+
+if (allowedPaths.includes(pathname) && window.fbq) {
+  const alreadyFired = sessionStorage.getItem("pv_fired");
+  if (!alreadyFired) {
+    sessionStorage.setItem("pv_fired", "1");
+    window.fbq("track", "PageView");
+  }
+}
 
   }, [pathname]);
 
