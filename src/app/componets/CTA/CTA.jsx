@@ -6,12 +6,22 @@ import { useRouter } from "next/navigation";
 import { renderHighlighted } from "../utils/highlight";
 import "./CTA.css";
 import Link from "next/link";
+import { useRef } from "react";
 
 export default function CTA({ product }) {
   const settings = useSettings();
   const { lang } = useLang();
   const { qty, increment, decrement } = useQuantity();
   const router = useRouter();
+    // useRef عشان نمنع الـ event يتكرر حتى لو في re-render
+  const checkoutFired = useRef(false);
+
+  const handleCtaClick = () => {
+    if (!checkoutFired.current) {
+      checkoutFired.current = true;
+      trackEvent(PixelEvent.INITIATE_CHECKOUT, { content_name: "CTA Button" });
+    }
+  };
 
   const buttonbackground = settings?.colors?.buttonbackground;
   const backgroundColor  = settings?.colors?.backgroundColor;
@@ -108,7 +118,7 @@ const totalPrice = item?.price * qty;
 
   
           {/* Buy Button */}
-          <Link href={`/checkoutpage?qty=${qty}`}>
+          <Link href={`/checkoutpage?qty=${qty}`} onClick={handleCtaClick}>
         <button
      
           style={{ padding: "5px 38px", borderRadius: 16, background: buttonbackground, color: buttontext, fontWeight: 800, border: "none", cursor: "pointer", boxShadow: `0 10px 30px ${buttonbackground}44`, transition: "transform 0.2s, box-shadow 0.2s", fontFamily: "inherit", width: "100%", margin: "2px 0", fontSize: 23 }}

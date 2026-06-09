@@ -128,6 +128,7 @@ import { AuthProvider } from "./providers/AuthProvider";
 import { LanguageProvider } from "./providers/LanguageProvider";
 import Script from "next/script";
 import "./globals.css";
+import PixelPageViewOnce from "./componets/pixel/PixelPageViewOnce";
 
 
 const PIXEL_ID = "2496490754109919";
@@ -180,16 +181,16 @@ export default async function RootLayout({ children }) {
                 'https://connect.facebook.net/en_US/fbevents.js');
                 fbq('set','autoConfig', false, '${PIXEL_ID}');
                 fbq('init','${PIXEL_ID}');
-                fbq('trackCustom', 'LandingPageView');
-
-         
+                // ⚠️ لا تضيف أي track هنا — التتبع بيتعمل في PixelPageViewOnce
               `,
             }}
           />
         )}
       </head>
       <body className="min-h-full flex flex-col">
-  
+        {/* ── Meta Pixel: LandingPageView مرة واحدة طول الـ session ── */}
+        <PixelPageViewOnce />
+
         <SettingsProvider initialSettings={settings}>
           <AuthProvider>
             <LanguageProvider>
