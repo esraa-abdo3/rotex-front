@@ -5,7 +5,7 @@ import { LanguageProvider } from "./providers/LanguageProvider";
 import Script from "next/script";
 import "./globals.css";
 import PixelPageViewOnce from "./componets/pixel/PixelPageViewOnce";
-const PIXEL_ID = "1595684412275541"
+const PIXEL_ID = "2496490754109919"
 
 async function getSettings() {
   try {
