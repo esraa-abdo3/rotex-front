@@ -152,19 +152,12 @@ export default async function Home() {
     .sort(([, a], [, b]) => a - b)
     .map(([key]) => key);
 
-  // Resolve the key of the 3rd section (index 2) for pixel tracking
   const thirdSectionKey = sortedSections[2];
   const thirdSectionId  = thirdSectionKey ? `section-${thirdSectionKey}` : null;
 
   return (
     <div>
-      {/*
-        ── Meta Pixel: Section 3 tracking ──────────────────────────────────
-        SectionPixelTracker is a "use client" component.
-        It observes the 3rd section via IntersectionObserver and fires
-        fbq('trackCustom', 'ViewSection3') exactly once when it's visible.
-        ─────────────────────────────────────────────────────────────────────
-      */}
+  
       {thirdSectionId && (
         <SectionPixelTracker
           targetId={thirdSectionId}

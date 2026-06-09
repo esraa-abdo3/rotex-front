@@ -34,7 +34,7 @@ export default function Product({ product }) {
     currency:  { ar: "جنيه",       en: "EGP"         },
     insteadOf: { ar: "بدلاً من",   en: "Instead of"  },
   };
-    const oldPrice = item?.oldPrice ?? item?.originalPrice ?? 2700;
+const oldPrice = item?.oldPrice ?? item?.originalPrice ?? 2700;
 const totalOldPrice = oldPrice * qty;
 
   const QtyPill = () => (
