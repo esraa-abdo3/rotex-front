@@ -90,6 +90,7 @@ import Headersection from "../componets/herosection/Headersection";
 import CTA from "../componets/CTA/CTA.jsx";
 import FloatingButton from "../componets/FloatingButton/FloatingButton";
 import SectionPixelTracker from "../componets/pixel/SectionPixelTracker";
+import HomePixelTracker from "../componets/pixel/HomePixelTracker";
 
 async function getProduct() {
   try {
@@ -157,6 +158,7 @@ export default async function Home() {
 
   return (
     <div>
+      <HomePixelTracker mode="onload" />
   
       {thirdSectionId && (
         <SectionPixelTracker
