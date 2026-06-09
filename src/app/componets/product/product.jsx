@@ -43,12 +43,23 @@ const totalOldPrice = oldPrice * qty;
       <button onClick={increment} style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", background: `${buttonbackground}`, border: "none", fontSize: 16, fontWeight: 500, color: buttontext, cursor: "pointer" }}>+</button>
     </div>
   );
-     const handleCtaClick = () => {
-      if (!checkoutFired.current) {
-        checkoutFired.current = true;
-        trackEvent(PixelEvent.INITIATE_CHECKOUT, { content_name: "CTA Button" });
-      }
-    };
+    //  const handleCtaClick = () => {
+    //   if (!checkoutFired.current) {
+    //     checkoutFired.current = true;
+    //     trackEvent(PixelEvent.INITIATE_CHECKOUT, { content_name: "CTA Button" });
+    //   }
+  // };
+  const handleCtaClick = () => {
+  if (!checkoutFired.current) {
+    checkoutFired.current = true;
+
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq("track", "InitiateCheckout", {
+        content_name: "CTA Button",
+      });
+    }
+  }
+};
 
   return (
     <section id="product" dir={lang === "ar" ? "rtl" : "ltr"} style={{ padding: "10px 20px", width: "100%", boxSizing: "border-box" }}>
