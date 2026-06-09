@@ -13,17 +13,17 @@ export default function FloatingButton({ product }) {
   const { qty, increment, decrement } = useQuantity();
   const router = useRouter();
   const { lang } = useLang();
-  const checkoutFired = useRef(false);
+  // const checkoutFired = useRef(false);
 
   if (!settings?.floatingButton?.visible) return null;
     
   
-    const handleCtaClick = () => {
-      if (!checkoutFired.current) {
-        checkoutFired.current = true;
-        trackEvent(PixelEvent.INITIATE_CHECKOUT, { content_name: "CTA Button" });
-      }
-    };
+    // const handleCtaClick = () => {
+    //   if (!checkoutFired.current) {
+    //     checkoutFired.current = true;
+    //     trackEvent(PixelEvent.INITIATE_CHECKOUT, { content_name: "CTA Button" });
+    //   }
+    // };
 
   const buttonbackground = settings?.colors?.buttonbackground;
   const backgroundColor  = settings?.colors?.backgroundColor;
@@ -77,7 +77,7 @@ const totalOldPrice = oldPrice * qty;
       <div className="itemcta" style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", flexWrap: "wrap", gap: 5, padding: "0px 5px" }}>
 
   
-            <Link href={`/checkoutpage?qty=${qty}`} onClick={handleCtaClick}>
+            <Link href={`/checkoutpage?qty=${qty}`}>
               <button
               
 
