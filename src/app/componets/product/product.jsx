@@ -4,6 +4,8 @@ import { useSettings } from "@/app/providers/SettingsProvider";
 import { useLang } from "@/app/providers/LanguageProvider";
 import { useQuantity } from "@/app/providers/QuantityProvider";
 import { renderHighlighted } from "../utils/highlight";
+import Link from "next/link";
+import { useRef } from "react";
 
 export default function Product({ product }) {
   const settings = useSettings();
@@ -11,6 +13,7 @@ export default function Product({ product }) {
   const { qty, increment, decrement } = useQuantity();
   const item = product?.[0];
   const router = useRouter();
+    const checkoutFired = useRef(false);
 
   const buttonbackground  = settings?.colors?.buttonbackground;
   const backgroundColor   = settings?.colors?.backgroundColor;
@@ -40,6 +43,12 @@ const totalOldPrice = oldPrice * qty;
       <button onClick={increment} style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", background: `${buttonbackground}`, border: "none", fontSize: 16, fontWeight: 500, color: buttontext, cursor: "pointer" }}>+</button>
     </div>
   );
+     const handleCtaClick = () => {
+      if (!checkoutFired.current) {
+        checkoutFired.current = true;
+        trackEvent(PixelEvent.INITIATE_CHECKOUT, { content_name: "CTA Button" });
+      }
+    };
 
   return (
     <section id="product" dir={lang === "ar" ? "rtl" : "ltr"} style={{ padding: "10px 20px", width: "100%", boxSizing: "border-box" }}>
@@ -77,9 +86,32 @@ const totalOldPrice = oldPrice * qty;
           </div>
 
           
-          <button onClick={() => router.push(`/checkoutpage?qty=${qty}`)} style={{ width: "100%", padding: "15px 0", borderRadius: 50, background: buttonbackground, color: buttontext, fontWeight: 800, fontSize: 18, border: "none", cursor: "pointer", letterSpacing: 0.5, transition: "transform 0.15s", fontFamily: "inherit" }}>
+          {/* <button onClick={() => router.push(`/checkoutpage?qty=${qty}`)} style={{ width: "100%", padding: "15px 0", borderRadius: 50, background: buttonbackground, color: buttontext, fontWeight: 800, fontSize: 18, border: "none", cursor: "pointer", letterSpacing: 0.5, transition: "transform 0.15s", fontFamily: "inherit" }}>
             {renderHighlighted(t.buy[lang], highlightColor)}
-          </button>
+          </button> */}
+          <Link
+  href={`/checkoutpage?qty=${qty}`}
+  style={{
+    width: "100%",
+    padding: "15px 0",
+    borderRadius: 50,
+    background: buttonbackground,
+    color: buttontext,
+    fontWeight: 800,
+    fontSize: 18,
+    border: "none",
+    cursor: "pointer",
+    letterSpacing: 0.5,
+    transition: "transform 0.15s",
+    fontFamily: "inherit",
+    display: "block",
+    textAlign: "center",
+    textDecoration: "none",
+  }}
+            onClick={handleCtaClick}
+>
+  {renderHighlighted(t.buy[lang], highlightColor)}
+</Link>
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20, fontSize: 14, color: textColor, flexWrap: "wrap" }}>
             <span style={{color:textColor}}>{renderHighlighted(shippingSignature?.[lang], highlightColor)}</span>

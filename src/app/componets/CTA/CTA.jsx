@@ -13,7 +13,7 @@ export default function CTA({ product }) {
   const { lang } = useLang();
   const { qty, increment, decrement } = useQuantity();
   const router = useRouter();
-    // useRef عشان نمنع الـ event يتكرر حتى لو في re-render
+
   const checkoutFired = useRef(false);
 
   const handleCtaClick = () => {

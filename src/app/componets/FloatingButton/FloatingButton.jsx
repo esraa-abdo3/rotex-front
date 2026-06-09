@@ -6,14 +6,24 @@ import { useLang } from "@/app/providers/LanguageProvider";
 import { renderHighlighted } from "../utils/highlight";
 import "../CTA/CTA.css"
 import Link from "next/link";
+import { useRef } from "react";
 
 export default function FloatingButton({ product }) {
   const settings = useSettings();
   const { qty, increment, decrement } = useQuantity();
   const router = useRouter();
   const { lang } = useLang();
+  const checkoutFired = useRef(false);
 
   if (!settings?.floatingButton?.visible) return null;
+    
+  
+    const handleCtaClick = () => {
+      if (!checkoutFired.current) {
+        checkoutFired.current = true;
+        trackEvent(PixelEvent.INITIATE_CHECKOUT, { content_name: "CTA Button" });
+      }
+    };
 
   const buttonbackground = settings?.colors?.buttonbackground;
   const backgroundColor  = settings?.colors?.backgroundColor;
@@ -67,14 +77,14 @@ const totalOldPrice = oldPrice * qty;
       <div className="itemcta" style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", flexWrap: "wrap", gap: 5, padding: "0px 5px" }}>
 
   
-            {/* Buy Button */}
-            <Link href={`/checkoutpage?qty=${qty}`}></Link>
+            <Link href={`/checkoutpage?qty=${qty}`} onClick={handleCtaClick}>
         <button
 
           style={{ padding: "5px 38px", borderRadius: 16, background: buttonbackground, color: buttontext, fontWeight: 800, border: "none", cursor: "pointer", boxShadow: `0 10px 30px ${buttonbackground}44`, transition: "transform 0.2s, box-shadow 0.2s", fontFamily: "inherit", width: "100%", margin: "2px 0", fontSize: 23 }}
         >
           {renderHighlighted(t.cta[lang], highlightColor)}
-        </button>
+              </button>
+              </Link>
       </div>
     </div>
         </div>
