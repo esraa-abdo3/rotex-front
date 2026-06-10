@@ -4,8 +4,8 @@ import { AuthProvider } from "./providers/AuthProvider";
 import { LanguageProvider } from "./providers/LanguageProvider";
 import Script from "next/script";
 import "./globals.css";
-import PixelPageViewOnce from "./componets/pixel/PixelPageViewOnce";
-const PIXEL_ID = "2496490754109919"
+
+const PIXEL_ID = "974856042110122"
 
 async function getSettings() {
   try {
@@ -32,7 +32,39 @@ async function getSettings() {
     return null;
   }
 }
+export async function generateMetadata() {
+  try {
+    const res = await fetch("https://rootex-backend.vercel.app/api/v1/product/getallproducts", {
+      cache: "no-store",
 
+      signal: AbortSignal.timeout(5000), 
+    });
+
+    if (!res.ok) throw new Error("Failed to fetch");
+
+    const data = await res.json();
+    const product = data?.data?.[0];
+
+    if (!product) throw new Error("No product found");
+
+    return {
+      title: product.name?.ar || "RooteX Store",
+      description: product.description?.ar || "وصف المنتج هنا",
+      icons: {
+        icon: product.images?.[0] || "/favicon.ico",
+      },
+    };
+  } catch (error) {
+    
+    return {
+      title: "RooteX Store",
+      description: "متجر روتكس الافتراضي",
+      icons: {
+        icon: "/favicon.ico", 
+      },
+    };
+  }
+}
 export default async function RootLayout({ children }) {
   const settings = await getSettings();
 
