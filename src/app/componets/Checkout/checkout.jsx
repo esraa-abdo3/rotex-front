@@ -73,6 +73,7 @@ export default function Checkout({ product }) {
   const [errors, setErrors] = useState({});
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState("")
 
   const set = (k, v) => setForm(p => ({ ...p, [k]: v, ...(k === "gov" ? { city: "" } : {}) }));
   const cities = form.gov ? GOVS[form.gov] ?? [] : [];
@@ -123,6 +124,15 @@ visa: {
     shippingCost: { ar: "تكلفة الشحن", en: "Shipping Cost" },
     insteadOf: { ar: "بدلاً من", en: "Instead of" },
     noitems: { ar: "عدد", en: "Quantity" },
+    errStock: {
+  ar: "عذرًا، هذا المنتج نفدت كميته ",
+  en: "Sorry, this product is out of stock or the requested quantity is unavailable."
+},
+
+errGeneral: {
+  ar: "حدثت مشكلة أثناء تنفيذ العملية. يُرجى المحاولة مرة أخرى.",
+  en: "Something went wrong while processing your request. Please try again."
+}
    
      
   };
@@ -141,6 +151,7 @@ visa: {
 
   const handleSubmit = async () => {
     if (!validate()) return;
+    setApiError("")
 
     try {
       setLoading(true);
@@ -159,7 +170,12 @@ visa: {
       if (payMethod === "cash") router.push(`/success/${res.data.data.orderNumber}`);
       if (payMethod === "paymob") window.location.href = res.data.data.checkoutUrl;
     } catch (error) {
-      console.log(error.response?.data);
+      const serverMsg = error.response?.data?.msg || "";
+      if (serverMsg.toLowerCase().includes("stock") || serverMsg.toLowerCase().includes("not enough")) {
+        setApiError(t.errStock[lang]);
+      } else {
+        setApiError(serverMsg || t.errGeneral[lang]);
+      }
     } finally {
       setLoading(false);
     }
@@ -291,7 +307,15 @@ visa: {
           </div>
           </div>
         </div>
-          <div className="bg-white px-5 pb-2 pt-2">
+        <div className="bg-white px-5 pb-2 pt-2">
+                 {apiError && (
+            <div 
+              className="text-center text-sm font-bold text-red-600 mb-3 bg-red-50 border border-red-200 py-3 px-4 rounded-xl transition-all"
+              style={{ fontFamily: "'Cairo', sans-serif" }}
+            >
+              ⚠️ {apiError}
+            </div>
+          )}
           <button onClick={handleSubmit} disabled={loading}
             className="w-full py-4 rounded-2xl font-black text-lg text-white flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-70 cursor-pointer"
             style={{ background: buttonbackground, color:buttontext, boxShadow: "0 8px 24px rgba(59,47,140,0.3)" }}>
