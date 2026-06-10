@@ -102,8 +102,8 @@ const totalOldPrice = oldPrice * qty;
     cash: { ar: "الدفع عند الاستلام", en: "Cash on Delivery" },
     cashSub: { ar: "كاش عند الإستلام", en: "Cash" },
 visa: {
-  ar: "فيزا / ماستر كارد / المحافظ الإلكترونية",
-  en: "Credit / Debit Card / Mobile Wallets",
+  ar: "دفع أونلاين",
+  en: "Online Payment",
 },
     visaSub: { ar: "ادفع أونلاين بأمان", en: "Pay securely online" },
     total: { ar: "إجمالي", en: "Total" },
@@ -251,29 +251,66 @@ errGeneral: {
             <span className="text-sm font-bold" style={{ color: textColor }}>{t.payMethod[lang]}</span>
           </div>
           <div className="grid grid-cols-2 gap-2">
+         
             {[
-              { key: "cash", label: t.cash[lang], sub: t.cashSub[lang], icon: "💵" },
-              { key: "paymob", label: t.visa[lang], sub: t.visaSub[lang], icon: "💳" },
-            ].map(opt => (
-              <button style={{fontSize:"16px"}} key={opt.key} onClick={() => setPayMethod(opt.key)}
-                className="flex items-center gap-1 px-1 py-3 rounded-2xl border-2 text-center transition-all"
-                style={{
-                  borderColor: payMethod === opt.key ?`${buttonbackground}22` : "#e8e3f5",
-                  background: payMethod === opt.key ?`${buttonbackground}22` : "#faf9fe",
-                }}>
-                <div className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
-                  style={{ borderColor: payMethod === opt.key ? `${buttonbackground}` : "#c0b8e0" }}>
-                  {payMethod === opt.key && (
-                    <div className="w-2 h-2 rounded-full" style={{ background: `${buttonbackground}` }} />
-                  )}
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-bold" style={{ color: textColor }}>{opt.label}</p>
-                  <p className="text-xs" style={{ color: textColor }}>{opt.sub}    <span className="text-xl">{opt.icon}</span></p>
-                </div>
+  { key: "cash", label: t.cash[lang], sub: t.cashSub[lang], icon: "💵" },
+  { key: "paymob", label: t.visa[lang], sub: t.visaSub[lang], icon: null },
+].map(opt => (
+  <button style={{fontSize:"16px"}} key={opt.key} onClick={() => setPayMethod(opt.key)}
+    className="flex items-center gap-1 px-1 py-3 rounded-2xl border-2 text-center transition-all"
+    style={{
+      borderColor: payMethod === opt.key ? `${buttonbackground}22` : "#e8e3f5",
+      background: payMethod === opt.key ? `${buttonbackground}22` : "#faf9fe",
+    }}>
+    <div className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
+      style={{ borderColor: payMethod === opt.key ? `${buttonbackground}` : "#c0b8e0" }}>
+      {payMethod === opt.key && (
+        <div className="w-2 h-2 rounded-full" style={{ background: `${buttonbackground}` }} />
+      )}
+    </div>
+    <div className="flex-1">
+      <p className="text-sm font-bold" style={{ color: textColor }}>
+        {opt.key === "paymob" ? (
+          <div className="flex flex-col gap-0.5 mt-1 items-center text-center">
+            {[
+              {
+                name: lang === "ar" ? "فيزا" : "Visa",
+                icon: (
+                  <img src="/visa.jpg" style={{width:"35px" , maxWidth:"35px" , borderRadius:"2px"}}/>
+                )
+              },
+              {
+                name: lang === "ar" ? "ماستر كارد" : "Mastercard",
+                icon: (
+                  <img src="/mastercard.png" style={{width:"30px" , maxWidth:"30px"}}/>
+                )
+              },
+              {
+                name: lang === "ar" ? "محفظة إلكترونية" : "Mobile Wallet",
+                icon: (
              
-              </button>
+                  <img src="/wallet.png" style={{width:"20px" , maxWidth:"20px"}}/>
+                )
+              },
+            ].map(item => (
+              <div key={item.name} className="flex items-center gap-1  text-center">
+                {item.icon}
+                <span className="text-xs" style={{ color: textColor }}>{item.name}</span>
+              </div>
             ))}
+          
+          </div>
+        ) : ( opt.label )}
+        </p>
+            
+     
+
+        
+        <p className="text-xs" style={{ color: textColor }}>{opt.sub} <span className="text-xl">{opt.icon}</span></p>
+      
+    </div>
+  </button>
+))}
           </div>
         </div>
 
@@ -296,7 +333,7 @@ errGeneral: {
 
           </div>
           <div className="pb-3 border-b border-[#f0eef8]"></div>
-         {/* test */}
+       
           <div className=" price-desc flex justify-between items-center pt-0">
             <span  className="text-sm tota-checkout" style={{ color: textColor }}>{t.total[lang]} </span>
                 <div style={{ display: "flex", alignItems: "center", gap: 3, flexWrap: "wrap" , justifyContent:"center" }}>
