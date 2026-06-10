@@ -74,12 +74,13 @@ const totalOldPrice = oldPrice * qty;
 </span>
           </div>
         </div>
-      </div>   
+        </div> 
+       <Link href={`/checkoutpage?qty=${qty}`} onClick={handleCtaClick}> 
        <div className="cta-section" style={{ borderRadius: 16, overflow: "hidden", width: "75%", margin: "5px auto 0px auto", backgroundColor: backgroundColor, paddingBottom: 0 }}>
       <div className="itemcta" style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", flexWrap: "wrap", gap: 5, padding: "0px 5px" }}>
 
   
-            <Link href={`/checkoutpage?qty=${qty}`} onClick={handleCtaClick}>
+           
               <button
               
 
@@ -87,9 +88,10 @@ const totalOldPrice = oldPrice * qty;
         >
           {renderHighlighted(t.cta[lang], highlightColor)}
               </button>
-              </Link>
+            
       </div>
-    </div>
+          </div>
+          </Link> 
         </div>
 
   
