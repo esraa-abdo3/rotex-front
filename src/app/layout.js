@@ -4,7 +4,7 @@ import { AuthProvider } from "./providers/AuthProvider";
 import { LanguageProvider } from "./providers/LanguageProvider";
 import Script from "next/script";
 import "./globals.css";
-const PIXEL_ID = "2496490754109919"
+const PIXEL_ID = "974856042110122"
 
 async function getSettings() {
   try {
