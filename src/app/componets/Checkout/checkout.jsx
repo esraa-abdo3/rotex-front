@@ -100,7 +100,10 @@ const totalOldPrice = oldPrice * qty;
     payMethod: { ar: "طريقة الدفع", en: "Payment Method" },
     cash: { ar: "الدفع عند الاستلام", en: "Cash on Delivery" },
     cashSub: { ar: "كاش عند الإستلام", en: "Cash" },
-    visa: { ar: "فيزا / ماستر كارد", en: "Credit / Debit Card" },
+visa: {
+  ar: "فيزا / ماستر كارد / المحافظ الإلكترونية",
+  en: "Credit / Debit Card / Mobile Wallets",
+},
     visaSub: { ar: "ادفع أونلاين بأمان", en: "Pay securely online" },
     total: { ar: "إجمالي", en: "Total" },
     confirm: { ar: "إكمال الطلب", en: "Complete Order" },
@@ -118,7 +121,10 @@ const totalOldPrice = oldPrice * qty;
     dashboard: { ar: "لوحة التحكم", en: "Dashboard" },
     price: { ar: "السعر", en: "price" },
     shippingCost: { ar: "تكلفة الشحن", en: "Shipping Cost" },
-     insteadOf: { ar: "بدلاً من", en: "Instead of" },
+    insteadOf: { ar: "بدلاً من", en: "Instead of" },
+    noitems: { ar: "عدد", en: "Quantity" },
+   
+     
   };
 
   const validate = () => {
@@ -150,7 +156,7 @@ const totalOldPrice = oldPrice * qty;
         items: [{ product: "6a105fe04036081b1eda3108", quantity: qty }],
       };
       const res = await axios.post("https://rootex-backend.vercel.app/api/v1/order/createorder", payload);
-        trackEvent(PixelEvent.PixelEvent.LEAD, { content_name: "placeorder" });
+      trackEvent(PixelEvent.LEAD, { content_name: "placeorder" });
       if (payMethod === "cash") router.push(`/success/${res.data.data.orderNumber}`);
       if (payMethod === "paymob") window.location.href = res.data.data.checkoutUrl;
     } catch (error) {
@@ -223,7 +229,7 @@ const totalOldPrice = oldPrice * qty;
         <div className="h-2" style={{ background: "#f0eef8" }} />
 
     
-        <div className="bg-white px-5 py-3">
+        <div className="bg-white px-1.5 lg:px-5 py-3 m-auto">
           <div className="flex items-center gap-2 mb-2 justify-center text-center">
             <span style={{ color: backgroundColor, fontSize: 16 }}>< FiCreditCard/></span>
             <span className="text-sm font-bold" style={{ color: textColor }}>{t.payMethod[lang]}</span>
@@ -242,14 +248,14 @@ const totalOldPrice = oldPrice * qty;
                 <div className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
                   style={{ borderColor: payMethod === opt.key ? `${buttonbackground}` : "#c0b8e0" }}>
                   {payMethod === opt.key && (
-                    <div className="w-2.3 h-2.3 rounded-full" style={{ background: `${buttonbackground}` }} />
+                    <div className="w-2 h-2 rounded-full" style={{ background: `${buttonbackground}` }} />
                   )}
                 </div>
                 <div className="flex-1">
                   <p className="text-sm font-bold" style={{ color: textColor }}>{opt.label}</p>
-                  <p className="text-xs" style={{ color: textColor }}>{opt.sub}</p>
+                  <p className="text-xs" style={{ color: textColor }}>{opt.sub}    <span className="text-xl">{opt.icon}</span></p>
                 </div>
-                <span className="text-xl">{opt.icon}</span>
+             
               </button>
             ))}
           </div>
@@ -259,9 +265,9 @@ const totalOldPrice = oldPrice * qty;
         <div className="bg-white  px-1 lg:px-4 py-2">
           <div className="flex items-center justify-between pb-3 border-b border-[#f0eef8]">
             <span className="text-sm font-semibold" style={{ color: textColor }}>
-              {productName} × {qty}
+              {productName}  { t.noitems[lang]} {qty} {lang =="ar"? qty >1 ?"قطع":"قطعة" :"items"}
             </span>
-    
+  
           </div>
           <div className="flex gap-2 items-center pt-2" style={{fontWeight:"700"}}>
             <span className="text-sm" style={{ color: textColor }}>{t.price[lang]}: </span>
