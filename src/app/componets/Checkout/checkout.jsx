@@ -147,7 +147,6 @@ visa: {
       const payload = {
         name: form.name,
         phone: form.phone,
-        email: form.email,
         country: "Egypt",
         governorate: form.gov,
         city: form.city === "__other__" ? form.cityText : form.city,
