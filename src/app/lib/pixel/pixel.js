@@ -5,7 +5,8 @@ export const PIXEL_ID = "2496490754109919";
 
 export const PixelEvent = {
   VIEW_CONTENT:     "ViewContent",
-  INITIATE_CHECKOUT:"InitiateCheckout",
+  INITIATE_CHECKOUT: "InitiateCheckout",
+  LEAD: "Lead",
 };
 
 function isBrowser() {

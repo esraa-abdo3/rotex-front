@@ -7,12 +7,21 @@ import { renderHighlighted } from "../utils/highlight";
 import "../CTA/CTA.css"
 import Link from "next/link";
 import { useRef } from "react";
+import { trackEvent } from "@/app/lib/pixel/pixel";
 
 export default function FloatingButton({ product }) {
   const settings = useSettings();
   const { qty, increment, decrement } = useQuantity();
   const router = useRouter();
   const { lang } = useLang();
+    const checkoutFired = useRef(false);
+
+  const handleCtaClick = () => {
+    if (!checkoutFired.current) {
+      checkoutFired.current = true;
+      trackEvent(PixelEvent.INITIATE_CHECKOUT, { content_name: "CTA Button" });
+    }
+  };
 
 
   if (!settings?.floatingButton?.visible) return null;
@@ -70,7 +79,7 @@ const totalOldPrice = oldPrice * qty;
       <div className="itemcta" style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", flexWrap: "wrap", gap: 5, padding: "0px 5px" }}>
 
   
-            <Link href={`/checkoutpage?qty=${qty}`}>
+            <Link href={`/checkoutpage?qty=${qty}`} onClick={handleCtaClick}>
               <button
               
 

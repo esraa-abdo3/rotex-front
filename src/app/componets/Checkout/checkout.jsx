@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { FiUser, FiPhone } from "react-icons/fi";
 import { FiCreditCard } from "react-icons/fi";
 import "../CTA/CTA.css"
+import { trackEvent, PixelEvent } from "../../lib/pixel/pixel";
 
 
 const GOVS = {
@@ -149,8 +150,7 @@ const totalOldPrice = oldPrice * qty;
         items: [{ product: "6a105fe04036081b1eda3108", quantity: qty }],
       };
       const res = await axios.post("https://rootex-backend.vercel.app/api/v1/order/createorder", payload);
-
-
+        trackEvent(PixelEvent.PixelEvent.LEAD, { content_name: "placeorder" });
       if (payMethod === "cash") router.push(`/success/${res.data.data.orderNumber}`);
       if (payMethod === "paymob") window.location.href = res.data.data.checkoutUrl;
     } catch (error) {

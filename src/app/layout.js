@@ -64,7 +64,7 @@ export default async function RootLayout({ children }) {
       </head>
       <body className="min-h-full flex flex-col">
     
-        <PixelPageViewOnce />
+        {/* <PixelPageViewOnce /> */}
 
         <SettingsProvider initialSettings={settings}>
           <AuthProvider>
