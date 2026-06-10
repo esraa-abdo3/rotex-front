@@ -2,6 +2,9 @@
 
 Developed a complete e-commerce platform for a hair care brand as a freelance project, handling both frontend and backend development, along with third-party integrations and business automation tools.
 
+## Project Link:
+https://rotex-front.vercel.app/
+
 ## Frontend Development (Next.js)
 
 * Built the entire customer-facing website using Next.js.
@@ -115,9 +118,6 @@ Handled the complete payment lifecycle, including payment initiation, callback p
 * Paymob Integration
 * Meta Pixel
 * Google Sheets API
-
-
-##Live Demo:
-https://rotex-front.vercel.app/
 * Responsive Web Design
+
 
