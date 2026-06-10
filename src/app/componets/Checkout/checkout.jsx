@@ -269,7 +269,7 @@ errGeneral: {
       )}
     </div>
     <div className="flex-1">
-      <p className="text-sm font-bold" style={{ color: textColor }}>
+      <div className="text-sm font-bold" style={{ color: textColor }}>
         {opt.key === "paymob" ? (
           <div className="flex flex-col gap-0.5 mt-1 items-center text-center">
             {[
@@ -301,7 +301,7 @@ errGeneral: {
           
           </div>
         ) : ( opt.label )}
-        </p>
+        </div>
             
      
 
