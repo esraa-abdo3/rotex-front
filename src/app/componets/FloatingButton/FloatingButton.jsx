@@ -6,7 +6,7 @@ import { useLang } from "@/app/providers/LanguageProvider";
 import { renderHighlighted } from "../utils/highlight";
 import "../CTA/CTA.css"
 import Link from "next/link";
-import { useRef } from "react";
+
 import { trackEvent, PixelEvent } from "@/app/lib/pixel/pixel";
 
 export default function FloatingButton({ product }) {
@@ -16,10 +16,7 @@ export default function FloatingButton({ product }) {
   const { lang } = useLang();
 
   const handleCtaClick = () => {
-    if (!checkoutFired.current) {
-      checkoutFired.current = true;
-      trackEvent(PixelEvent.INITIATE_CHECKOUT, { content_name: "CTA Button" });
-    }
+    trackEvent(PixelEvent.INITIATE_CHECKOUT, { content_name: "CTA Button" });
   };
 
   if (!settings?.floatingButton?.visible) return null;

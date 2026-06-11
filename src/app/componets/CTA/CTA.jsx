@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { renderHighlighted } from "../utils/highlight";
 import "./CTA.css";
 import Link from "next/link";
-import { useRef } from "react";
+
 import { trackEvent, PixelEvent } from "@/app/lib/pixel/pixel";
 
 export default function CTA({ product }) {
@@ -16,10 +16,7 @@ export default function CTA({ product }) {
   const router = useRouter();
 
   const handleCtaClick = () => {
-    if (!checkoutFired.current) {
-      checkoutFired.current = true;
-      trackEvent(PixelEvent.INITIATE_CHECKOUT, { content_name: "CTA Button" });
-    }
+    trackEvent(PixelEvent.INITIATE_CHECKOUT, { content_name: "CTA Button" });
   };
 
   const buttonbackground = settings?.colors?.buttonbackground;
