@@ -6,7 +6,7 @@ import Result      from "../componets/result/result";
 import Headersection from "../componets/herosection/Headersection";
 import CTA from "../componets/CTA/CTA.jsx";
 import FloatingButton from "../componets/FloatingButton/FloatingButton";
-import SectionPixelTracker from "../componets/pixel/SectionPixelTracker";
+import ViewContentTracker from "../componets/ViewContentTracker";
 import HomePixelTracker from "../componets/pixel/HomePixelTracker";
 
 async function getProduct() {
@@ -78,10 +78,9 @@ export default async function Home() {
       <HomePixelTracker mode="onload" />
   
       {thirdSectionId && (
-        <SectionPixelTracker
+        <ViewContentTracker
           targetId={thirdSectionId}
-          eventName="ViewSection3"
-          params={{ section: thirdSectionKey, position: 3 }}
+          sessionKey="px_vc_section3"
         />
       )}
 

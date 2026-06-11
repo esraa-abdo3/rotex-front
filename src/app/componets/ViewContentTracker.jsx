@@ -1,30 +1,31 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useEffect } from "react";
 import { trackEvent, PixelEvent } from "@/app/lib/pixel/pixel";
 
 /**
  * ViewContentTracker
  *
- * Fires fbq('track', 'ViewContent') once when the target section enters
- * the viewport. Uses IntersectionObserver — no scroll listeners.
+ * Fires fbq('track', 'ViewContent') ONCE per session when the target
+ * section enters the viewport.
+ * sessionStorage keeps the flag across refresh / back-navigation.
  *
- * @param {string} targetId - id attribute of the element to observe
+ * @param {string} targetId   - id attribute of the element to observe
+ * @param {string} sessionKey - unique key stored in sessionStorage (default: "px_vc_fired")
  */
-export default function ViewContentTracker({ targetId }) {
-  const fired = useRef(false);
-
+export default function ViewContentTracker({ targetId, sessionKey = "px_vc_fired" }) {
   useEffect(() => {
-    if (!targetId || fired.current) return;
+    if (!targetId) return;
+    if (sessionStorage.getItem(sessionKey)) return; // already fired this session
 
     const section = document.getElementById(targetId);
     if (!section) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !fired.current) {
-          fired.current = true;
+        if (entries[0].isIntersecting) {
           trackEvent(PixelEvent.VIEW_CONTENT);
+          sessionStorage.setItem(sessionKey, "1");
           observer.disconnect();
         }
       },
@@ -33,7 +34,7 @@ export default function ViewContentTracker({ targetId }) {
 
     observer.observe(section);
     return () => observer.disconnect();
-  }, [targetId]);
+  }, [targetId, sessionKey]);
 
   return null;
 }

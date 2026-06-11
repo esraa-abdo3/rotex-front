@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { trackCustomEvent } from "@/app/lib/pixel/pixel";
 
 /**
  * useSectionTracking
  *
  * Observes a DOM element via IntersectionObserver and fires a single
- * fbq('trackCustom', eventName, params) when the element becomes visible.
+ * fbq('trackCustom', eventName, params) ONCE PER SESSION when the element
+ * becomes visible. sessionStorage keeps the flag across refresh / back-navigation.
  *
  * @param {React.RefObject<HTMLElement>} ref         - ref attached to the section element
  * @param {string}                       eventName   - Custom event name (trackCustom)
@@ -20,18 +21,18 @@ import { trackCustomEvent } from "@/app/lib/pixel/pixel";
  *   return <div ref={ref}>...</div>;
  */
 export function useSectionTracking(ref, eventName, params = {}, threshold = 0.3) {
-  const fired = useRef(false);
-
   useEffect(() => {
     const el = ref?.current;
-    if (!el || fired.current) return;
+    if (!el || !eventName) return;
+
+    const sessionKey = `px_section_${eventName}`;
+    if (sessionStorage.getItem(sessionKey)) return; // already fired this session
 
     const observer = new IntersectionObserver(
       (entries) => {
-        const entry = entries[0];
-        if (entry.isIntersecting && !fired.current) {
-          fired.current = true;
+        if (entries[0].isIntersecting) {
           trackCustomEvent(eventName, params);
+          sessionStorage.setItem(sessionKey, "1");
           observer.disconnect();
         }
       },
