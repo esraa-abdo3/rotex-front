@@ -7,15 +7,13 @@ import { renderHighlighted } from "../utils/highlight";
 import "./CTA.css";
 import Link from "next/link";
 import { useRef } from "react";
-import { trackEvent } from "@/app/lib/pixel/pixel";
+import { trackEvent, PixelEvent } from "@/app/lib/pixel/pixel";
 
 export default function CTA({ product }) {
   const settings = useSettings();
   const { lang } = useLang();
   const { qty, increment, decrement } = useQuantity();
   const router = useRouter();
-
-  const checkoutFired = useRef(false);
 
   const handleCtaClick = () => {
     if (!checkoutFired.current) {

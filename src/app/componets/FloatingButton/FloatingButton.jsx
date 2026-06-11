@@ -7,14 +7,13 @@ import { renderHighlighted } from "../utils/highlight";
 import "../CTA/CTA.css"
 import Link from "next/link";
 import { useRef } from "react";
-import { trackEvent } from "@/app/lib/pixel/pixel";
+import { trackEvent, PixelEvent } from "@/app/lib/pixel/pixel";
 
 export default function FloatingButton({ product }) {
   const settings = useSettings();
   const { qty, increment, decrement } = useQuantity();
   const router = useRouter();
   const { lang } = useLang();
-    const checkoutFired = useRef(false);
 
   const handleCtaClick = () => {
     if (!checkoutFired.current) {
@@ -22,7 +21,6 @@ export default function FloatingButton({ product }) {
       trackEvent(PixelEvent.INITIATE_CHECKOUT, { content_name: "CTA Button" });
     }
   };
-
 
   if (!settings?.floatingButton?.visible) return null;
     
