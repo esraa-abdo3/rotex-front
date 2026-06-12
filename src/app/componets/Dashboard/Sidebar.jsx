@@ -75,7 +75,7 @@ export default function Sidebar() {
   const [open, setOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const pathname = usePathname();
-  const API = "https://rootex-backend.vercel.app/api/v1";
+  const API = "https://api.beautyhub.es/api/v1";
   const router = useRouter();
     const { logout } = useAuth();
 

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-const API = "https://rootex-backend.vercel.app/api/v1";
+const API = "https://api.beautyhub.es/api/v1";
 
 const STATUS_COLORS = {
   pending:    { bg: "#fff7ed", text: "#c2410c" },

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
-const API = "https://rootex-backend.vercel.app/api/v1";
+const API = "https://api.beautyhub.es/api/v1";
 
 const STATUSES = ["pending", "processing", "shipped", "canceled", "delivered"];
 

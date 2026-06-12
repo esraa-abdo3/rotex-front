@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const API = "https://rootex-backend.vercel.app/api/v1";
+const API = "https://api.beautyhub.es/api/v1";
 
 const SECTION_META = {
   Heroheader: { label: "Header Section", icon: "🔝", desc: "Top navigation header" },

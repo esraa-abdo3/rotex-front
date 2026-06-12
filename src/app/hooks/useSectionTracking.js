@@ -26,7 +26,7 @@ export function useSectionTracking(ref, eventName, params = {}, threshold = 0.3)
     if (!el || !eventName) return;
 
     const sessionKey = `px_section_${eventName}`;
-    if (sessionStorage.getItem(sessionKey)) return; // already fired this session
+    if (sessionStorage.getItem(sessionKey)) return; 
 
     const observer = new IntersectionObserver(
       (entries) => {

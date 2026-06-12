@@ -8,7 +8,7 @@ const PIXEL_ID = "974856042110122"
 
 async function getSettings() {
   try {
-    const res = await fetch("https://rootex-backend.vercel.app/api/v1/setting", {
+    const res = await fetch("https://api.beautyhub.es/api/v1/setting", {
       cache: "no-store",
     });
     if (!res.ok) return null;
@@ -33,7 +33,7 @@ async function getSettings() {
 }
 export async function generateMetadata() {
   try {
-    const res = await fetch("https://rootex-backend.vercel.app/api/v1/product/getallproducts", {
+    const res = await fetch("https://api.beautyhub.es/api/v1/product/getallproducts", {
       cache: "no-store",
 
       signal: AbortSignal.timeout(5000), 

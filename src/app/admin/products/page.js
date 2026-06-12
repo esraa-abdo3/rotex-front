@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-const API = "https://rootex-backend.vercel.app/api/v1";
+const API = "https://api.beautyhub.es/api/v1";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);

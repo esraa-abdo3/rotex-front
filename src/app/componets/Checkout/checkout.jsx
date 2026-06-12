@@ -165,7 +165,7 @@ errGeneral: {
         paymentMethod: payMethod,
         items: [{ product: "6a105fe04036081b1eda3108", quantity: qty }],
       };
-      const res = await axios.post("https://rootex-backend.vercel.app/api/v1/order/createorder", payload);
+      const res = await axios.post("https://api.beautyhub.es/api/v1/order/createorder", payload);
       trackEvent(PixelEvent.LEAD, {  value: totalOldPrice + SHIPPING,
   currency: "EGP" });
       if (payMethod === "cash") router.push(`/success/${res.data.data.orderNumber}`);

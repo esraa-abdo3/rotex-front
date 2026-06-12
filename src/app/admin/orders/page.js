@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 
-const API = "https://rootex-backend.vercel.app/api/v1";
+const API = "https://api.beautyhub.es/api/v1";
 
 const STATUS_META = {
   all:        { label: "All",        color: "#374151", bg: "#f3f4f6" },

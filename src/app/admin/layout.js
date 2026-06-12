@@ -13,7 +13,7 @@ async function getMe() {
     const token = cookieStore.get("token")?.value;
     if (!token) return null;
 
-    const res = await fetch("https://rootex-backend.vercel.app/api/v1/auth/me", {
+    const res = await fetch("https://api.beautyhub.es/api/v1/auth/me", {
       method: "GET",
       headers: { Cookie: `token=${token}` },
       cache: "no-store",

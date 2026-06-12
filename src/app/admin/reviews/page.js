@@ -3,7 +3,7 @@
 import { useLang } from "@/app/providers/LanguageProvider";
 import { useEffect, useState, useMemo } from "react";
 
-const API = "https://rootex-backend.vercel.app/api/v1";
+const API = "https://api.beautyhub.es/api/v1";
 
 // ─── Star renderer ────────────────────────────────────────────────────────────
 function Stars({ rating, size = 14, interactive = false, onRate }) {

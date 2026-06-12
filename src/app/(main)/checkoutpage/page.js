@@ -1,7 +1,7 @@
 import Checkout from "../../componets/Checkout/checkout";
 
 async function getProduct() {
-  const res = await fetch("https://rootex-backend.vercel.app/api/v1/product/getallproducts", {
+  const res = await fetch("https://api.beautyhub.es/api/v1/product/getallproducts", {
     cache: "no-store", 
   });
 

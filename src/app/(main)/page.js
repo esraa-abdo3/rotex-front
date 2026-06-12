@@ -12,7 +12,7 @@ import HomePixelTracker from "../componets/pixel/HomePixelTracker";
 async function getProduct() {
   try {
     const res = await fetch(
-      "https://rootex-backend.vercel.app/api/v1/product/getallproducts",
+      "https://api.beautyhub.es/api/v1/product/getallproducts",
       { cache: "no-store" }
     );
     if (!res.ok) return { data: [] };
@@ -23,7 +23,7 @@ async function getProduct() {
 }
 
 async function getReviews() {
-  const res = await fetch("https://rootex-backend.vercel.app/api/v1/Review/visible", { cache: "no-store" });
+  const res = await fetch("https://api.beautyhub.es/api/v1/Review/visible", { cache: "no-store" });
   if (!res.ok) return [];
   const data = await res.json();
   return data.data || [];
@@ -31,7 +31,7 @@ async function getReviews() {
 
 async function getSectionOrder() {
   try {
-    const res = await fetch("https://rootex-backend.vercel.app/api/v1/section-order", { cache: "no-store" });
+    const res = await fetch("https://api.beautyhub.es/api/v1/section-order", { cache: "no-store" });
     if (!res.ok) return { Heroheader: 1, Hero: 2, product: 3, after: 4, review: 5, CTA: 6 };
     const data = await res.json();
     return data.success ? data.order : { Heroheader: 1, Hero: 2, product: 3, after: 4, review: 5, CTA: 6 };

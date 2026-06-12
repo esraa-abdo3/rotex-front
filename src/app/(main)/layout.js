@@ -7,7 +7,7 @@ import Navbar from "../componets/Navbar/Navbar";
 
 async function getSettings() {
   try {
-    const res = await fetch("https://rootex-backend.vercel.app/api/v1/setting", {
+    const res = await fetch("https://api.beautyhub.es/api/v1/setting", {
       next: { revalidate: 60 },
     });
 

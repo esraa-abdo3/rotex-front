@@ -4,7 +4,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import axios from "axios";
 
-const API = "https://rootex-backend.vercel.app/api/v1";
+const API = "https://api.beautyhub.es/api/v1";
 
 const TEXT_FIELDS = [
   { key: "text1",      label: "Text 1",       desc: "First line of the hero hook" },

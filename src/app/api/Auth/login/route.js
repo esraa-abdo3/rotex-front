@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   const body = await req.json();
 
-  const res = await fetch("https://rootex-backend.vercel.app/api/v1/auth/login", {
+  const res = await fetch("https://api.beautyhub.es/api/v1/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -16,7 +16,7 @@ export async function POST(req) {
     return NextResponse.json(data, { status: res.status });
   }
 
-  // ✅ الباك اند بيبعت الـ token في الـ JSON — نحطه إحنا في الكوكي
+
   const token = data?.data?.token;
 
   if (!token) {
